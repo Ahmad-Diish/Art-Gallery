@@ -18,17 +18,17 @@
     }
     .navbar-brand {
       font-size: 1.5rem;
-      color: gold;
+      color: #923f0e;
     }
     .navbar-brand:hover
     {
-      color : gold;
+      color : #923f0e;
     }
     .navbar-toggler-icon {
-      color: white;
+      color: #fef3c7;
     }
     .nav-link {
-      color: white;
+      color: #fef3c7;
     }
     .nav-link:hover {
       color: #adb5bd;
@@ -45,7 +45,7 @@
     .search-btn {
       background-color: #d5a27c;
       border: none;
-      color: white;
+      color: #fef3c7;
     }
     .search-btn:hover {
       background-color: #6c757d;
@@ -53,7 +53,7 @@
     .heart-btn, .person-btn {
       background-color: transparent;
       border: none;
-      color: white;
+      color: #fef3c7;
     }
     .heart-btn:hover, .person-btn:hover {
       color: #adb5bd;
