@@ -19,10 +19,10 @@
       font-size: 1.5rem;
       color: gold;
     }
-    /*.navbar-brand:hover
+    .navbar-brand:hover
     {
       color : gold;
-    }*/
+    }
     .navbar-toggler-icon {
       color: white;
     }
