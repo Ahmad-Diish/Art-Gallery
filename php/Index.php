@@ -3,12 +3,19 @@ require_once("header.php");
 ?>
 
 <!DOCTYPE html>
+<html>
+<head>
+    <title>Art-Gallery</title>
+    
+</head>
+<body>
 
- Hallo 
+<!-- Your page content here -->
+<p>Hallo</p>
 
+</body>
 </html>
-
 
 <?php
 require_once("footer.php");
-?>   
+?>
