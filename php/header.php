@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* Stildefinition für Rechts */
     body {
       font-family: 'Roboto', sans-serif;
       background-color: #f8f9fa;
@@ -19,6 +20,7 @@
     .navbar-brand {
       font-size: 1.5rem;
       color: #923f0e;
+      font-family: "Rancho",cursive;
     }
     .navbar-brand:hover
     {
@@ -27,12 +29,27 @@
     .navbar-toggler-icon {
       color: #fef3c7;
     }
+    /* Stildefinition für den Link */
     .nav-link {
       color: #fef3c7;
     }
     .nav-link:hover {
-      color: #adb5bd;
+      color: #fef3c7;
     }
+    
+    .dropdown-item
+    {
+      color: #fef3c7;
+      background-color: #d5a27c;
+    }
+    .dropdown-item:hover
+    {
+      color: #923f0e;
+    }
+    .nav-link.dropdown-toggle{
+      
+    }
+    /* Stildefinition für Footer */
     .footer {
       padding: 20px;
       background-color: #d5a27c;
@@ -42,6 +59,7 @@
       bottom: 0;
       width: 100%;
     }
+    /* Stildefinition für Links */
     .search-btn {
       background-color: #d5a27c;
       border: none;
@@ -58,29 +76,29 @@
     .heart-btn:hover, .person-btn:hover {
       color: #adb5bd;
     }
+    
   </style>
 </head>
 <body>
 <header>
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src="../assets/images/logo.jpg" width="50" height="50" alt="">
-    </a>
-    <a class="navbar-brand mb-0 h1" style="font-family: Rancho, cursive;" href="#">Art Gallery</a>
+    <a class="navbar-brand" href="../php/index.php" style="text-decoration:none;">
+    <img src="../assets/images/logo.jpg" alt="imageLogo" width="50" height="50" >
+    Art Gallery </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#">Startseite</a>
+          <a class="nav-link" href= "../php/index.php" >Startseite</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Über uns</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" color:hover:white;>
             Mehr über der Kunstwerk
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -15,21 +15,21 @@ require_once("carousel.php");
 
 <!-- Your page content here -->
        <div class="container mt-5">
-            <h2>Top Künstler</h2>
+            <h2>Top Kunstwerk</h2>
             <div class="row mt-5" style="justify-content: space-between;">
                 <!-- Top Künstler -->
                 <?php
                 
                 ?>
             </div>
-            <h2>Top Kunstwerk</h2>
+            <h2>Häufigsten rezensierten Künstler</h2>
             <div class="row mt-5" style="justify-content: space-between;">
                 <!-- Top Kunstwerk -->
                 <?php
                 
                 ?>
             </div>
-            <h2>Recent Review</h2>
+            <h2>Aktuellsten Rezensionen</h2>
             <div class="row mt-5">
                 <!-- neueste Feedback -->
                 <?php
