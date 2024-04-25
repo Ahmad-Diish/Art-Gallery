@@ -19,6 +19,8 @@ require_once("carousel.php");
             <div class="row mt-5" style="justify-content: space-between;">
                 <!-- Top Künstler -->
                 <?php
+                 
+                 $artworkRepository->displayTopArtwork();
                 
                 ?>
             </div>

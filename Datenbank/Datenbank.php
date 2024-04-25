@@ -39,5 +39,6 @@ class Database
                 
         }
     }
+   public function close(){return $this->conn = null;}
 }
 ?>
