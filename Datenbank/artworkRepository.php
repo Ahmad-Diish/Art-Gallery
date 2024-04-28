@@ -31,16 +31,6 @@ class ArtworkRepository
 
 
 
-    public function displayAllArtworks()
-    {
-        $artworks = $this->collectionAllArtworks;
-
-        foreach ($artworks as $artwork) {
-
-            $this->artworki = Artwork::fromState($artwork);
-            $this->artworki->outputArtworks();
-        }
-    }
 
 
     private function getAllArtwork()
@@ -102,7 +92,7 @@ class ArtworkRepository
         return $result;
     }
 
-
+    // TOPArtwork Homepage
     public function displayTopArtwork()
     {
 
@@ -144,51 +134,4 @@ class ArtworkRepository
         return $TopArtworks;
     }
 
-
-    function sortiereArtworks($sortierungsart, $sortierreihenfolge)
-    {
-        $this->database->connect();
-        try{
-            if ($sortierungsart == 'YearOfWork') {
-                //aufsteigend A---Z
-                if ($sortierreihenfolge == 'aufsteigend') {
-                    //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
-                    $anfrage = "SELECT * FROM Artworks ORDER BY YearOfWork ASC";
-                }
-                // absteigend Z---A 
-                elseif ($sortierreihenfolge == 'absteigend') {
-                    $anfrage = "SELECT * FROM Artworks ORDER BY YearOfWork DESC";
-                }
-            } elseif ($sortierungsart == 'ArtistID') {
-                if ($sortierreihenfolge == 'aufsteigend') {
-                    //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
-                    $anfrage = "SELECT * FROM Artworks ORDER BY ArtistID ASC";
-                }
-                // absteigend Z---A 
-                elseif ($sortierreihenfolge == 'absteigend') {
-                    $anfrage = "SELECT * FROM Artworks ORDER BY ArtistID DESC";
-                }
-            } elseif ($sortierungsart == 'Title') {
-                if ($sortierreihenfolge == 'aufsteigend') {
-                    //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
-                    $anfrage = "SELECT * FROM Artworks ORDER BY Title ASC";
-                }
-                // absteigend Z---A 
-                elseif ($sortierreihenfolge == 'absteigend') {
-                    $anfrage = "SELECT * FROM Artworks ORDER BY Title DESC";
-                }
-            }
-            $stmt = $this->database->prepareStatement($anfrage);
-
-            $stmt->execute();
-
-            $artworks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $ex) {
-            exit('could not retrieve Artwork' . $ex->getMessage());
-        } finally {
-            $this->database->close();
-        }
-        
-        $this->collectionAllArtworks = $artworks;
-    }
 }
