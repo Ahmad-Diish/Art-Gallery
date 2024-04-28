@@ -1,6 +1,6 @@
 <?php
 require_once("header.php");
-require_once("../datenbank/artworkRepository.php");
+require_once("../Datenbank/artworkRepository.php");
 require_once("carousel.php");
 
 
