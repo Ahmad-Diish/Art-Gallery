@@ -84,7 +84,7 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <a class="navbar-brand" href="../Homepage/index.php" style="text-decoration:none;">
-    <img src="../assets/images/logo.jpg" alt="imageLogo" width="50" height="50" >
+    <img src="../assets/images/logo.png" alt="imageLogo" width="50" height="50" >
     Art Gallery </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -103,7 +103,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="#">Künstler</a></li>
-            <li><a class="dropdown-item" href="#">Kunstwerk</a></li>
+            <li><a class="dropdown-item" href="../Pages/artsworks.php">Kunstwerk</a></li>
             <li><a class="dropdown-item" href="#">Genres</a></li>
             <li><a class="dropdown-item" href="#">Themen</a></li>
           </ul>
