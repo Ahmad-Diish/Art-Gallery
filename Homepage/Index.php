@@ -27,7 +27,7 @@ $artworkRepository = new ArtworkRepository($conn);
                 <!-- Top Künstler -->
                 <?php
                  
-                 $artworkRepository->displayTopArtwork();
+                 $artworkRepository->TopArtwork();
                 
                 ?>
             </div>

@@ -29,7 +29,16 @@ class ArtworkRepository
     }
 
 
+    public function AllArtworks()
+    {
+        $artworks = $this->collectionAllArtworks;
 
+        foreach ($artworks as $artwork) {
+
+            $this->artworki = Artwork::fromState($artwork);
+            $this->artworki->outputArtworks();
+        }
+    }
 
 
 
@@ -93,7 +102,7 @@ class ArtworkRepository
     }
 
     // TOPArtwork Homepage
-    public function displayTopArtwork()
+    public function TopArtwork()
     {
 
         $topArtworks = $this->getTopArtwork();

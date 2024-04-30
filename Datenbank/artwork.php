@@ -1,8 +1,25 @@
 <?php
 
+//* hier wurde die globale Variable sowie Methode definiert.
 
-require_once("../Datenbank/main.php");
 
+require("../Datenbank/datenbank.php");
+
+function checkKunstwerkImage($verzeichnis)
+{
+  return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerkklein.jpg";
+}
+
+//*Funktion für verschönern nicht mehr als 3 Worte in Title zeigen ...
+function truncate($title)
+{
+  $words = explode(" ", $title); // Teilt den Titel in Wörter auf
+  if (count($words) > 3) {
+    return implode(" ", array_slice($words, 0, 4)) . "..."; // Kürzt den Titel auf die ersten drei Wörter
+  } else {
+    return $title; // Gibt den Originaltitel zurück, wenn er 3 oder weniger Wörter hat
+  }
+}
 
 class Artwork
 {
@@ -143,29 +160,42 @@ class Artwork
       return new self($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink);
    }
 
-   public function outputArtworks()
-   {
 
-      echo '<div class="col-md-3 col-lg-3 mb-4">';
-      echo '<div class="card">';
-      //C:\xampp\htdocs\WT_Projekt\assets\images\Art_Images v3\images\works\square-medium
-      strlen($this->getImageFileName()) == 5 ? $image = "../assets/images/Art_Images v3/images/works/square-medium/0" . $this->getImageFileName() . ".jpg" : $image = "../assets/images/Art_Images v3/images/works/square-medium/" . $this->getImageFileName() . ".jpg";
-      $checkedImage = checkKunstwerkImage($image);
-      $checkedImage = "'" . $checkedImage . "'";
-      echo '<img src=' . $checkedImage . '"class="card-img-top" alt=' . $this->getArtworkTitle() . '>';
-      //echo '<div class="card-body d-flex flex-column justify-content-end">';
-      echo '<div class="card-body">';
-      $truncatedTitle = truncate($this->getArtworkTitle()); // Kürzt den Titel
-      echo '<a href="../php/displaySingleArtwork.php?artworkID=' . $this->getArtWorksID() . '"class="titleColor"> <h6 class="card-title">' . $truncatedTitle . '</h6></a>';
-      
-      echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">
-               <input type="hidden" name="artworkId" value="' . $this->getArtWorksID() . '">';
-    
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
+// Methode zur Ausgabe von Kunstwerkkarten
+public function outputArtworks()
+{
+    // Öffnen des Kartencontainers
+    echo '<div class="col-md-3 col-lg-3 mb-4">';
+    echo '<div class="card">';
 
-      
-   }
+    // Bildpfad generieren
+    $image = $this->getImageFileName();
+    $imagePath = strlen($image) == 5 ? "../assets/images/Art_Images v3/images/works/square-medium/0$image.jpg" : "../assets/images/Art_Images v3/images/works/square-medium/$image.jpg";
+    $checkedImage = checkKunstwerkImage($imagePath);
+
+    // Bild ausgeben
+    echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
+
+    // Karteninhalt
+    echo '<div class="card-body">';
+    $truncatedTitle = truncate($this->getArtworkTitle()); // Funktion zum Kürzen des Titels aufrufen
+    echo '<a href="../php/displaySingleArtwork.php?artworkID=' . $this->getArtWorksID() . '" class="titleColor"><h6 class="card-title">' . $truncatedTitle . '</h6></a>';
+
+    // Formular für weitere Aktionen
+    echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">
+            <input type="hidden" name="artworkId" value="' . $this->getArtWorksID() . '">
+          </form>';
+
+    // Mehr Infos Button
+    echo '<div style="padding:30px;position:absolute;justify-content:space-evenly;"> 
+            <a href="../php/displaySingleArtwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
+          </div>';
+
+    // Kartencontainer schließen
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+}
+   
 
 }
