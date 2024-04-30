@@ -10,16 +10,6 @@ function checkKunstwerkImage($verzeichnis)
   return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerkklein.jpg";
 }
 
-//*Funktion für verschönern nicht mehr als 3 Worte in Title zeigen ...
-function truncate($title)
-{
-  $words = explode(" ", $title); // Teilt den Titel in Wörter auf
-  if (count($words) > 3) {
-    return implode(" ", array_slice($words, 0, 4)) . "..."; // Kürzt den Titel auf die ersten drei Wörter
-  } else {
-    return $title; // Gibt den Originaltitel zurück, wenn er 3 oder weniger Wörter hat
-  }
-}
 
 class Artwork
 {
@@ -178,8 +168,8 @@ public function outputArtworks()
             }
 
             .button_user_erweitern {
-                background-color: #4CAF50; /* Hintergrundfarbe */
-                color: white; /* Textfarbe */
+                background-color: #923f0e; /* Hintergrundfarbe */
+                color: black; /* Textfarbe */
                 border: none; /* Kein Rahmen */
                 padding: 10px 20px; /* Innenabstand */
                 text-align: center; /* Zentriert den Text */
@@ -192,8 +182,8 @@ public function outputArtworks()
             }
 
             .button_user_erweitern:hover {
-                background-color: #45a049; /* Ändert die Hintergrundfarbe beim Überfahren */
-                color: white; /* Ändert die Textfarbe beim Überfahren */
+                background-color: #fef3c7; /* Ändert die Hintergrundfarbe beim Überfahren */
+                color: black; /* Ändert die Textfarbe beim Überfahren */
             }
         </style>
     ';
@@ -217,8 +207,7 @@ public function outputArtworks()
 
     // Karteninhalt
     echo '<div class="card-body">';
-    $truncatedTitle = truncate($this->getArtworkTitle()); // Funktion zum Kürzen des Titels aufrufen
-    echo '<h6 class="card-title">' . $truncatedTitle . '</h6>';
+    echo '<h6 class="card-title">' . $this->getArtworkTitle() . '</h6>';
 
     // Mehr Infos Button mit neuem Design
     echo '<div class="more-info-button">
