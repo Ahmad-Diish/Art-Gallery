@@ -160,10 +160,47 @@ class Artwork
       return new self($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink);
    }
 
-
 // Methode zur Ausgabe von Kunstwerkkarten
 public function outputArtworks()
 {
+    // CSS für den Rahmen um das Bild und den Mehr Infos Button
+    $css = '
+        <style>
+            .card-img-container {
+                border: 2px solid #ddd; /* Schöner Rahmen um das Bild */
+                border-radius: 8px; /* Abgerundete Ecken */
+                overflow: hidden; /* Um das Bild innerhalb des Rahmens zu behalten */
+            }
+
+            .more-info-button {
+                text-align: center; /* Zentriert den Button */
+                margin-top: 15px; /* Abstand nach oben */
+            }
+
+            .button_user_erweitern {
+                background-color: #4CAF50; /* Hintergrundfarbe */
+                color: white; /* Textfarbe */
+                border: none; /* Kein Rahmen */
+                padding: 10px 20px; /* Innenabstand */
+                text-align: center; /* Zentriert den Text */
+                text-decoration: none; /* Kein Unterstrich */
+                display: inline-block; /* Blockelement */
+                font-size: 16px; /* Schriftgröße */
+                border-radius: 4px; /* Abgerundete Ecken */
+                cursor: pointer; /* Zeigt an, dass es sich um einen anklickbaren Button handelt */
+                transition-duration: 0.4s; /* Animationsdauer */
+            }
+
+            .button_user_erweitern:hover {
+                background-color: #45a049; /* Ändert die Hintergrundfarbe beim Überfahren */
+                color: white; /* Ändert die Textfarbe beim Überfahren */
+            }
+        </style>
+    ';
+
+    // Ausgabe des CSS
+    echo $css;
+
     // Öffnen des Kartencontainers
     echo '<div class="col-md-3 col-lg-3 mb-4">';
     echo '<div class="card">';
@@ -173,21 +210,18 @@ public function outputArtworks()
     $imagePath = strlen($image) == 5 ? "../assets/images/Art_Images v3/images/works/square-medium/0$image.jpg" : "../assets/images/Art_Images v3/images/works/square-medium/$image.jpg";
     $checkedImage = checkKunstwerkImage($imagePath);
 
-    // Bild ausgeben
+    // Bild ausgeben in schönem Rahmen
+    echo '<div class="card-img-container">';
     echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
+    echo '</div>';
 
     // Karteninhalt
     echo '<div class="card-body">';
     $truncatedTitle = truncate($this->getArtworkTitle()); // Funktion zum Kürzen des Titels aufrufen
-    echo '<a href="../php/displaySingleArtwork.php?artworkID=' . $this->getArtWorksID() . '" class="titleColor"><h6 class="card-title">' . $truncatedTitle . '</h6></a>';
+    echo '<h6 class="card-title">' . $truncatedTitle . '</h6>';
 
-    // Formular für weitere Aktionen
-    echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">
-            <input type="hidden" name="artworkId" value="' . $this->getArtWorksID() . '">
-          </form>';
-
-    // Mehr Infos Button
-    echo '<div style="padding:30px;position:absolute;justify-content:space-evenly;"> 
+    // Mehr Infos Button mit neuem Design
+    echo '<div class="more-info-button">
             <a href="../php/displaySingleArtwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
           </div>';
 
@@ -196,6 +230,6 @@ public function outputArtworks()
     echo '</div>';
     echo '</div>';
 }
-   
+
 
 }
