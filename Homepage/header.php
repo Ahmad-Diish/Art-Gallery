@@ -106,7 +106,7 @@
               <a class="nav-link" href="../Homepage/index.php">Startseite</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Über uns</a>
+              <a class="nav-link" href="../Pages/aboutUs.php">Über uns</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" color:hover:white;>
@@ -116,7 +116,7 @@
                 <li><a class="dropdown-item" href="../Pages/artists.php">Künstler</a></li>
                 <li><a class="dropdown-item" href="../Pages/artsworks.php">Kunstwerk</a></li>
                 <li><a class="dropdown-item" href="../Pages/genres.php">Genres</a></li>
-                <li><a class="dropdown-item" href="#">Themen</a></li>
+                <li><a class="dropdown-item" href="../Pages/subjects.php">Themen</a></li>
               </ul>
             </li>
           </ul>
