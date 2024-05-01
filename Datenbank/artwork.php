@@ -157,33 +157,39 @@ public function outputArtworks()
     $css = '
         <style>
             .card-img-container {
-                border: 2px solid #ddd; /* Schöner Rahmen um das Bild */
-                border-radius: 8px; /* Abgerundete Ecken */
-                overflow: hidden; /* Um das Bild innerhalb des Rahmens zu behalten */
+                border: 5px solid #ddd; 
+                border-radius: 10px; 
+                overflow: hidden;
             }
-
+            .card {
+               border-radius: 10px;
+               background-color: #fef3c7;
+               width: 300px; /* Breite festlegen */
+               height: 400px; /* Höhe festlegen */
+           }
+           
             .more-info-button {
-                text-align: center; /* Zentriert den Button */
-                margin-top: 15px; /* Abstand nach oben */
+                text-align: center; 
+                margin-top: 15px; 
             }
 
             .button_user_erweitern {
-                background-color: #923f0e; /* Hintergrundfarbe */
-                color: black; /* Textfarbe */
-                border: none; /* Kein Rahmen */
-                padding: 10px 20px; /* Innenabstand */
-                text-align: center; /* Zentriert den Text */
-                text-decoration: none; /* Kein Unterstrich */
-                display: inline-block; /* Blockelement */
-                font-size: 16px; /* Schriftgröße */
-                border-radius: 4px; /* Abgerundete Ecken */
-                cursor: pointer; /* Zeigt an, dass es sich um einen anklickbaren Button handelt */
-                transition-duration: 0.4s; /* Animationsdauer */
+                background-color: #d5a27c; 
+                color: black; 
+                border: none; 
+                padding: 5px 10px; 
+                text-align: center; 
+                text-decoration: none; 
+                display: inline-block; 
+                font-size: 16px; 
+                border-radius: 4px; 
+                cursor: pointer; 
+                transition-duration: 0.4s; 
             }
 
             .button_user_erweitern:hover {
-                background-color: #fef3c7; /* Ändert die Hintergrundfarbe beim Überfahren */
-                color: black; /* Ändert die Textfarbe beim Überfahren */
+                background-color: #fef3c7; 
+                color: black; 
             }
         </style>
     ';
@@ -211,7 +217,7 @@ public function outputArtworks()
 
     // Mehr Infos Button mit neuem Design
     echo '<div class="more-info-button">
-            <a href="../php/displaySingleArtwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
+            <a href="../Pages/Single Artwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
           </div>';
 
     // Kartencontainer schließen
@@ -219,6 +225,4 @@ public function outputArtworks()
     echo '</div>';
     echo '</div>';
 }
-
-
 }
