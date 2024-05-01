@@ -177,7 +177,7 @@ class Artist
 
 function checkArtistImage($verzeichnis)
 {
-    return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/missingPerson.png";
+    return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/KeinPersonklein.png";
 }
 
 ?>
