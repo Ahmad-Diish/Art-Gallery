@@ -64,7 +64,37 @@ class ArtworkRepository
             $this->datenbank->close();
         }
     }
+    public function getArtwork($id)
+    {
+        $result = $this->getArtworkByID($id);
+        if ($result === null) {
+            throw new Exception('the ArtworksID is not available');
+        }
 
+        $this->artworki = Artwork::fromState($result);
+        return $this->artworki;
+    }
+    private function getArtworkByID($artworkId)
+    {
+        $this->database->connect();
+        try{
+            $anfrage = "SELECT * FROM artworks WHERE ArtWorkID = :artworkId";
+
+            $stmt = $this->database->prepareStatement($anfrage);
+
+            $stmt->bindParam(':artworkId', $artworkId);
+
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            exit('could not retrieve Artwork' . $ex->getMessage());
+        } finally {
+            $this->database->close();
+        }
+        
+        return $result;
+    }
 
 
     // TOPArtwork Homepage
