@@ -76,11 +76,11 @@ class ArtworkRepository
     }
     private function getArtworkByID($artworkId)
     {
-        $this->database->connect();
+        $this->datenbank->connect();
         try{
             $anfrage = "SELECT * FROM artworks WHERE ArtWorkID = :artworkId";
 
-            $stmt = $this->database->prepareStatement($anfrage);
+            $stmt = $this->datenbank->prepareStatement($anfrage);
 
             $stmt->bindParam(':artworkId', $artworkId);
 
@@ -90,7 +90,7 @@ class ArtworkRepository
         } catch (Exception $ex) {
             exit('could not retrieve Artwork' . $ex->getMessage());
         } finally {
-            $this->database->close();
+            $this->datenbank->close();
         }
         
         return $result;
