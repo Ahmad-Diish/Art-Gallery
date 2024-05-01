@@ -98,7 +98,7 @@ class Genre
         echo '<img src=' . $checkedImage . '"class="card-img-top" alt=' . $this->getGenreName() . '>';
       
         echo '<div class="card-body">';
-        echo '<a href="../Pages/SingleGenre.php" class="titleColor"> <h6 class="card-title">' . $this->getGenreName() . '</h6></a>';
+        echo '<a href="../Pages/singleGenre.php" class="titleColor"> <h6 class="card-title">' . $this->getGenreName() . '</h6></a>';
         echo '</div>';
         echo '</div>';
         echo '</div>';
