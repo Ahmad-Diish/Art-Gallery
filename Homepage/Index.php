@@ -1,12 +1,14 @@
 <?php
 require_once("header.php");
 require_once("../Datenbank/artworkRepository.php");
+require_once("../Datenbank/artistRepository.php");
 require_once("carousel.php");
 
 
 // Erstellen einer neuen Datenbankverbindung und einer ArtistRepository-Instanz.
 $conn = new Datenbank();
 $artworkRepository = new ArtworkRepository($conn);
+$artistRepository = new ArtistRepository($conn);
 
 ?>
 
@@ -35,7 +37,7 @@ $artworkRepository = new ArtworkRepository($conn);
             <div class="row mt-5" style="justify-content: space-between;">
                 <!-- Top Kunstwerk -->
                 <?php
-                
+                    $artistRepository->displayTopArtists();
                 ?>
             </div>
             <h2>Aktuellsten Rezensionen</h2>

@@ -1,0 +1,191 @@
+<?php
+
+require_once("../Datenbank/artist.php");
+
+class ArtistRepository
+{
+
+    private $datenbank;
+    private $artist;
+
+    public function __construct($datenbank)
+    {
+        $this->datenbank = $datenbank;
+        $this->artist = Artist::getDefaultArtist();
+    }
+
+    private function getTopArtists() // Homepage
+    {
+
+        $this->datenbank->connect();
+        try {
+            $anfrage = " SELECT artists.ArtistID, artists.FirstName, artists.LastName, COUNT(reviews.ReviewId) AS review_count 
+                     FROM artists JOIN artworks ON artists.ArtistID = artworks.ArtistID JOIN reviews ON artworks.ArtWorkID = reviews.ArtWorkId 
+                     GROUP BY artists.ArtistID 
+                     ORDER BY review_count DESC LIMIT 3";
+
+            $stmt = $this->datenbank->prepareStatement($anfrage);
+
+            $stmt->execute();
+
+            $TopArtists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            exit('could not retrieve artist' . $ex->getMessage());
+        } finally {
+            $this->datenbank->close();
+        }
+
+        return $TopArtists;
+    }
+
+    public function displayTopArtists()  // Homepage
+    {
+
+        $topArtists = $this->getTopArtists();
+
+        foreach ($topArtists as $topArtist) {
+
+            $this->artist = Artist::fromState($topArtist);
+
+            $this->artist->outputArtist();
+        }
+    }
+    
+
+    
+    // funktion um Künstler nach aufsteigend oder absteigend zu sotieren. Wird in [function displayAllArtist] genutzt
+    private function sortiereKuenstler($sortierreihenfolge) 
+    {
+        $this->datenbank->connect();
+
+        try {
+            //aufsteigend A---Z
+            if ($sortierreihenfolge == 'aufsteigend') {
+                //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
+                $anfrage = "SELECT * FROM Artists ORDER BY LastName ASC";
+            }
+            // absteigend Z---A 
+            elseif ($sortierreihenfolge == 'absteigend') {
+                $anfrage = "SELECT * FROM Artists ORDER BY LastName DESC";
+            }
+
+            $stmt = $this->datenbank->prepareStatement($anfrage);
+
+            $stmt->execute();
+
+            $artists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            exit('could not retrieve Artist' . $ex->getMessage());
+        } finally {
+            $this->datenbank->close();
+        }
+
+        return $artists;
+    }
+
+    // funktion die all künstler mit Reihfolge anzeigt
+    public function displayAllArtist($sortierreihenfolge)
+    {
+
+
+        $artists = $this->sortiereKuenstler($sortierreihenfolge);
+
+        foreach ($artists as $artist) {
+            
+
+            $this->artist = Artist::fromState($artist);
+
+            $this->artist->outputArtist();
+        }
+    }
+
+
+    // funktion die aus der Datenbank der artist anhand seiner ID ausgebt wird in [function getArtist] genutzt.
+    private function getArtistByID($artistId)
+    {
+        $this->datenbank->connect();
+        try {
+            $anfrage = "SELECT * FROM artists WHERE ArtistID = :artistId";
+
+            $stmt = $this->datenbank->prepareStatement($anfrage);
+
+            $stmt->bindParam(':artistId', $artistId);
+
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+
+            exit('Could not retrieve artist: ' . $ex->getMessage());
+        } finally {
+            $this->datenbank->close();
+        }
+
+        return $result;
+    }
+
+    //die Funktionalität zur Abfrage eines Künstlers aus der Datenbank zu kapseln und das Ergebnis als Artist-Objekt zurückzugeben. 
+    public function getArtist($id)
+    {
+        $result = $this->getArtistByID($id);    // Die Methode ruft den Künstler aus der Datenbank anhand 
+                                                // seiner ID mithilfe der bereits implementierten Methode getArtistByID ab.
+                                                // Das Ergebnis wird in der Variablen $result gespeichert.
+
+        if ($result === null) {
+            throw new Exception('the ArtistId is not available');
+        }
+
+        return Artist::fromState($result); //Wenn ein gültiges Ergebnis vorliegt, wird ein Artist-Objekt erstellt, 
+                                            //indem die statische Methode fromState der Artist-Klasse aufgerufen wird. 
+                                            //Diese Methode konvertiert das aus der Datenbank abgerufene Array in ein Artist-Objekt.
+    }
+
+
+    // funktion die eine kunstwerk anhand eine  Artist-ID zurückgibt. Wird in [function getArtworks] verwendet
+    private function getArtworksByArtistID($artistId)
+    {
+        $this->datenbank->connect();
+        try {
+            $anfrage = "SELECT * FROM artworks WHERE ArtistID = :artistId";
+
+            $stmt = $this->datenbank->prepareStatement($anfrage);
+
+            $stmt->bindParam(':artistId', $artistId);
+
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+
+            exit('could not retrieve artist ' . $ex->getMessage());
+        } finally {
+            $this->datenbank->close();
+        }
+
+        return $result;
+    }
+
+    //Funktion hat den Zweck, alle Kunstwerke eines Künstlers anhand seiner ID abzurufen und zurückzugeben.
+    public function getArtworks($id)
+    {
+        $results = $this->getArtworksByArtistID($id);
+
+        if ($results === null) {
+            throw new Exception('the ArtworkId is not available');
+        }
+        $tempArtist = $this->artist;
+
+
+        foreach ($results as $result) {
+
+            $tempArtist->setArtworksForArtist($result);
+        }
+        $tempArtworks = $tempArtist->getArtworksForArtist();
+
+        return $tempArtworks;
+    }
+
+
+}       
+
+?>
