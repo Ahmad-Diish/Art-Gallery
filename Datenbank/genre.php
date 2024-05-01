@@ -63,30 +63,32 @@ class Genre
     }
    
    
-
-  /*
     public function outputGenres():void
     {
-        echo '<div class="col-md-4 col-lg-2 mb-4">';
-        echo '<div class="card">';
-       
-        $image = "../assets/images/Art_Images v3/images/genres/square-medium/" . $this->getGenreID() . ".jpg";
-        
-        $checkedImage = $image;
+        $css = '
+        <style>
+            .card-img-container {
+                border: 5px solid #ddd; 
+                border-radius: 10px; 
+                overflow: hidden;
+            }
+            .card {
+               border-radius: 10px;
+               background-color: #fef3c7;
+               width: 100%; /* Breite festlegen */
+               height: 100%; /* Höhe festlegen */
+           }
+           .titleColor{
+            text-align: center;
+            color: black;
 
-        $checkedImage = "'" . $checkedImage . "'";
-        echo '<img src=' . $checkedImage . '"class="card-img-top" alt=' . $this->getGenreName() . '>';
-       
-        echo '<div class="card-body">';
-        echo '<a href="#" class="titleColor"> <h6 class="card-title">' . $this->getGenreName() . '</h6></a>';
-        echo '</div>';
-        echo '</div>';
-        echo '</div>';
-        
-    }*/
-   
-    public function outputGenres():void
-    {
+           }
+           
+        </style>
+    ';
+
+    // Ausgabe des CSS
+    echo $css;
         echo '<div class="col-md-3 col-lg-2 mb-4">';
         echo '<div class="card">';
         

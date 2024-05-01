@@ -115,7 +115,7 @@
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="../Pages/artists.php">Künstler</a></li>
                 <li><a class="dropdown-item" href="../Pages/artsworks.php">Kunstwerk</a></li>
-                <li><a class="dropdown-item" href="#">Genres</a></li>
+                <li><a class="dropdown-item" href="../Pages/genres.php">Genres</a></li>
                 <li><a class="dropdown-item" href="#">Themen</a></li>
               </ul>
             </li>

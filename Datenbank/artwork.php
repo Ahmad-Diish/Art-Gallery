@@ -225,4 +225,52 @@ public function outputArtworks()
     echo '</div>';
     echo '</div>';
 }
+
+public function outputSingleArtwork()
+{
+    echo '<div class="container mt-5" style="max-width: 1100px; margin: 0 auto; padding: 60px; background-color: #E5DDC5; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">';
+    echo '<h3>' . $this->getArtistFirstName() . " " . $this->getArtistLastName() . '</h3>';
+    echo '<div class="row">';
+    echo '<div class="col-md-4">';
+    echo '<div class="artist-card">';
+    $image = "../assets/images/Art_Images v3/images/artists/medium/" . $this->getArtistID() . ".jpg";
+    $checkedImage = checkArtistImage($image);
+    echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtistFirstName() . '">';
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="col-md-8">';
+
+    echo '<p>' . $this->getDetailsArtist() . '</p>';
+    echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
+    echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
+    //echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
+    echo '</form>';
+    echo '<table class="table mt-4">';
+    echo '<tbody>';
+    echo '<tr>';
+    echo '<th scope="row">Name</th>';
+    echo '<td>' . $this->getArtistFirstName() . " " . $this->getArtistLastName() . '</td>';
+    echo '</tr>';
+    echo '<tr>';
+    echo '<th scope="row">Datum</th>';
+    echo '<td>' . $this->getArtistDateBirth() . '-' . $this->getArtistDateDeath() . '</td>';
+    echo '</tr>';
+    echo '<tr>';
+    echo '<th scope="row">Nationalität des Künstlers</th>';
+    echo '<td>' . $this->getArtistNationality() . '</td>';
+    echo '</tr>';
+    echo '<tr>';
+    echo '<th scope="row">Mehr Infos</th>';
+    echo '<td><a class="textColor_gold" href="' . $this->getArtistLink() . '">' . $this->getArtistLink() . '</a></td>';
+    echo '</tr>';
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    echo '</div>';
+    echo '<h2 style="padding-left:10px;" class="mt-4">Kunstwerke von  ' . $this->getArtistFirstName() . " " . $this->getArtistLastName() . '</h2>';
+    echo '<div class="row">';
+}
+
+
+
 }

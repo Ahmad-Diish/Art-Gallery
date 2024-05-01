@@ -8,7 +8,6 @@ $conn = new datenbank();
 $genrei = new GenreRepository($conn);
 
 ?>
-
 <genres>
     <body>
         <div class="container mt-4">
