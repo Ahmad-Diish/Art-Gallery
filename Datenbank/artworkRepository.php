@@ -64,6 +64,7 @@ class ArtworkRepository
             $this->datenbank->close();
         }
     }
+    // für Artist
     public function getArtwork($id)
     {
         $result = $this->getArtworkByID($id);
@@ -74,6 +75,7 @@ class ArtworkRepository
         $this->artworki = Artwork::fromState($result);
         return $this->artworki;
     }
+    // für Artist
     private function getArtworkByID($artworkId)
     {
         $this->datenbank->connect();

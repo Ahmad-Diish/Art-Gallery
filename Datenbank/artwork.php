@@ -217,7 +217,7 @@ public function outputArtworks()
 
     // Mehr Infos Button mit neuem Design
     echo '<div class="more-info-button">
-            <a href="../Pages/Single Artwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
+            <a href="../Pages/SingleArtwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
           </div>';
 
     // Kartencontainer schließen

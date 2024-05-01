@@ -105,7 +105,7 @@ class Artist
 
         echo '<div class="card-body" style="background-color: #fffbeb; display: flex; align-items: center; justify-content: space-between; flex-direction: column; height: 90px;">';
         echo '<div style="display: flex; align-items: center; justify-content: space-between;">';
-        echo '<a class="artist-name" style="color: #d5a27c; text-decoration: none; height: 100%; display: flex; align-items: center;" href="../pages/displaySingleArtist.php?artistID=' . $this->getArtistID() . '">';
+        echo '<a class="artist-name" style="color: #d5a27c; text-decoration: none; height: 100%; display: flex; align-items: center;" href="../pages/SingleArtist.php?artistID=' . $this->getArtistID() . '">';
         echo '<h5 class="card-title" style="margin: 0;">' . htmlspecialchars($this->getArtistFirstName() . " " . $this->getArtistLastName()) . '</h5></a>'; // Added display: flex; align-items: center;
         echo '<a href="../php/addToFavorites.php?artistID=' . $this->getArtistID() . '"<button class="btn heart-btn"><i class="bi bi-heart" style="width: 6px; height: 36px; margin-left: 10px; color: red; filter: drop-shadow(1px 1px 2px grey);" ></i></button></a>';
         echo '</div>'; // Close flex container
