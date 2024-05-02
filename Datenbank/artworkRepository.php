@@ -75,6 +75,7 @@ class ArtworkRepository
         $this->artworki = Artwork::fromState($result);
         return $this->artworki;
     }
+    
     // für Artist
     private function getArtworkByID($artworkId)
     {

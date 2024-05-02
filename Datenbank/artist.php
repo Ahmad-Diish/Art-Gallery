@@ -1,5 +1,5 @@
 <?php
-require_once("artwork.php");
+require_once ("artwork.php");
 class Artist
 {
 
@@ -116,7 +116,7 @@ class Artist
 
     }
 
-    
+
 
     public function setArtworksForArtist($artworkAlsArray)
     {
@@ -177,7 +177,7 @@ class Artist
 
 function checkArtistImage($verzeichnis)
 {
-    return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/KeinPersonklein.png";
+    return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinPerson.png";
 }
 
 ?>
@@ -219,5 +219,4 @@ function checkArtistImage($verzeichnis)
         box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
         transform: translateY(-5px);
     }
-    
 </style>

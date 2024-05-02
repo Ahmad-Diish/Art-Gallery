@@ -5,8 +5,11 @@ require("../Datenbank/datenbank.php");
 
 function checkKunstwerkImage($verzeichnis)
 {
-  return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerkklein.jpg";
+  return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerk.png";
 }
+
+
+
 class Genre
 {
 

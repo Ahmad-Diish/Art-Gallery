@@ -2,12 +2,12 @@
 
 //* hier wurde die globale Variable sowie Methode definiert.
 
-
+require_once("artistRepository.php");
 require("../Datenbank/datenbank.php");
 
 function checkKunstwerkImage($verzeichnis)
 {
-  return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerkklein.jpg";
+  return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerk.png";
 }
 
 
@@ -225,4 +225,64 @@ public function outputArtworks()
     echo '</div>';
     echo '</div>';
 }
+
+
+public function outputSingleArtwork()
+{
+   // Beschreibung des Bildes
+   echo '<p>Beschreibung des Bildes hier...</p>';
+
+   // Öffnungs-Tags der Tabelle und der ersten Zeile
+   echo '<div class="row">';
+   echo '<div class="col-md-8">'; // Spalte für die Tabelle
+
+   // Tabelle für die Details des Kunstwerks
+   echo '<table class="table">';
+   echo '<tr><th>Titel</th><td>' . $this->getArtworkTitle() . '</td></tr>';
+   // Weitere Details hier einfügen, falls benötigt
+   // Fünf zusätzliche Zeilen hinzufügen
+   for ($i = 1; $i <= 5; $i++) {
+       echo '<tr><th>Zusätzliche Information ' . $i . '</th><td>Wert ' . $i . '</td></tr>';
+   }
+   echo '</table>';
+
+   echo '</div>'; // Ende der Spalte für die Tabelle
+   echo '<div class="col-md-4">'; // Spalte für das Bild
+
+   // Bild des Kunstwerks
+   echo '<div class="card">';
+   $image = strlen($this->getImageFileName()) == 5 ? "../assets/images/Art_Images v3/images/works/medium/0" . $this->getImageFileName() . ".jpg" : "../assets/images/Art_Images v3/images/works/medium/" . $this->getImageFileName() . ".jpg";
+   $checkedImage = checkKunstwerkImage($image);
+   echo '<a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '"></a>';
+   echo '</div>';
+
+   echo '</div>'; // Ende der Spalte für das Bild
+   echo '</div>'; // Ende der Zeile
+
+   // Modal
+   $modalId = "exampleModal" . uniqid(); // Unique Modal ID
+   echo '<div class="modal fade" id="' . $modalId . '" tabindex="-1" aria-labelledby="' . $modalId . '" aria-hidden="true">';
+   echo '    <div class="modal-dialog" role="document">';
+   echo '        <div class="modal-content">';
+   echo '            <div class="modal-header">';
+   echo '                <h5 class="modal-title" id="' . $modalId . '">' . $this->getArtworkTitle() . " durch " . $this->artist->getArtistFirstName() . " " . $this->artist->getArtistLastName() . '</h5>';
+   echo '                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+   echo '            </div>';
+   echo '            <div class="modal-body">';
+   echo '                <p>' . $this->getArtworkTitle() . '</p>';
+   $imageModal = strlen($this->getImageFileName()) == 5 ? "../assets/images/Art_Images v3/images/works/large/0" . $this->getImageFileName() . ".jpg" : "../assets/images/Art_Images v3/images/works/large/" . $this->getImageFileName() . ".jpg";
+   $checkedImageModal = checkKunstwerkImage($imageModal);
+   echo '                <img src="' . $checkedImageModal . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
+   echo '            </div>';
+   echo '            <div class="modal-footer">';
+   echo '                <button type="button" class="btn btn-secondary button_style" data-bs-dismiss="modal">Schließen</button>';
+   echo '            </div>';
+   echo '        </div>';
+   echo '    </div>';
+   echo '</div>';
+}
+
+
+
+
 }
