@@ -34,7 +34,7 @@ class Genre
         
         $this->link = $link;
         
-        $this->Datenbank = new Datenbank();
+       
     }
   
     public function getGenreID():int
