@@ -9,11 +9,17 @@ $genrei = new GenreRepository($conn);
 
 ?>
 <genres>
+    <head>
+        <style>
+            body {
+ background-color: #fffbeb;}
+
+        </style>
+    </head>
     <body>
         <div class="container mt-4">
-            <h2>Genres Galerie</h2>
+            <h2 class="text-center">Genres Galerie</h2>
             <div class="row mt-4">
-               
                 <?php
                 $genrei->AllGenres();
                 ?>
@@ -22,7 +28,9 @@ $genrei = new GenreRepository($conn);
     </body>
 </genres>
 
+<?php require_once("../Homepage/footer.php"); ?>
 
-<?php
-require_once("../Homepage/footer.php");
+
 ?>
+
+

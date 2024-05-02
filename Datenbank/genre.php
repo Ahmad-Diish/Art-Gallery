@@ -66,44 +66,57 @@ class Genre
     }
    
    
-    public function outputGenres():void
+    public function outputGenres(): void
     {
         $css = '
         <style>
-            .card-img-container {
-                border: 5px solid #ddd; 
-                border-radius: 10px; 
-                overflow: hidden;
-            }
             .card {
-               border-radius: 10px;
-               background-color: #fef3c7;
-               width: 100%; /* Breite festlegen */
-               height: 100%; /* Höhe festlegen */
-           }
-           .titleColor{
-            text-align: center;
-            color: black;
-
-           }
-           
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s;
+                background-color: #fef3c7;
+                
+                cursor: pointer;
+            }
+            
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            }
+    
+            .card-img {
+                width: 100%;
+                height: auto;
+                border-bottom: 1px solid #ddd;
+            }
+    
+            .card-title {
+                text-align: center;
+                padding: 10px;
+                color: #333;
+                font-size: 16px;
+                font-weight: bold;
+                text-decoration: none;
+            }
         </style>
-    ';
-
-    // Ausgabe des CSS
-    echo $css;
+        ';
+    
+        // CSS ausgeben
+        echo $css;
+    
         echo '<div class="col-md-3 col-lg-2 mb-4">';
         echo '<div class="card">';
-        
+    
         $image = "../assets/images/Art_Images v3/images/genres/square-medium/" . $this->getGenreID() . ".jpg";
         $checkedImage = checkKunstwerkImage($image);
         $checkedImage = "'" . $checkedImage . "'";
-        echo '<img src=' . $checkedImage . '"class="card-img-top" alt=' . $this->getGenreName() . '>';
-      
-        echo '<div class="card-body">';
-        echo '<a href="../Pages/singleGenre.php" class="titleColor"> <h6 class="card-title">' . $this->getGenreName() . '</h6></a>';
-        echo '</div>';
+        echo '<img src=' . $checkedImage . ' class="card-img" alt=' . $this->getGenreName() . '>';
+    
+        echo '<a href="../Pages/singleGenre.php" class="card-title">' . $this->getGenreName() . '</a>';
+    
         echo '</div>';
         echo '</div>';
     }
-}
+}    
