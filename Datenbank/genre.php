@@ -47,7 +47,10 @@ class Genre
     {
         return $this->genreName;
     }
-
+    public function description():string
+    {
+        return $this->genreName;
+    }
 
  
     public static function fromState(Array $genre):Genre
@@ -95,7 +98,7 @@ class Genre
             .card-title {
                 text-align: center;
                 padding: 10px;
-                color: #333;
+                color: #923f0e  ;
                 font-size: 16px;
                 font-weight: bold;
                 text-decoration: none;

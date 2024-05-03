@@ -5,6 +5,8 @@ require_once("../Datenbank/genre.php");
 require_once("../Datenbank/datenbank.php");
 
 
+
+
 class GenreRepository
 {
   
@@ -12,6 +14,7 @@ class GenreRepository
 
     private $Datenbank;
     private $genrei;
+    private $artworki ;
     
 
 
@@ -59,10 +62,49 @@ class GenreRepository
         $this->collectionAllGenres = $genres;
     }
     
+    public function getGenreByID($genreId)
+    {
+        $this->Datenbank->connect();
+        try{
+            $anfrage = "SELECT * FROM genres WHERE GenreID = :genreId";
+
+            $stmt = $this->Datenbank->prepareStatement($anfrage);
+
+            $stmt->bindParam(":genreId", $genreId);
+
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            exit('Genres konnten nicht abgerufen werden' . $ex->getMessage());
+        } finally {
+            $this->Datenbank->close();
+        }
+    }
+        
+
+        public function getArtworksForGenre($genreId)
+         {
+            $this->Datenbank->connect();
+          
+            $anfrage = "SELECT * FROM artworks WHERE GenreID = :genreId";
+             $stmt = $this->Datenbank->prepare($anfrage);
+             $stmt->bind_param(":genreId", $genreId);
+             $stmt->execute();
+             $result = $stmt->get_result();
+             $artworks = array();
+             while ($row = $result->fetch_assoc()) {
+               $artworks[] = $row;
+             }
+             return $artworks;
+        }
+    
+}
+    
 
 
 
     
 
 
-}
+
