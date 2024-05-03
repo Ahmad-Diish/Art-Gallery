@@ -15,92 +15,66 @@ $artistRepository = new ArtistRepository($conn);
 $artist = Artist::getDefaultArtist();
 $artworkRepository = new ArtworkRepository($conn);
 
-
-//* wenn die Bewertung ausgeführt wird , wird die Webseite nochmal mit Parameter artistId geladen , um die Fehler zu vermeiden
-$artistID = isset($_GET["parameter"]) ? $_GET["parameter"] : null;
-
-//* wenn die das Kunstwerk in displayArtistSingle gelöscht  wird , wird die Webseite nochmal mit Parameter artistId geladen , um die Fehler zu vermeiden
-//$artistID = isset($_GET["action"]) ? $_GET["artistId"] : null;
-
-
-// Überprüfe, ob die artistID im URL-Parameter vorhanden ist
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-    //Beim Reload wegen Hinzufügen/Entfernen in/von Favourite
-    $artistID = isset($_GET["parameter"]) ? $_GET["parameter"] : null;
-
-    // Überprüfe, ob die artworkID im URL-Parameter vorhanden ist
-    if (isset($_GET['artistID'])) {
-
-        $artistID = $_GET['artistID'];
-    }
-    // Verarbeitung der GET-Anfrage für das Hinzufügen/Entfernen von Favoriten.
-    if (isset($_GET['action']) && ($_GET['action'] == 'addFavoriteArtist')) {
-
-        $artistID = $_GET['artistId'];
-
-        // Fügen das Artist zu den Favoriten hinzu, wenn es noch nicht vorhanden ist
-
-        if (!in_array($artistID, $_SESSION['favorite_artists'])) {
-
-            // hierfür Hinzufügen eines Elementes Ende der Liste
-            $_SESSION['favorite_artists'][] = $artistID;
-
-            exit();
-        }
+// Überprüfe, ob eine Künstler-ID im URL-Parameter vorhanden ist
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Prüfe, ob die Künstler-ID im URL-Parameter "parameter" oder "artistID" vorhanden ist
+    if (isset($_GET["parameter"])) {
+        $artistID = $_GET["parameter"];
+    } elseif (isset($_GET["artistID"])) {
+        $artistID = $_GET["artistID"];
+    } else {
+        $artistID = null;
     }
 
-    //Artwork Favourite Hinzufügen/Entfernen
-    if (isset($_GET['artworkId'])) {
-
-        $artworkId = $_GET['artworkId'];
-
-        if (isset($_GET['action']) && ($_GET['action'] == 'addFavoriteArtwork')) {
-
-            if (!in_array($artworkId, $_SESSION['favorite_artworks'])) {
-
-                // hier für Hinzufügen eines Elementes Ende der Liste
-
+    // Überprüfe, ob der Parameter "action" in der URL vorhanden ist
+    if (isset($_GET['action'])) {
+        // Verarbeite die GET-Anfrage für das Hinzufügen von Favoriten
+        if ($_GET['action'] === 'addFavoriteArtist' && $artistID) {
+            // Füge den Künstler zu den Favoriten hinzu, wenn er noch nicht vorhanden ist
+            if (!in_array($artistID, $_SESSION['favorite_artists'] ?? [])) {
+                $_SESSION['favorite_artists'][] = $artistID;
                 exit();
             }
-
-            $artwork = $artworkRepository->getArtwork($artworkId);
-
-            $artistID = $artwork->getArtistId();
         }
-    } else {
-
-        echo "<p>Fehler: Künstler-ID nicht angegeben.</p>";
     }
+}
+
+// Stelle sicher, dass die Künstler-ID gültig ist, bevor du sie abrufst
+if (!is_numeric($artistID) || $artistID <= 0) {
+    // Handle ungültige Künstler-ID (z. B. Fehlermeldung anzeigen)
+    echo "Ungültige Künstler-ID!";
+    exit;
 }
 
 $artist = $artistRepository->getArtist($artistID);
 $artworks = $artistRepository->getArtworks($artistID);
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
-
-
 ?>
 <singleArtist>
-
+    <style>
+        /* CSS-Stile für die Seite */
+    </style>
     <body>
-        <div class="container mt-4";>
+        <div class="container mt-4">
             <?php
-            $artist->outputSingleArtist();
-            //hier wurden die Kunstwerke von jedem Künstler gezeigt    
-            foreach ($artworks as $artwork) {
-                $artwork->outputArtworks();
+            
+            // Prüfe, ob das Objekt nicht null ist, bevor du die Methode aufrufst
+            if ($artist !== null) {
+                $artist->outputSingleArtist(); // Gib die Informationen des Künstlers aus
+            } else {
+                echo "Fehler: Künstlerobjekt ist null."; // Zeige eine Fehlermeldung
             }
-            echo '</div>'; //Ende der Row für Bilder
             ?>
 
-        </div>
+            <?php foreach ($artworks as $artwork) {
+                $artwork->outputArtworks(); // Gib die Informationen des Kunstwerks aus
+            } ?>
+            </div> </div>
     </body>
 </singleArtist>
-
 <?php
 require("../Homepage/footer.php");
 ?>

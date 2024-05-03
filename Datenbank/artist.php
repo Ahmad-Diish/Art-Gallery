@@ -187,7 +187,143 @@ class Artist
 
     public function outputSingleArtist()
     {
-        echo '<div class="container mt-5" style="max-width: 1100px; margin: 0 auto; padding: 60px; background-color: #E5DDC5; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">';
+        $css = '
+        <style>
+          
+        .button_style {
+        background-color: #923f0e;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        margin-bottom: 4px;
+        margin-top: 1px;
+          margin-left: 4rem;
+    }
+
+    .button_style:hover {
+        background-color: #D1BB9E;
+    }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+           }
+            
+            p::before {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #923f0e;
+            margin-bottom: 10px;
+            }
+
+    .artist-card {
+        
+        border-radius: 10px;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        background: #D1BB9E;
+        padding: 20px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        margin-right: 1rem;
+
+    }
+
+    .artist-card img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+
+    .artist-card:hover {
+        box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+    }
+
+   .table {
+    margin-left: 4rem;
+  width: 80%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Table header styles */
+.table th {
+  background-color: #D1BB9E;
+  color: #322C2B;
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 17px;
+}
+
+/* Table body row styles */
+.table tr {
+  border-bottom: 1px solid black;
+}
+
+.table tr:last-child {
+  border-bottom: 2px splid #923f0e;
+}
+
+/* Table body cell styles */
+.table td {
+  padding: 12px 15px;
+  color: #923f0e;
+  font-size: 18px;
+}
+
+
+.textColor_gold {
+  color: blue; /* Gold color for links */
+  text-decoration: none;
+}
+
+.textColor_gold:hover {
+  text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table th {
+    text-align: right;
+    padding-right: 20px;
+    position: relative;
+  }
+
+  .table td {
+    text-align: left;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+ 
+}
+h2 {
+    margin-bottom: 2rem;
+}
+            </style>
+        ';
+     
+        echo $css;
+        echo '<body style="background-color: #fffbeb;">';
         echo '<h3>' . $this->getArtistFirstName() . " " . $this->getArtistLastName() . '</h3>';
         echo '<div class="row">';
         echo '<div class="col-md-4">';
@@ -198,14 +334,18 @@ class Artist
         echo '</div>';
         echo '</div>';
         echo '<div class="col-md-8">';
-                $isFavorite = false;
+        
         echo '<p>' . $this->getDetailsArtist() . '</p>';
-        echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
+        // echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
+        
+        $isFavorite = false;
         echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
         echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
-        echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
+        echo '<button type="button" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
         //echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
-        echo '</form>';
+        //echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
+ 
+        
         echo '<table class="table mt-4">';
         echo '<tbody>';
         echo '<tr>';
@@ -225,11 +365,21 @@ class Artist
         echo '<td><a class="textColor_gold" href="' . $this->getArtistLink() . '">' . $this->getArtistLink() . '</a></td>';
         echo '</tr>';
         echo '</tbody>';
+        echo '</div>';
         echo '</table>';
+
+
         echo '</div>';
-        echo '</div>';
+        //echo '</div>';
         echo '<h2 style="padding-left:10px;" class="mt-4">Kunstwerke von  ' . $this->getArtistFirstName() . " " . $this->getArtistLastName() . '</h2>';
+        //echo '</div>'; // Close the current container
         echo '<div class="row">';
+        echo '</div>'; // Close the current container
+        echo '<div class="row">'; // Open a new row
+        echo '</div>';
+    
+        
+       
     }
 }
 
@@ -243,41 +393,8 @@ function checkArtistImage($verzeichnis)
 }
 ?>
 
-<!-- <style>
-    .form-select {
-        width: 200px;
-        margin-right: 10px;
+<style>
+    .card {
+        margin-bottom: 4rem;
     }
-
-    .button_style {
-        background-color: #343a40;
-        color: #fff;
-        border: none;
-        padding: 8px 16px;
-        cursor: pointer;
-    }
-
-    .button_style:hover {
-        background-color: #1d2124;
-    }
-
-    .artist-card {
-        border-radius: 10px;
-        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-        background: #D1BB9E;
-        padding: 20px;
-
-    }
-
-    .artist-card img {
-        width: 100%;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-
-
-    .artist-card:hover {
-        box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
-        transform: translateY(-5px);
-    }
-</style>  -->
+</style>
