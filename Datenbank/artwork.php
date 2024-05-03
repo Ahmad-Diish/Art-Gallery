@@ -68,7 +68,7 @@ class Artwork
       $this->artworkGalleryID = $artworkGalleryID;
       $this->artworkLink = $artworkLink;
       $this->googleLink = $googleLink;
-      $this->Datenbank = new Datenbank();
+      $this->datenbank = new Datenbank();
       $this->artist = Artist::getDefaultArtist();
    }
 
