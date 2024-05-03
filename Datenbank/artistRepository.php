@@ -14,23 +14,38 @@ class ArtistRepository
         $this->artist = Artist::getDefaultArtist();
     }
 
+    // function addFavoriteArtwork($artistId): void
+
+    // {
+    //     // hier für Hinzufügen eines Elementes Ende der Liste
+    //     $_SESSION['favorite_artists'][] = $artistId;
+    // }
+    // function removeFavoriteArtist($artistId): void
+    // {
+    //     if (($key = array_search($artistId, $_SESSION['favorite_artists'])) !== false) {
+    //         unset($_SESSION['favorite_artists'][$key]);
+    //     }
+    // }
+
+   
     private function getTopArtists() // Homepage
     {
-
         $this->datenbank->connect();
+
+        $sql = "SELECT artists.ArtistID, artists.FirstName, artists.LastName, COUNT(reviews.ReviewId) AS review_count 
+             FROM artists 
+             JOIN artworks ON artists.ArtistID = artworks.ArtistID 
+             JOIN reviews ON artworks.ArtWorkID = reviews.ArtWorkId 
+             GROUP BY artists.ArtistID 
+             ORDER BY review_count DESC LIMIT 3";
+
         try {
-            $anfrage = " SELECT artists.ArtistID, artists.FirstName, artists.LastName, COUNT(reviews.ReviewId) AS review_count 
-                     FROM artists JOIN artworks ON artists.ArtistID = artworks.ArtistID JOIN reviews ON artworks.ArtWorkID = reviews.ArtWorkId 
-                     GROUP BY artists.ArtistID 
-                     ORDER BY review_count DESC LIMIT 3";
-
-            $stmt = $this->datenbank->prepareStatement($anfrage);
-
+            $stmt = $this->datenbank->prepareStatement($sql);
             $stmt->execute();
-
             $TopArtists = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $ex) {
-            exit('could not retrieve artist' . $ex->getMessage());
+        } catch (PDOException $ex) {
+            // Log or handle the specific PDO exception here
+            exit('Could not retrieve artists: ' . $ex->getMessage());
         } finally {
             $this->datenbank->close();
         }
@@ -50,6 +65,8 @@ class ArtistRepository
             $this->artist->outputArtist();
         }
     }
+    
+    
     
 
     
@@ -127,18 +144,16 @@ class ArtistRepository
     //die Funktionalität zur Abfrage eines Künstlers aus der Datenbank zu kapseln und das Ergebnis als Artist-Objekt zurückzugeben. 
     public function getArtist($id)
     {
-        $result = $this->getArtistByID($id);    // Die Methode ruft den Künstler aus der Datenbank anhand 
-                                                // seiner ID mithilfe der bereits implementierten Methode getArtistByID ab.
-                                                // Das Ergebnis wird in der Variablen $result gespeichert.
+        $result = $this->getArtistByID($id); // Retrieve artist data from database
 
-        if ($result === null) {
-            throw new Exception('the ArtistId is not available');
+        // Check if the result is an array (artist data) or null (no artist found)
+        if (is_array($result)) {
+            return Artist::fromState($result); // Convert array to Artist object
+        } else {
+            throw new Exception('Artist with ID ' . $id . ' not found'); // Handle no artist scenario
         }
-
-        return Artist::fromState($result); //Wenn ein gültiges Ergebnis vorliegt, wird ein Artist-Objekt erstellt, 
-                                            //indem die statische Methode fromState der Artist-Klasse aufgerufen wird. 
-                                            //Diese Methode konvertiert das aus der Datenbank abgerufene Array in ein Artist-Objekt.
     }
+
 
 
     // funktion die eine kunstwerk anhand eine  Artist-ID zurückgibt. Wird in [function getArtworks] verwendet
@@ -184,7 +199,6 @@ class ArtistRepository
 
         return $tempArtworks;
     }
-
 
 }       
 

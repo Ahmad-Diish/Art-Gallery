@@ -1,5 +1,5 @@
 <?php
-require_once ("artwork.php");
+require_once("artwork.php");
 class Artist
 {
 
@@ -14,11 +14,12 @@ class Artist
 
     private $artworks;
 
+    private $isFavorite;
     private $datenbank;
 
     private $imagePath;
 
-    public function __construct($artistId, $firstName, $lastName, $nationality, $yearOfBirth, $yearOfDeath, $details, $artistLink)
+    public function __construct($artistId, $firstName, $lastName, $nationality, $yearOfBirth, $yearOfDeath, $details, $artistLink, $isFavorite)
     {
         // Initialisierung der Eigenschaften...
         $this->artistID = $artistId;
@@ -29,6 +30,7 @@ class Artist
         $this->yearOfDeath = $yearOfDeath;
         $this->details = $details;
         $this->artistLink = $artistLink;
+
     }
     //**Setter und Getter */
     public function getArtistID()
@@ -72,6 +74,11 @@ class Artist
     {
         return $this->artistLink;
     }
+    
+    public function getIsFavorite()
+    {
+        return $this->isFavorite;
+    }
 
 
     public static function fromState(array $artist): Artist
@@ -84,36 +91,85 @@ class Artist
         $yearOfDeath = $artist["YearOfDeath"] ?? null;
         $details = $artist["Details"] ?? null;
         $artistLink = $artist["ArtistLink"] ?? null;
-        return new self($id, $firstName, $lastName, $nationality, $yearOfBirth, $yearOfDeath, $details, $artistLink);
+        $isFavorite = $artist["IsFavorite"] ?? null;
+        return new self($id, $firstName, $lastName, $nationality, $yearOfBirth, $yearOfDeath, $details, $artistLink, $isFavorite);
     }
 
 
     public static function getDefaultArtist(): Artist
     {
-        return new self(-1, "", "", "", 0, 0, "", "");
+        return new self(-1, "", "", "", 0, 0, "", "",false);
     }
 
-    public function outputArtist() // Homepage
+    public function outputArtist()
     {
+        // CSS for styling the card and the more info button
+        $css = '
+        <style>
+            .card-img-container {
+                border: 5px solid #ddd; 
+                border-radius: 10px; 
+                overflow: hidden;
+            }
+            .card {
+                border-radius: 10px;
+                background-color: #fef3c7;
+                width: 300px;
+                height: 400px;
+            }
+            .more-info-button {
+                text-align: center; 
+                margin-top: 15px; 
+            }
+            .button_user_erweitern {
+                background-color: #d5a27c; 
+                color: black; 
+                border: none; 
+                padding: 5px 10px; 
+                text-align: center; 
+                text-decoration: none; 
+                display: inline-block; 
+                font-size: 16px; 
+                border-radius: 4px; 
+                cursor: pointer; 
+                transition-duration: 0.4s; 
+            }
+            .button_user_erweitern:hover {
+                background-color: #fef3c7; 
+                color: black; 
+            }
+        </style>
+    ';
 
+        // Output the CSS
+        echo $css;
+
+        // Open the card container
         echo '<div class="col-md-3 col-lg-3 mb-4">';
         echo '<div class="card">';
+
+        // Image path
         $image = "../assets/images/Art_Images v3/images/artists/square-medium/" . $this->getArtistID() . ".jpg";
         $checkedImage = checkArtistImage($image);
-        $checkedImage = "'" . $checkedImage . "'";
-        echo '<img src=' . $checkedImage . ' class="card-img-top" alt="' . htmlspecialchars($this->getArtistFirstName() . ' ' . $this->getArtistLastName()) . '">';
 
-        echo '<div class="card-body" style="background-color: #fffbeb; display: flex; align-items: center; justify-content: space-between; flex-direction: column; height: 90px;">';
-        echo '<div style="display: flex; align-items: center; justify-content: space-between;">';
-        echo '<a class="artist-name" style="color: #d5a27c; text-decoration: none; height: 100%; display: flex; align-items: center;" href="../pages/singleArtist.php?artistID=' . $this->getArtistID() . '">';
-        echo '<h5 class="card-title" style="margin: 0;">' . htmlspecialchars($this->getArtistFirstName() . " " . $this->getArtistLastName()) . '</h5></a>'; // Added display: flex; align-items: center;
-        echo '<a href="../php/addToFavorites.php?artistID=' . $this->getArtistID() . '"<button class="btn heart-btn"><i class="bi bi-heart" style="width: 6px; height: 36px; margin-left: 10px; color: red; filter: drop-shadow(1px 1px 2px grey);" ></i></button></a>';
-        echo '</div>'; // Close flex container
+        // Output the image within a container
+        echo '<div class="card-img-container">';
+        echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtistFirstName() . ' ' . $this->getArtistLastName() . '">';
+        echo '</div>';
 
-        echo '</div>'; // Close card-body
-        echo '</div>'; // Close card
-        echo '</div>'; // Close column
+        // Card body
+        echo '<div class="card-body">';
+        echo '<h6 class="card-title">' . htmlspecialchars($this->getArtistFirstName() . " " . $this->getArtistLastName()) .  '</h6>';
 
+        // More info button
+        echo '<div class="more-info-button">
+            <a href="../Pages/singleArtist.php?artistID=' . $this->getArtistID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
+          </div>';
+
+        // Close card container
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
     }
 
 
@@ -142,10 +198,12 @@ class Artist
         echo '</div>';
         echo '</div>';
         echo '<div class="col-md-8">';
-
+                $isFavorite = false;
         echo '<p>' . $this->getDetailsArtist() . '</p>';
         echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
         echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
+        echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
+        echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
         //echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
         echo '</form>';
         echo '<table class="table mt-4">';
@@ -177,11 +235,15 @@ class Artist
 
 function checkArtistImage($verzeichnis)
 {
-    return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinPerson.png";
+    if (file_exists($verzeichnis)) {
+        return $verzeichnis;
+    } else {
+        return "../assets/images/keinPerson.png";
+    }
 }
-
 ?>
-<style>
+
+<!-- <style>
     .form-select {
         width: 200px;
         margin-right: 10px;
@@ -199,7 +261,6 @@ function checkArtistImage($verzeichnis)
         background-color: #1d2124;
     }
 
-    /* Künstlerbilder */
     .artist-card {
         border-radius: 10px;
         box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
@@ -219,4 +280,4 @@ function checkArtistImage($verzeichnis)
         box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
         transform: translateY(-5px);
     }
-</style>
+</style>  -->
