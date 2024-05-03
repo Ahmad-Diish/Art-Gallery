@@ -7,7 +7,7 @@ require("../Datenbank/datenbank.php");
 
 function checkKunstwerkImage($verzeichnis)
 {
-  return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerk.png";
+   return file_exists($verzeichnis) ? $verzeichnis : "../assets/images/keinKunstwerk.png";
 }
 
 
@@ -48,8 +48,8 @@ class Artwork
    private $datenbank;
 
    //Konstruktor der Klasse Artwork.
-    
-   
+
+
    public function __construct($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink)
    {
 
@@ -122,10 +122,10 @@ class Artwork
       return $this->medium;
    }
 
-   
+
    public static function getDefaultArtwork(): Artwork
    {
-     //$artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink
+      //$artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink
       return new self(-1, -1, "", "", "", "", "", 0, 0, 0, 0, "", 0, "", "");
    }
 
@@ -151,11 +151,11 @@ class Artwork
       return new self($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink);
    }
 
-// Methode zur Ausgabe von Kunstwerkkarten
-public function outputArtworks()
-{
-    // CSS für den Rahmen um das Bild und den Mehr Infos Button
-    $css = '
+   // Methode zur Ausgabe von Kunstwerkkarten
+   public function outputArtworks()
+   {
+      // CSS für den Rahmen um das Bild und den Mehr Infos Button
+      $css = '
         <style>
             .card-img-container {
                 border: 5px solid #ddd; 
@@ -195,117 +195,192 @@ public function outputArtworks()
         </style>
     ';
 
-    // Ausgabe des CSS
-    echo $css;
+      // Ausgabe des CSS
+      echo $css;
 
-    // Öffnen des Kartencontainers
-    echo '<div class="col-md-3 col-lg-3 mb-4">';
-    echo '<div class="card">';
+      // Öffnen des Kartencontainers
+      echo '<div class="col-md-3 col-lg-3 mb-4">';
+      echo '<div class="card">';
 
-    // Bildpfad generieren
-    $image = $this->getImageFileName();
-    $imagePath = strlen($image) == 5 ? "../assets/images/Art_Images v3/images/works/square-medium/0$image.jpg" : "../assets/images/Art_Images v3/images/works/square-medium/$image.jpg";
-    $checkedImage = checkKunstwerkImage($imagePath);
+      // Bildpfad generieren
+      $image = $this->getImageFileName();
+      $imagePath = strlen($image) == 5 ? "../assets/images/Art_Images v3/images/works/square-medium/0$image.jpg" : "../assets/images/Art_Images v3/images/works/square-medium/$image.jpg";
+      $checkedImage = checkKunstwerkImage($imagePath);
 
-    // Bild ausgeben in schönem Rahmen
-    echo '<div class="card-img-container">';
-    echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
-    echo '</div>';
+      // Bild ausgeben in schönem Rahmen
+      echo '<div class="card-img-container">';
+      echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
+      echo '</div>';
 
-    // Karteninhalt
-    echo '<div class="card-body">';
-    echo '<h6 class="card-title">' . $this->getArtworkTitle() . '</h6>';
+      // Karteninhalt
+      echo '<div class="card-body">';
+      echo '<h6 class="card-title">' . $this->getArtworkTitle() . '</h6>';
 
-    // Mehr Infos Button mit neuem Design
-    echo '<div class="more-info-button">
+      // Mehr Infos Button mit neuem Design
+      echo '<div class="more-info-button">
             <a href="../Pages/singleArtwork.php?artworkID=' . $this->getArtWorksID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
           </div>';
 
-    // Kartencontainer schließen
-    echo '</div>';
-    echo '</div>';
-    echo '</div>';
-}
-
-
-public function outputSingleArtwork()
-{
-   // CSS für den Rahmen um das Bild und den Mehr Infos Button
-   $css = '
-   <style>
-       .card-img-container {
-           border: 5px solid #ddd; 
-           border-radius: 10px; 
-           overflow: hidden;
-       }
-       .card {
-          border-radius: 10px;
-          background-color: #fef3c7;
-          width: 400px; 
-          height: 500px; 
-          margin-Bottom: 70px;
-      }
-      p {
-         color: #666;
-         margin-Top: 100px;
-         font-family: "Arial ";
-      }
-      .card-title{
-         color: #923f0e;
-         font-family: "";
-         margin-TOP: 70px;
-         margin-bottom: 1px;
-     }
-      table {
-         color: #666;
-         margin-TOP: 50px;
-         font-family: "Arial ";
-         background-color: #fef3c7;
-          border: 5px solid #ddd; 
-           border-radius: 10px; 
-           overflow: hidden;
-      }
-   </style>
-';
-// Ausgabe des CSS
-echo $css;
-   // Die code Grundlagen
-   $arti = new ArtistRepository($this->datenbank);
-   $this->artist = $arti->getArtist($this->getArtistId());
-   
-
-   // Beschreibung des Bildes
-   echo '<h1 class="card-title">' . $this->getArtworkTitle() . '</h1>';
-   echo '<h6>By' . " " . '<a class="textColor_gold" href=../Pages/singleArtist.php?artistID='  . $this->getArtistId() . '>' . $this->artist->getArtistFirstName() . " " . $this->artist->getArtistLastName() . '</a></h6>';
-   echo '<p>Beschreibung des Bildes hier...</p>';
-
-   // Öffnungs-Tags der Tabelle und der ersten Zeile
-   echo '<div class="row">';
-   echo '<div class="col-md-8">'; // Spalte für die Tabelle
-
-   // Tabelle für die Details des Kunstwerks
-   echo '<table class="table">';
-   echo '<tr><th>Titel</th><td>' . $this->getArtworkTitle() . '</td></tr>';
-   // Weitere Details hier einfügen, falls benötigt
-   
-   // Fünf zusätzliche Zeilen hinzufügen
-   for ($i = 1; $i <= 6; $i++) {
-       echo '<tr><th>Zusätzliche Information ' . $i . '</th><td>Wert ' . $i . '</td></tr>';
+      // Kartencontainer schließen
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
    }
-   echo '</table>';
 
-   echo '</div>'; // Ende der Spalte für die Tabelle
-   echo '<div class="col-md-4">'; // Spalte für das Bild
 
-   // Bild des Kunstwerks
-   echo '<div class="card">';
-   $image = strlen($this->getImageFileName()) == 5 ? "../assets/images/Art_Images v3/images/works/medium/0" . $this->getImageFileName() . ".jpg" : "../assets/images/Art_Images v3/images/works/medium/" . $this->getImageFileName() . ".jpg";
-   $checkedImage = checkKunstwerkImage($image);
-   echo '<a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '"></a>';
-   echo '</div>';
+   public function outputSingleArtwork()
+   {
+      // CSS für den Rahmen um das Bild und den Mehr Infos Button
+      $css = '
+    <style>
+        .card-img-container {
+            border: 5px solid #ddd; 
+            border-radius: 10px; 
+            overflow: hidden; 
+        }
+        .card {
+            border-radius: 10px;
+            background-color: #fef3c7;
+            margin-top: 70px;
+            
+        }
+        .By {
+            color: #923f0e;
+            font-family: "Arial";
+        }
+        h5 {
+            color: #923f0e;
+            font-family: "Arial";
+        }
+        .card-P {
+            color: #666;
+            margin-top: 60px;
+            font-family: "Arial";
+            padding-top: 10px;
+            border: 100px;
+            width: 100%;
+        }
 
-   echo '</div>'; 
-   echo '</div>'; 
+        .card-title {
+            color: #923f0e;
+            font-family: "";
+            margin-top: 70px;
+            margin-bottom: 1px;
+        }
+        .custom-table {
+            width: 70%; 
+            height: 50%; 
+            color: #666;
+            margin-top: 30px;
+            margin-bottom: 200px;
+            font-family: "Arial";
+            background-color: #fef3c7;
+            border: 10px solid #ddd; 
+            border-radius: 10px; 
+            overflow: hidden;
+        }
+        .custom-table th, .custom-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .custom-table td {
+            background-color: #f0e2b8;
+            padding-right: 200px;  
+            text-align: left;
+            width: 500px;
+        }
+        
+        
+        /* Bild style */
+        .modal-content {
+            background-color: #fef3c7;
+            border-radius: 10px;
+        }
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .modal-title {
+            color: #923f0e;
+            font-family: "Arial";
+        }
+        .modal-footer {
+            border-top: none;
+            padding-top: 0;
+        }
 
-}
+        
+    </style>
+    ';
+      // Ausgabe des CSS
+      echo $css;
+
+      // Die code Grundlagen
+      $arti = new ArtistRepository($this->datenbank);
+      $this->artist = $arti->getArtist($this->getArtistId());
+
+      echo '<h1 class="card-title">' . $this->getArtworkTitle() . '</h1>';
+      echo '<h5>By' . " " . '<a class="By" href=../Pages/singleArtist.php?artistID='  . $this->getArtistId() . '>' . $this->artist->getArtistFirstName() . " " . $this->artist->getArtistLastName() . '</a></h5>';
+
+      // Beschreibung des Bildes
+      echo '<div class="row">';
+      echo '<div class="col-md-8">';
+      $artworkDescription = $this->getArtworkDescription();
+      if (!empty($artworkDescription)) {
+         echo '<p class="card-P">' . $artworkDescription . '</p>';
+      } else {
+         echo '<p class="card-P">Zu diesem Gemälde sind derzeit keine Informationen verfügbar. Wir wünschen Ihnen eine angenehme Zeit in unserer Gemäldegalerie.</p>';
+      }
+
+      // das Hinzufügen oder Entfernen von Kunstwerken aus der Favoritenliste
+      echo '<div class="buttons_Single_Artwork">';
+      $istFavorite = false;
+      if (isset($_SESSION['favorite_artworks']) && in_array($this->getArtWorksID(), $_SESSION['favorite_artworks'])) {
+         $istFavorite = true;
+      }
+      echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="POST">';
+      echo '<input type="hidden" name="ArtworkId" value="' . $this->getArtWorksID() . '">';
+      echo '<button type="submit" style="background-color: #923f0e; color: #fff;" name="action" value="' . ($istFavorite ? 'removeFavoriteArtwork' : 'addFavoriteArtwork') . '" class="' . ($istFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($istFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
+      echo '</form>';
+      echo '</div>';
+
+      // Beschreibung des Tabelle
+      echo '<table class="table custom-table">';
+      echo '<tr><th colspan="2">Details zum Gemälde</th></tr>';
+      echo '<tr><th>Datum:</th><td>' . $this->getArtworkYearOfWork() . '</td></tr>';
+      echo '<tr><th>Medium:</th><td>' . $this->getArtworkMedium() . '</td></tr>';
+      echo '<tr><th>Dimensionen:</th><td>' . $this->getArtworkWidth() . 'cm x ' . $this->getArtworkHeight() . 'cm </td></tr>';
+      echo '<tr><th>Home:</th><td>dfvgdfn  </td></tr>';
+      echo '<tr><th>Genres:</th><td>' . $this->getArtworkMedium() . '</td></tr>';
+      echo '<tr><th>Subjekte:</th><td>' . $this->getArtworkMedium() . '</td></tr>';
+      echo '</table>';
+      echo '</div>';
+
+      // Bild des Kunstwerks
+      echo '<div class="col-md-4">';
+      echo '<div class="card">';
+      $image = strlen($this->getImageFileName()) == 5 ? "../assets/images/Art_Images v3/images/works/medium/0" . $this->getImageFileName() . ".jpg" : "../assets/images/Art_Images v3/images/works/medium/" . $this->getImageFileName() . ".jpg";
+      $checkedImage = checkKunstwerkImage($image);
+      echo '<a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#BildGroß"><img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '"></a>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
+
+      // Die größe Blid
+      echo '<div class="modal fade" id="BildGroß" tabindex="-1" aria-labelledby="BildGroßLabel" aria-hidden="true">';
+      echo '    <div class="modal-dialog modal-dialog-centered">';
+      echo '        <div class="modal-content">';
+      echo '            <div class="modal-header">';
+      echo '                <h5 class="modal-title">' . $this->getArtworkTitle() . " By " . $this->artist->getArtistFirstName() . " " . $this->artist->getArtistLastName() . '</h5>';
+      echo '            </div>';
+      echo '            <div class="modal-body">';
+      echo '                <img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
+      echo '            </div>';
+      echo '            <div class="modal-footer justify-content-center">';
+      echo '                <button type="button" class="btn btn-secondary button_style" style="background-color: #923f0e; color: #fff;" data-bs-dismiss="modal">Schließen</button>';
+      echo '            </div>';
+      echo '        </div>';
+      echo '    </div>';
+      echo '</div>';
+   }
 }

@@ -52,7 +52,6 @@
       color: #923f0e;
     }
 
-    .nav-link.dropdown-toggle {}
 
     /* Stildefinition für Footer */
     .footer {
