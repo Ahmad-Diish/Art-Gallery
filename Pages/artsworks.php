@@ -40,6 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #fffbeb;
            
         }
+        h2 {
+            text-align: center;
+            color: #923f0e;
+            font-family: "Goudy Stout";
+            margin-TOP: 70px;
+            margin-bottom: 100px;
+        }
+        label{
+            color: #923f0e;
+            margin-bottom: 50px;
+        }
 
         select {
             padding: 8px;
@@ -47,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 5px;
             font-size: 16px;
             margin-right: 10px;
-            /* Platz zwischen den Feldern */
+            color: #923f0e;
         }
 
         /* Stile für den Sortierbutton */
@@ -71,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="container mt-5">
-        <h2>Kunstwerke Galerie</h2>
+        <h2>Kunstwerke Galeria</h2>
         <!-- Sorting Options -->
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <label for="Sortiere">Sortiere nach:</label>

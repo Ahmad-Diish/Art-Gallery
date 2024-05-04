@@ -23,16 +23,37 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
             margin-right: 10px;
         }
 
-        .button_style {
-            background-color: #923f0e;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
+        h2 {
+            text-align: center;
+            color: #923f0e;
+            font-family: "Goudy Stout";
+            margin-TOP: 70px;
+            margin-bottom: 100px;
         }
 
-        .button_style:hover {
-            background-color: #1d2124;
+        label{
+            color: #923f0e;
+            margin-bottom: 50px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+            color: #923f0e;
+        }
+
+        /* Stile für den Sortierbutton */
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #923f0e;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         body {
@@ -52,25 +73,32 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
 <body>
     <div class="container mt-5">
         <h2>Künstler Galeria</h2>
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"><select class="form-select select_style" style="height: 50px" aria-label="Default select example" name="sortierreihenfolge">
-                <option value="aufsteigend" <?php echo ($sortierreihenfolge == 'aufsteigend') ? 'selected' : ''; ?>>Aufsteigend</option>
-                <option value="absteigend" <?php echo ($sortierreihenfolge == 'absteigend') ? 'selected' : ''; ?>>Absteigend</option>
-            </select><button name="sortieren" type="submit" class="btn btn-dark button_style">Sortieren</button></form>
-      
-            <div class="row mt-4 cards">
-        <?php
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        </select>
+            <label for="Rangfolge">Rangfolge:</label>
+            <select class="" aria-label="Default select example" name="sortierreihenfolge">
+                <option value="aufsteigend" <?php echo ($sortierreihenfolge == 'aufsteigend') ? 'selected' : ''; ?>>
+                    Aufsteigend</option>
+                <option value="absteigend" <?php echo ($sortierreihenfolge == 'absteigend') ? 'selected' : ''; ?>>
+                    Absteigend</option>
+            </select>
+            <button type="submit">Sortieren</button>
+        </form>
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        <div class="row mt-4 cards">
+            <?php
 
-            if (isset($_POST['sortieren'])) {
-                $sortierreihenfolge = $_POST['sortierreihenfolge'];
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+                if (isset($_POST['sortieren'])) {
+                    $sortierreihenfolge = $_POST['sortierreihenfolge'];
+                    $artistRepository->displayAllArtist($sortierreihenfolge);
+                }
+            } else {
                 $artistRepository->displayAllArtist($sortierreihenfolge);
             }
-        } else {
-            $artistRepository->displayAllArtist($sortierreihenfolge);
-        }
-        ?>
-    </div>
+            ?>
+        </div>
     </div>
 </body>
 
