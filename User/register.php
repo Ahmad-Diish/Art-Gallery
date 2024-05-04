@@ -2,10 +2,6 @@
 require_once("header.php");
 ?>
 
-<?php
-require_once("../Homepage/footer.php");
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,8 +23,8 @@ require_once("../Homepage/footer.php");
         <input type="text" name="firstname"><br>
         <label for="lastname">Last name:</label>
         <input type="text" name="lastname"><br>
-        <label for="adress">Adress:</label>
-        <input type="text" name="adress"><br>
+        <label for="address">Address:</label>
+        <input type="text" name="address"><br>
         <label for="password">City:</label>
         <input type="text" name="city"><br>
         <label for="password">Region:</label>
@@ -52,9 +48,10 @@ require_once("../Homepage/footer.php");
         <button type="submit" name="submit">Sign up</button>
     </form>
     </div>
-</section>
-
-
-    
+</section>   
 </body>
 </html>
+
+<?php
+require_once("../Homepage/footer.php");
+?>
