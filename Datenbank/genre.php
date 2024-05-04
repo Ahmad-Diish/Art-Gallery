@@ -47,6 +47,10 @@ class Genre
     {
         return $this->genreName;
     }
+    public function era():string
+    {
+        return $this->genreName;
+    }
     public function description():string
     {
         return $this->genreName;

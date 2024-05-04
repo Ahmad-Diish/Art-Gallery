@@ -46,7 +46,7 @@ class GenreRepository
     {  
         $this->Datenbank->connect();
         try{
-            $anfrage = "SELECT * FROM `genres`";
+            $anfrage ="SELECT * FROM `genres` ORDER BY Era, GenreName"; 
 
             $stmt = $this->Datenbank->prepareStatement($anfrage);
 
@@ -73,8 +73,10 @@ class GenreRepository
             $stmt->bindParam(":genreId", $genreId);
 
             $stmt->execute();
+            
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result->fetch_assoc();
         } catch (Exception $ex) {
             exit('Genres konnten nicht abgerufen werden' . $ex->getMessage());
         } finally {
