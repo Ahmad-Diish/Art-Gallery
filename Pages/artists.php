@@ -77,12 +77,10 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
         </select>
             <label for="Rangfolge">Rangfolge:</label>
             <select class="" aria-label="Default select example" name="sortierreihenfolge">
-                <option value="aufsteigend" <?php echo ($sortierreihenfolge == 'aufsteigend') ? 'selected' : ''; ?>>
-                    Aufsteigend</option>
-                <option value="absteigend" <?php echo ($sortierreihenfolge == 'absteigend') ? 'selected' : ''; ?>>
-                    Absteigend</option>
+                <option value="aufsteigend" <?php echo ($sortierreihenfolge == 'aufsteigend') ? 'selected' : ''; ?>> Aufsteigend</option>
+                <option value="absteigend" <?php echo ($sortierreihenfolge == 'absteigend') ? 'selected' : ''; ?>>Absteigend</option>
             </select>
-            <button type="submit">Sortieren</button>
+            <button name="sortieren" type="submit">Sortieren</button>
         </form>
 
         <div class="row mt-4 cards">
