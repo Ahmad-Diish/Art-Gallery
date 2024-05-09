@@ -104,7 +104,7 @@ class Genre
             }
         
             .card:hover .card-title {
-                color: #0F39A0 ;
+               
                 text-decoration: underline;
             }
         </style>
