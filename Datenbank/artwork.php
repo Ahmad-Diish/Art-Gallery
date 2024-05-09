@@ -1,9 +1,9 @@
 <?php
 
 //* hier wurde die globale Variable sowie Methode definiert.
-
-require_once("artistRepository.php");
 require("../Datenbank/datenbank.php");
+require_once("artistRepository.php");
+require_once("gallery.php");
 
 function checkKunstwerkImage($verzeichnis)
 {
@@ -70,6 +70,7 @@ class Artwork
       $this->googleLink = $googleLink;
       $this->datenbank = new Datenbank();
       $this->artist = Artist::getDefaultArtist();
+      $this->gallery = Gallery::getDefaultGallery();
    }
 
    //** Getter und Setter */
@@ -227,6 +228,93 @@ class Artwork
       echo '</div>';
    }
 
+   // Methoden für Gallery
+   private function getGalleryByArtworksID($artworksID)
+   {
+       $this->datenbank->connect();
+       try {
+           $anfrage = "SELECT ga.GalleryID , ga.GalleryName , ga.GalleryNativeName , ga.GalleryCity,ga.GalleryCountry , ga.Latitude,ga.Longitude , ga.GalleryWebSite 
+                     FROM galleries ga
+                     JOIN Artworks a ON a.GalleryID = ga.GalleryID
+                     WHERE a.ArtWorkID = :artworksID";
+
+           $stmt = $this->datenbank->prepareStatement($anfrage);
+
+           $stmt->bindParam(':artworksID', $artworksID);
+
+           $stmt->execute();
+
+           $results = $stmt->fetch(PDO::FETCH_ASSOC);
+       } catch (PDOException $e) {
+           echo "Fehler: " . $e->getMessage();
+           return false;
+       } finally {
+           $this->datenbank->close();
+       }
+      
+       return $results;
+   }
+   public function getGalleryForArtwork($id)
+   {
+       $result = $this->getGalleryByArtworksID($id);
+
+       if ($result === null) {
+           return 'the GalleryId is not available';
+       }
+        
+       $tempGallery = Gallery::fromState($result);
+       return $tempGallery;
+   }
+   public function collapse()
+   {
+    $css = '
+    <style>
+    .card_c{
+        border-radius: 20px;
+        background-color: #fef3c7;
+        border: 10px;
+        width: 170%;
+        padding: 15px;
+    }
+    .text{
+        font-family: "Arial";
+        color: #666;
+        
+    }
+    .card-body{
+        padding-top: 15px;
+        font-family: "Arial";
+        color: #666;
+    }
+    </style>
+    ';
+      // Ausgabe des CSS
+      echo $css;
+       $gallery = $this->getGalleryForArtwork($this->getArtWorksID());
+       $galleryInfos = '<div id="accordion">
+           <div class="card_c">
+               <div class="card-header" id="headingOne">
+                   <h6 class="mb-auto">
+                       <a role="button" class="text" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">'
+                       . $gallery->getGalleryNativeName() .
+                       '</a>
+                   </h6>
+               </div>
+               <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+               <div class="card-body">'
+                   . 'Galeriename: ' . $gallery->getGalleryName() . '<br>'
+                   . 'Nativer Galeriename: ' . $gallery->getGalleryNativeName() . '<br>'
+                   . 'Stadt: ' . $gallery->getGalleryCity() . '<br>'
+                   . 'Land : ' . $gallery->getGalleryCountry() . '<br>'
+                   . 'Breite: ' . $gallery->getLatitude() . '<br>'
+                   . 'Längengrad: ' . $gallery->getLongitude() . '<br>'
+                   . "Quelle: <a class='text' href='" . $gallery->getGalleryWebSite() . "'>Webseite</a>";
+               '</div>
+           </div>
+       </div>
+   </div>';
+       return $galleryInfos;
+   }
 
    public function outputSingleArtwork()
    {
@@ -350,7 +438,7 @@ class Artwork
       echo '<tr><th>Datum:</th><td>' . $this->getArtworkYearOfWork() . '</td></tr>';
       echo '<tr><th>Medium:</th><td>' . $this->getArtworkMedium() . '</td></tr>';
       echo '<tr><th>Dimensionen:</th><td>' . $this->getArtworkWidth() . 'cm x ' . $this->getArtworkHeight() . 'cm </td></tr>';
-      echo '<tr><th>Home:</th><td>dfvgdfn  </td></tr>';
+      echo '<tr><th>Home:</th><td>' .$this->collapse(). ' </td></tr>';
       echo '<tr><th>Genres:</th><td>' . $this->getArtworkMedium() . '</td></tr>';
       echo '<tr><th>Subjekte:</th><td>' . $this->getArtworkMedium() . '</td></tr>';
       echo '</table>';
