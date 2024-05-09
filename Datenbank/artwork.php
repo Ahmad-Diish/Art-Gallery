@@ -152,17 +152,17 @@ class Artwork
       return new self($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink);
    }
 
-    public function setSubjectsForArtwork($subjectAlsArray)
-    {
-        $subject = Subject::getDefaultSubject();
-        $subject = Subject::fromState($subjectAlsArray);
-        $this->subjects[] = $subject;
-    }
+    // public function setSubjectsForArtwork($subjectAlsArray)
+    // {
+    //     $subject = Subject::getDefaultSubject();
+    //     $subject = Subject::fromState($subjectAlsArray);
+    //     $this->subjects[] = $subject;
+    // }
 
-    public function getSubjectsForArtwork()
-    {
-        return $this->subjects;
-    }
+    // public function getSubjectsForArtwork()
+    // {
+    //     return $this->subjects;
+    // }
 
    // Methode zur Ausgabe von Kunstwerkkarten
    public function outputArtworks()
