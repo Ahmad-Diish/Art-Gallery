@@ -53,6 +53,7 @@ class ArtistRepository
         return $TopArtists;
     }
 
+
     public function displayTopArtists()  // Homepage
     {
 
@@ -65,8 +66,6 @@ class ArtistRepository
             $this->artist->outputArtist();
         }
     }
-    
-    
     
 
     

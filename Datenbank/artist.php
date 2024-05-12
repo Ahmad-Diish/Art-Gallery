@@ -205,7 +205,7 @@ class Artist
         background-color: #D1BB9E;
     }
 
-        p {
+        .artist-description {
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 20px;
@@ -217,7 +217,7 @@ class Artist
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
            }
             
-            p::before {
+            .artist-description::before {
             content: "";
             display: block;
             width: 50px;
@@ -334,8 +334,8 @@ h2 {
         echo '</div>';
         echo '</div>';
         echo '<div class="col-md-8">';
-        
-        echo '<p>' . $this->getDetailsArtist() . '</p>';
+
+        echo '<p class="artist-description">' . $this->getDetailsArtist() . '</p>';
         // echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
         
         $isFavorite = false;
