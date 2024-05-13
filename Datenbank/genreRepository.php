@@ -2,9 +2,12 @@
 
 require_once("../Datenbank/genre.php");
 
+
+
+
 class GenreRepository
 {
-    private $collectionAllGenres = array();
+    public $collectionAllGenres = array();
     private $Datenbank;
     private $genrei;
     private $artworki;
@@ -15,6 +18,32 @@ class GenreRepository
         $this->getAllGenres();
         $this->genrei = Genre::getDefaultGenre();
     }
+
+    // ... (other methods)
+
+    public function getArtworksForGenre($genreId)
+    {
+        $this->Datenbank->connect();
+        try {
+            $anfrage = "SELECT a.*
+                      FROM artworks a
+                      INNER JOIN artworkgenres ag ON a.ArtWorkID = ag.ArtWorkID
+                      WHERE ag.GenreID = :genreId";
+            $stmt = $this->Datenbank->prepareStatement($anfrage);
+            $stmt->bindParam(":genreId", $genreId);
+            $stmt->execute();
+            $artworks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            exit('could not retrieve Artworks for Genre' . $ex->getMessage());
+        } finally {
+            $this->Datenbank->close();
+        }
+    
+        return $artworks;
+    }
+    
+
+
 
     public function AllGenres()
     {
@@ -61,31 +90,12 @@ class GenreRepository
         return $result;
     }
 
-    public function getArtworksForGenre($genreId)
-    {
-        $this->Datenbank->connect();
-        try {
-            $anfrag = "SELECT * FROM artworkgenres
-                      INNER JOIN artwork ON artworkgenres.ArtworkID = artwork.ArtworkID
-                      WHERE artworkgenres.GenreID = :genreId";
-            $stmt = $this->Datenbank->prepareStatement($anfrag);
-            $stmt->bindParam(":genreId", $genreId);
-            $stmt->execute();
-            $artworks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $artworks = [
-                ['title' => 'Artwork 1'],
-                ['title' => 'Artwork 2'],
-                ['title' => 'Artwork 3']
-            ];
-        } catch (Exception $ex) {
-            exit('could not retrieve Artworks for Genre' . $ex->getMessage());
-        } finally {
-            $this->Datenbank->close();
-        }
-
-        return $artworks;
+  
     }
-}
+    
+    
+    
+
     
 
     
