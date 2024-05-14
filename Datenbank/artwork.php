@@ -340,7 +340,7 @@ class Artwork
         foreach ($subjects as $subject) {
             $subjectId = $subject['SubjectID'];
             $subjectName = htmlspecialchars($subject['SubjectName']);
-            $subjectLinks .= '<a class="textColor_gold" href="SingleSubject.php?SubjectId=' . $subjectId . '">' . $subjectName . '</a><br>';
+            $subjectLinks .= '<a class="textColor_gold" href="../Pages/singleSubject.php?SubjectId=' . $subjectId . '">' . $subjectName . '</a><br>';
         }
 
         return $subjectLinks;
@@ -352,7 +352,7 @@ class Artwork
         foreach ($Genres as $Genre) {
             $GenreId = $Genre['GenreID'];
             $genreName = htmlspecialchars($Genre['GenreName']); // Ändern von $subjectName auf $genreName
-            $GenreLinks .= '<a class="textColor_gold" href="SingleGenre.php?GenreId=' . $GenreId . '">' . $genreName . '</a><br>'; // Ändern von $subjectName auf $genreName
+            $GenreLinks .= '<a class="textColor_gold" href="../Pages/SingleGenre.php?GenreId=' . $GenreId . '">' . $genreName . '</a><br>'; // Ändern von $subjectName auf $genreName
         }
     
         return $GenreLinks;
