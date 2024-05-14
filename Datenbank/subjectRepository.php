@@ -19,7 +19,6 @@ class  SubjectRepository
     }
 
 
-
     private function getAllSubject() // Get all Subject from database 
     {
         $this->datenbank->connect();
@@ -103,6 +102,37 @@ class  SubjectRepository
         } catch (PDOException $e) {
             // Handle exceptions (e.g., database connection error)
             exit('Error retrieving artworks: ' . $e->getMessage());
+        }
+    }
+
+    //Methode für Ahmad
+    public function getSubjectByArtworksID($artworksID)
+    {
+        try {
+            // Verbindung zur Datenbank herstellen
+            $this->datenbank->connect();
+
+            // SQL-Abfrage, um das Thema für die bereitgestellte Artwork-ID abzurufen
+            $query = "SELECT subjects.SubjectID, subjects.SubjectName
+            FROM artworksubjects
+            INNER JOIN subjects ON artworksubjects.SubjectID = subjects.SubjectID
+            WHERE artworksubjects.ArtworkID = :artworksID";
+
+            $statement = $this->datenbank->prepareStatement($query);
+            $statement->bindParam(':artworksID', $artworksID);
+            $statement->execute();
+
+            // Themen für das Kunstwerk abrufen
+            $subjectData = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            // Datenbankverbindung schließen
+            $this->datenbank->close();
+
+            // Themen-Daten zurückgeben
+            return $subjectData;
+        } catch (PDOException $e) {
+            // Ausnahmen behandeln (z.B. Datenbankverbindungsfehler)
+            exit('Fehler beim Abrufen der Themen: ' . $e->getMessage());
         }
     }
    

@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             ?>
 
             <?php foreach ($artworks as $artwork) {
-                $artwork->outputArtworks(); // Gib die Informationen des Kunstwerks aus
+              $artwork->outputArtworks(); // Gib die Informationen des Kunstwerks aus
             } ?>
         </div>
         </div>
