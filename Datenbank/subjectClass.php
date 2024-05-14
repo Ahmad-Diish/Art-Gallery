@@ -1,6 +1,6 @@
 <?php
 
-require_once("../Datenbank/Artwork.php");
+require_once("../Datenbank/artworkClass.php");
 
 
 class Subject

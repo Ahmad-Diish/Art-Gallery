@@ -1,5 +1,5 @@
 <?php
-require_once("artwork.php");
+require_once("artworkClass.php");
 class Artist
 {
 

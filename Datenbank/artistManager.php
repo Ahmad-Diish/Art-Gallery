@@ -1,8 +1,8 @@
 <?php
 
-require_once("../Datenbank/artist.php");
+require_once("../Datenbank/artistClass.php");
 
-class ArtistRepository
+class ArtistManager
 {
 
     private $datenbank;
