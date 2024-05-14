@@ -1,11 +1,11 @@
 <?php
 require_once("../Homepage/header.php");
-require_once("../Datenbank/artworkRepository.php");
-require_once("../Datenbank/artwork.php");
-// Erstellen einer neuen Datenbankverbindung und einer ArtistRepository-Instanz.
+require_once("../Datenbank/artworkManager.php");
+require_once("../Datenbank/artworkClass.php");
+// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
 
 $conn = new Datenbank();
-$artworkRepository = new ArtworkRepository($conn);
+$artworkManager = new ArtworkManager($conn);
 
 $isLoggedIn = false;
 if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     echo "<p>Fehler: Kunstwerk-ID nicht angegeben.</p>";
 }
 
-$artwork = $artworkRepository->getArtwork($artworkID);
+$artwork = $artworkManager->getArtwork($artworkID);
 ?>
 
 <!DOCTYPE html>

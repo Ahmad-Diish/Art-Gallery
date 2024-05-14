@@ -1,14 +1,14 @@
 <?php
 require_once("header.php");
-require_once("../Datenbank/artworkRepository.php");
-require_once("../Datenbank/artistRepository.php");
+require_once("../Datenbank/artworkManager.php");
+require_once("../Datenbank/artistManager.php");
 require_once("carousel.php");
 
 
-// Erstellen einer neuen Datenbankverbindung und einer ArtistRepository-Instanz.
+// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
 $conn = new Datenbank();
-$artworkRepository = new ArtworkRepository($conn);
-$artistRepository = new ArtistRepository($conn);
+$artworkManager = new ArtworkManager($conn);
+$artistManager = new ArtistManager($conn);
 
 ?>
 
@@ -29,7 +29,7 @@ $artistRepository = new ArtistRepository($conn);
                 <!-- Top Künstler -->
                 <?php
                  
-                 $artworkRepository->TopArtwork();
+                 $artworkManager->TopArtwork();
                 
                 ?>
             </div>
@@ -37,7 +37,7 @@ $artistRepository = new ArtistRepository($conn);
             <div class="row mt-5" style="justify-content: space-between;">
                 <!-- Top Kunstwerk -->
                 <?php
-                    $artistRepository->displayTopArtists();
+                    $artistManager->displayTopArtists();
                 ?>
             </div>
             <h2>Aktuellsten Rezensionen</h2>

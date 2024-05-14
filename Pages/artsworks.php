@@ -1,11 +1,11 @@
 <?php
 require_once ("../Homepage/header.php");
-require_once ("../Datenbank/artworkRepository.php");
+require_once ("../Datenbank/artworkManager.php");
 
 
-// Erstellen einer neuen Datenbankverbindung und einer ArtistRepository-Instanz.
+// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
 $conn = new Datenbank();
-$artworkRepository = new ArtworkRepository($conn);
+$artworkManager = new ArtworkManager($conn);
 
 // Verarbeitung des Formulars für die Sortierung.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['sortierreihenfolge']) && (isset($_POST['sortierungsart']))) {
         $sortierreihenfolge = $_POST['sortierreihenfolge'];
         $sortierungsart = $_POST['sortierungsart'];
-        $artworkRepository->sortiereArtworks($sortierungsart, $sortierreihenfolge);
+        $artworkManager->sortiereArtworks($sortierungsart, $sortierreihenfolge);
     }
 } else {
     // Default-Sortierreihenfolge
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Default-Sortierungsart
     $sortierungsart = 'Title';
-    $artworkRepository->sortiereArtworks($sortierungsart, $sortierreihenfolge);
+    $artworkManager->sortiereArtworks($sortierungsart, $sortierreihenfolge);
 }
 
 ?>
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Artwork Images and Links -->
             <?php
             // Ausgabe der sortierten Kunstwerke
-            $artworkRepository->AllArtworks();
+            $artworkManager->AllArtworks();
             ?>
         </div>
     </div>

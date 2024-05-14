@@ -1,9 +1,9 @@
 <?php
 require_once("../Homepage/header.php");
-require_once("../Datenbank/artistRepository.php");
-require_once("../Datenbank/artist.php");
+require_once("../Datenbank/artistManager.php");
+require_once("../Datenbank/artistClass.php");
 $conn = new Datenbank();
-$artistRepository = new ArtistRepository($conn);
+$artistManager = new ArtistManager($conn);
 $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihenfolge'] : 'aufsteigend';
 
 
@@ -90,10 +90,10 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
 
                 if (isset($_POST['sortieren'])) {
                     $sortierreihenfolge = $_POST['sortierreihenfolge'];
-                    $artistRepository->displayAllArtist($sortierreihenfolge);
+                    $artistManager->displayAllArtist($sortierreihenfolge);
                 }
             } else {
-                $artistRepository->displayAllArtist($sortierreihenfolge);
+                $artistManager->displayAllArtist($sortierreihenfolge);
             }
             ?>
         </div>
