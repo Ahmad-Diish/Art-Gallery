@@ -1,8 +1,8 @@
 <?php
 
-require_once("../Datenbank/subject.php");
+require_once("../Datenbank/subjectClass.php");
 
-class  SubjectRepository
+class  SubjectManager
 {
     private $collectionAllSubjects = array();
 
