@@ -2,10 +2,10 @@
 
 //* hier wurde die globale Variable sowie Methode definiert.
 require("../Datenbank/datenbank.php");
-require_once("artistRepository.php");
-require_once("subjectRepository.php");
-require_once("genreRepository.php");
-require_once("gallery.php");
+require_once("artistManager.php");
+require_once("subjectManager.php");
+require_once("genreManager.php");
+require_once("galleryClass.php");
 
 function checkKunstwerkImage($verzeichnis)
 {
@@ -73,8 +73,8 @@ class Artwork
         $this->datenbank = new Datenbank();
         $this->artist = Artist::getDefaultArtist();
         $this->gallery = Gallery::getDefaultGallery();
-        $this->subjecti = new SubjectRepository($this->datenbank);
-        $this->genrei = new GenreRepository($this->datenbank);
+        $this->subjecti = new SubjectManager($this->datenbank);
+        $this->genrei = new GenreManager($this->datenbank);
         $this->genres = array();
         $this->subjects = array();
     }
@@ -447,7 +447,7 @@ class Artwork
         echo $css;
 
         // Die code Grundlagen
-        $arti = new ArtistRepository($this->datenbank);
+        $arti = new ArtistManager($this->datenbank);
         $this->artist = $arti->getArtist($this->getArtistId());
  
         echo '<h1 class="card-title">' . $this->getArtworkTitle() . '</h1>';
