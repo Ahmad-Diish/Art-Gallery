@@ -152,17 +152,17 @@ class Artwork
       return new self($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink);
    }
 
-    // public function setSubjectsForArtwork($subjectAlsArray)
-    // {
-    //     $subject = Subject::getDefaultSubject();
-    //     $subject = Subject::fromState($subjectAlsArray);
-    //     $this->subjects[] = $subject;
-    // }
+    public function setSubjectsForArtwork($subjectAlsArray)
+ {
+     $subject = Subject::getDefaultSubject();
+     $subject = Subject::fromState($subjectAlsArray);
+     $this->subjects[] = $subject;
+ }
 
-    // public function getSubjectsForArtwork()
-    // {
-    //     return $this->subjects;
-    // }
+ public function getSubjectsForArtwork()
+ {
+     return $this->subjects;
+ }
 
    // Methode zur Ausgabe von Kunstwerkkarten
    public function outputArtworks()
@@ -214,7 +214,7 @@ class Artwork
       // Öffnen des Kartencontainers
       echo '<div class="col-md-3 col-lg-3 mb-4">';
       echo '<div class="card">';
-
+      
       // Bildpfad generieren
       $image = $this->getImageFileName();
       $imagePath = strlen($image) == 5 ? "../assets/images/Art_Images v3/images/works/square-medium/0$image.jpg" : "../assets/images/Art_Images v3/images/works/square-medium/$image.jpg";
@@ -224,7 +224,7 @@ class Artwork
       echo '<div class="card-img-container">';
       echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtworkTitle() . '">';
       echo '</div>';
-
+       
       // Karteninhalt
       echo '<div class="card-body">';
       echo '<h6 class="card-title">' . $this->getArtworkTitle() . '</h6>';
