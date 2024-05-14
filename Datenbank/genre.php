@@ -8,7 +8,7 @@ class Genre
     private string $era;
     private string $description;
     private string $link;
-    
+
     public function __construct(int $genreID, string $genreName, string $era, string $description, string $link)
     {
         $this->genreID = $genreID;
@@ -17,43 +17,43 @@ class Genre
         $this->description = $description;
         $this->link = $link;
     }
-  
-    public function getGenreID():int
+
+    public function getGenreID(): int
     {
         return $this->genreID;
     }
 
-    public function getGenreName():string
+    public function getGenreName(): string
     {
         return $this->genreName;
     }
-    
-    public function getEra():string
+
+    public function getEra(): string
     {
         return $this->era;
     }
-    
-    public function getDescription():string
+
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public static function fromState(Array $genre):Genre
+    public static function fromState(array $genre): Genre
     {
         $genreID = $genre["GenreID"] ?? null;
         $genreName = $genre["GenreName"] ?? null;
         $era = $genre["Era"] ?? null;
         $description = $genre["Description"] ?? null;
         $link = $genre["Link"] ?? null;
-        return new self($genreID,$genreName,$era,$description,$link);
+        return new self($genreID, $genreName, $era, $description, $link);
     }
-  
+
     public static function getDefaultGenre(): Genre
     {
         return new self(-1, -1, "", "", "");
     }
-   
-public function outputGenres(): void
+
+    public function outputGenres(): void
     {
         $css = '
         <style>
@@ -135,8 +135,30 @@ public function outputGenres(): void
                 color: #923f0e;
                 font-family: "Goudy Stout";
                 margin-TOP: 70px;
-                margin-bottom: 100px;
+                margin-bottom: 50px;
                     }
+                .genre-info {
+
+                    background-color: #f5f5dc; /* Light brown background */
+                    padding: 30px ;
+                    text-align: center;
+                    color: #923f0e; /* Darker brown font color */
+                    border-radius: 30px;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                    margin-bottom: 100px;
+                    margin-top: 50px;
+                    position: relative;
+                    overflow: hidden; /* Hide overflow for smoother appearance */
+                    }
+
+                    .genre-info:before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;        
+                    border-radius: 30px;
+                    }
+
             </style>
         ';
 
@@ -146,6 +168,7 @@ public function outputGenres(): void
         echo '<body style="background-color: #fffbeb;">';
         //  echo '<div class="container mt-5">';
         echo '<h3 class="titleGenre">' . $this->getGenreName() . '</h3>';
+        echo '<p class="genre-info">' . $this->getDescription() . '</p>';
         echo '<div class="row">';
         echo '<div class="col-md-4">';
 
@@ -158,4 +181,3 @@ public function outputGenres(): void
         echo '</div>';
     }
 }
-?>
