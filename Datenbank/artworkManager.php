@@ -3,12 +3,12 @@
 
 // Diese Klasse fr den Aufruf von Artwork-klasse
 
-require_once("../Datenbank/artwork.php");
+require_once("../Datenbank/artworkClass.php");
 
 
 
 
-class ArtworkRepository
+class ArtworkManager
 {
 
 
