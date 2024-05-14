@@ -1,5 +1,5 @@
 <?php
-require_once("../Datenbank/Artwork.php");
+require_once("../Datenbank/ArtworkClass.php");
 
 class Genre
 {
@@ -119,7 +119,7 @@ class Genre
         echo '<img src=' . $checkedImage . ' class="card-img" alt=' . $this->getGenreName() . '>';
         echo '</a>';
 
-        echo '<a href="../Pages/SingleGenre.php?genreID=' . $this->getGenreID() . '" class="card-title">' . $this->getGenreName() . '</a>';
+        echo '<a href="../Pages/singleGenre.php?genreID=' . $this->getGenreID() . '" class="card-title">' . $this->getGenreName() . '</a>';
 
         echo '</div>';
         echo '</div>';

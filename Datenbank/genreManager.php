@@ -1,11 +1,11 @@
 <?php
 
-require_once("../Datenbank/genre.php");
+require_once("../Datenbank/genreClass.php");
 
 
 
 
-class GenreRepository
+class GenreManager
 {
     public $collectionAllGenres = array();
     private $Datenbank;
