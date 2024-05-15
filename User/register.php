@@ -1,5 +1,7 @@
 <?php
 require_once("../Homepage/header.php");
+require_once("../Datenbank/userManager.php");
+require_once("../Datenbank/userClass.php");
 
 ?>
 
