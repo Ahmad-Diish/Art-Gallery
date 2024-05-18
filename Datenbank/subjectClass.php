@@ -6,25 +6,30 @@ require_once("../Datenbank/artworkClass.php");
 class Subject
 {
 
-    public $subjectId;
-    private $subjectName;
+    public $subjectId; // Öffentliche Eigenschaft für die Subject-ID
+    private $subjectName; // Private Eigenschaft für den Subject-Namen
 
+
+     // Konstruktor für die Subject-Klasse
     public function __construct($subjectId, $subjectName)
     {
         $this->subjectId = $subjectId;
         $this->subjectName = $subjectName;
     }
 
+     // Getter für die Subject-ID
     public function getSubjectId(): int
     {
         return $this->subjectId;
     }
 
+    // Getter für den Subject-Namen
     public function getSubjectName(): string
     {
         return $this->subjectName;
     }
 
+     // Erstellen einer Subject-Instanz aus einem Array-Zustand
     public static function fromState( $subject): Subject
     {
         $subjectId = $subject["SubjectId"] ?? null;
@@ -34,14 +39,16 @@ class Subject
     }
 
 
+    // Erstellen einer Standard-Subject-Instanz
     public static function getDefaultSubject(): Subject
     {
         return new  self(-1, '');
     }
 
-
+    // Ausgabe der Subject-Informationen im HTML-Format
     public function outputSubjects(): void
     {
+        // CSS für die Kartenansicht
         $css = '
         <style>
          .card {
@@ -95,7 +102,7 @@ class Subject
         // Ausgabe des CSS
         echo $css;
 
-
+        // Ausgabe der Subject-Informationen als Karte
         echo '<div class="col-md-3 col-lg-2 mb-4">';
         echo '<div class="card">';
 
@@ -112,6 +119,8 @@ class Subject
         echo '</div>';
     }
    
+
+    // Ausgabe der Details eines einzelnen Subjects
     public function outputSingleSubject()
     {
         $css =
@@ -130,14 +139,14 @@ class Subject
 
         // Ausgabe des CSS
         echo $css;
-
+         // Ausgabe der Subject-Details
         echo '<body style="background-color: #fffbeb;">';
-      //  echo '<div class="container mt-5">';
+      
         echo '<h3 class="titleSubject">' . $this->getSubjectName() . '</h3>';
         echo '<div class="row">';
         echo '<div class="col-md-4">';
         
-        // Formular für weitere Aktionen (falls benötigt)
+       
         echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
         echo '<input type="hidden" name="artistId" value="' . $this->getSubjectId() . '">';
         echo '</form>';

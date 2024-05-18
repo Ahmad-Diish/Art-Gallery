@@ -5,29 +5,16 @@ require_once("../Datenbank/artistClass.php");
 class ArtistManager
 {
 
-    private $datenbank;
-    private $artist;
+    private $datenbank; // Datenbankverbindung
+    private $artist; // Künstlerobjekt
 
     public function __construct($datenbank)
     {
         $this->datenbank = $datenbank;
-        $this->artist = Artist::getDefaultArtist();
+        $this->artist = Artist::getDefaultArtist(); // Standardkünstler setzen
     }
 
-    // function addFavoriteArtwork($artistId): void
-
-    // {
-    //     // hier für Hinzufügen eines Elementes Ende der Liste
-    //     $_SESSION['favorite_artists'][] = $artistId;
-    // }
-    // function removeFavoriteArtist($artistId): void
-    // {
-    //     if (($key = array_search($artistId, $_SESSION['favorite_artists'])) !== false) {
-    //         unset($_SESSION['favorite_artists'][$key]);
-    //     }
-    // }
-
-   
+   // Funktion, um die Top-Künstler für die Homepage abzurufen
     private function getTopArtists() // Homepage
     {
         $this->datenbank->connect();
@@ -53,7 +40,7 @@ class ArtistManager
         return $TopArtists;
     }
 
-
+     // Funktion, um die Top-Künstler anzuzeigen
     public function displayTopArtists()  // Homepage
     {
 
@@ -99,7 +86,7 @@ class ArtistManager
         return $artists;
     }
 
-    // funktion die all künstler mit Reihfolge anzeigt
+    // Funktion die all künstler mit Reihfolge anzeigt
     public function displayAllArtist($sortierreihenfolge)
     {
 
@@ -116,7 +103,7 @@ class ArtistManager
     }
 
 
-    // funktion die aus der Datenbank der artist anhand seiner ID ausgebt wird in [function getArtist] genutzt.
+    // Funktion die aus der Datenbank der artist anhand seiner ID ausgebt wird in [function getArtist] genutzt.
     private function getArtistByID($artistId)
     {
         $this->datenbank->connect();
@@ -140,7 +127,7 @@ class ArtistManager
         return $result;
     }
 
-    //die Funktionalität zur Abfrage eines Künstlers aus der Datenbank zu kapseln und das Ergebnis als Artist-Objekt zurückzugeben. 
+    //Die Funktionalität zur Abfrage eines Künstlers aus der Datenbank zu kapseln und das Ergebnis als Artist-Objekt zurückzugeben. 
     public function getArtist($id)
     {
         $result = $this->getArtistByID($id); // Retrieve artist data from database
@@ -155,7 +142,7 @@ class ArtistManager
 
 
 
-    // funktion die eine kunstwerk anhand eine  Artist-ID zurückgibt. Wird in [function getArtworks] verwendet
+    // Funktion die eine kunstwerk anhand eine  Artist-ID zurückgibt. Wird in [function getArtworks] verwendet
     private function getArtworksByArtistID($artistId)
     {
         $this->datenbank->connect();

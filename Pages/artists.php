@@ -2,9 +2,10 @@
 require_once("../Homepage/header.php");
 require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artistClass.php");
-$conn = new Datenbank();
-$artistManager = new ArtistManager($conn);
-$sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihenfolge'] : 'aufsteigend';
+
+$conn = new Datenbank(); // Erstellen einer Datenbankverbindung
+$artistManager = new ArtistManager($conn); // Erstellen eines ArtistManager-Objekts mit der Datenbankverbindung
+$sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihenfolge'] : 'aufsteigend'; // Sortierreihenfolge setzen
 
 
 ?>
@@ -89,11 +90,11 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if (isset($_POST['sortieren'])) {
-                    $sortierreihenfolge = $_POST['sortierreihenfolge'];
-                    $artistManager->displayAllArtist($sortierreihenfolge);
+                    $sortierreihenfolge = $_POST['sortierreihenfolge']; // Sortierreihenfolge aus dem Formular abrufen
+                    $artistManager->displayAllArtist($sortierreihenfolge); // Künstler sortiert anzeigen
                 }
             } else {
-                $artistManager->displayAllArtist($sortierreihenfolge);
+                $artistManager->displayAllArtist($sortierreihenfolge); // Künstler standardmäßig anzeigen
             }
             ?>
         </div>
@@ -103,15 +104,3 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
 <?php
 require_once("../Homepage/footer.php");
 ?>
-
-
-<!-- <div class="row mt-4" style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 1px; background-color: #D1BB9E;">
-    style="
-
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #E5DDC5;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;" -->

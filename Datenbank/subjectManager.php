@@ -4,13 +4,14 @@ require_once("../Datenbank/subjectClass.php");
 
 class  SubjectManager
 {
-    private $collectionAllSubjects = array();
-
-    private $datenbank;
-    private $subjecti;
+    private $collectionAllSubjects = array(); // Sammlung aller Subjects
+    private $datenbank; // Datenbankverbindung
+    private $subjecti; // Aktuelles Subject
 
     private $artworki;
 
+
+    // Konstruktor für die SubjectManager-Klasse
     public function __construct($datenbank)
     {
         $this->datenbank = $datenbank;
@@ -19,7 +20,8 @@ class  SubjectManager
     }
 
 
-    private function getAllSubject() // Get all Subject from database 
+    // Alle Subjects aus der Datenbank abrufen
+    private function getAllSubject() 
     {
         $this->datenbank->connect();
         try {
@@ -42,7 +44,8 @@ class  SubjectManager
         $this->collectionAllSubjects = $subjects;
     }
 
-    public function displayAllSubjects() //display all Subject in the site "Subjects.php"
+      // Alle Subjects auf der Website anzeigen "Subjects.php"
+    public function displayAllSubjects()
     {
         $subjects = $this->collectionAllSubjects;
 
@@ -55,7 +58,7 @@ class  SubjectManager
     }
 
 
-
+    // Ein einzelnes Subject nach ID anzeigen
     public function displaySubjectById($subjectId)
     {
         $subjects = $this->collectionAllSubjects;
@@ -75,13 +78,15 @@ class  SubjectManager
         echo "Subjekt mit der ID $subjectId wurde nicht gefunden.";
     }
 
+
+    // Kunstwerke nach Subject-ID abrufen
     public function getArtworksBySubjectId($subjectId)
     {
         try {
-            // Connect to the database
+           
             $this->datenbank->connect();
 
-            // SQL query to retrieve artworks for the provided subject ID
+           // SQL-Abfrage, um Kunstwerke für die bereitgestellte Subject-ID abzurufen
             $query = "SELECT *
             FROM artworksubjects, artworks
             WHERE artworksubjects.ArtworkID = artworks.ArtworkID
@@ -105,7 +110,7 @@ class  SubjectManager
         }
     }
 
-    //Methode für Ahmad
+     // Themen nach Artwork-ID abrufen (!!!!für Ahmad!!!!!)
     public function getSubjectByArtworksID($artworksID)
     {
         try {

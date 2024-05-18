@@ -5,10 +5,7 @@ require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artworkManager.php");
 
 
-//*Dieser Anwendungsfall wird initiiert, wenn ein Benutzer einen einzelnen Künstler zur Anzeige auswählt (z. B. auf einen Link klickt, der den Benutzer zu dieser Seite führt). 2. Das System zeigt Informationen zu einem einzelnen Künstler an (angegeben über die Künstler-ID, die über einen Query-String-Parameter übergeben wird). Diese Seite sollte fehlende oder ungültige Abfragezeichenfolgen-ID-Parameter behandeln, indem sie auf eine Fehlerseite umleitet. Alle Informationen in der Künstlertabelle sollten angezeigt werden. Es sollte eine Möglichkeit geben, alle Kunstwerke des Künstlers anzuzeigen. Die Miniaturansicht, der Titel und die Schaltfläche „Ansicht“ des Kunstwerks müssen Links zu diesem Kunstwerk sein (gehen Sie also zum Anwendungsfall „Einzelnes Kunstwerk anzeigen“). Diese Seite muss es dem Benutzer ermöglichen, den Künstler zu einer sitzungsbasierten Favoritenliste hinzuzufügen (d. h. zum Anwendungsfall „Zu Favoriten hinzufügen“ wechseln). In diesem Fall wird es zur Liste der bevorzugten Künstler hinzugefügt.
-
-
-// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
+// Erstellen einer neuen Datenbankverbindung und Instanzen der Manager
 $conn = new Datenbank();
 $artistManager = new ArtistManager($conn);
 $artist = Artist::getDefaultArtist();
@@ -16,7 +13,7 @@ $artworkManager = new ArtworkManager($conn);
 
 // Überprüfe, ob eine Künstler-ID im URL-Parameter vorhanden ist
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Prüfe, ob die Künstler-ID im URL-Parameter "parameter" oder "artistID" vorhanden ist
+      // Überprüfen, ob die Künstler-ID im URL-Parameter "parameter" oder "artistID" vorhanden ist
     if (isset($_GET["parameter"])) {
         $artistID = $_GET["parameter"];
     } elseif (isset($_GET["artistID"])) {
@@ -40,16 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 // Stelle sicher, dass die Künstler-ID gültig ist, bevor du sie abrufst
 if (!is_numeric($artistID) || $artistID <= 0) {
-    // Handle ungültige Künstler-ID (z. B. Fehlermeldung anzeigen)
     echo "Ungültige Künstler-ID!";
     exit;
 }
 
-$artist = $artistManager->getArtist($artistID);
-$artworks = $artistManager->getArtworks($artistID);
+$artist = $artistManager->getArtist($artistID); // Künstlerinformationen abrufen
+$artworks = $artistManager->getArtworks($artistID); // Kunstwerke des Künstlers abrufen
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-}
 
 ?>
 <singleArtist>

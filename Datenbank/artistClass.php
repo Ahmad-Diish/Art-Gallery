@@ -3,6 +3,7 @@ require_once("artworkClass.php");
 class Artist
 {
 
+    // Private Eigenschaften der Klasse
     private $artistID;
     private $firstName;
     private $lastName;
@@ -19,9 +20,10 @@ class Artist
 
     private $imagePath;
 
+     // Konstruktor zum Initialisieren der Eigenschaften
     public function __construct($artistId, $firstName, $lastName, $nationality, $yearOfBirth, $yearOfDeath, $details, $artistLink, $isFavorite)
     {
-        // Initialisierung der Eigenschaften...
+       
         $this->artistID = $artistId;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -32,7 +34,7 @@ class Artist
         $this->artistLink = $artistLink;
 
     }
-    //**Setter und Getter */
+    // Getter 
     public function getArtistID()
     {
         return $this->artistID;
@@ -81,6 +83,7 @@ class Artist
     }
 
 
+    // Erzeugt ein Artist-Objekt aus einem assoziativen Array
     public static function fromState(array $artist): Artist
     {
         $id = $artist["ArtistID"];
@@ -96,14 +99,17 @@ class Artist
     }
 
 
+    // Erzeugt ein Default-Artist-Objekt
     public static function getDefaultArtist(): Artist
     {
         return new self(-1, "", "", "", 0, 0, "", "",false);
     }
 
+
+    // Gibt die Informationen des Künstlers aus
     public function outputArtist()
     {
-        // CSS for styling the card and the more info button
+        // CSS-Styles definieren
         $css = '
         <style>
             .card-img-container {
@@ -144,49 +150,54 @@ class Artist
         // Output the CSS
         echo $css;
 
-        // Open the card container
+        // Karte für den Künstler öffnen
         echo '<div class="col-md-3 col-lg-3 mb-4">';
         echo '<div class="card">';
 
-        // Image path
+        // Bildpfad überprüfen
         $image = "../assets/images/Art_Images v3/images/artists/square-medium/" . $this->getArtistID() . ".jpg";
         $checkedImage = checkArtistImage($image);
 
-        // Output the image within a container
+        // Bild innerhalb eines Containers ausgeben
         echo '<div class="card-img-container">';
         echo '<img src="' . $checkedImage . '" class="card-img-top" alt="' . $this->getArtistFirstName() . ' ' . $this->getArtistLastName() . '">';
         echo '</div>';
 
-        // Card body
+        // Kartentext ausgeben
         echo '<div class="card-body">';
         echo '<h6 class="card-title">' . htmlspecialchars($this->getArtistFirstName() . " " . $this->getArtistLastName()) .  '</h6>';
 
-        // More info button
+        // Mehr-Info-Button
         echo '<div class="more-info-button">
             <a href="../Pages/singleArtist.php?artistID=' . $this->getArtistID() . '" role="button" type="button" class="btn btn-sm button_user_erweitern">mehr Infos</a>
           </div>';
 
-        // Close card container
+        // Karte schließen
         echo '</div>';
         echo '</div>';
         echo '</div>';
     }
 
 
-
+    // Kunstwerke für den Künstler setzen
     public function setArtworksForArtist($artworkAlsArray)
     {
         $artwork = Artwork::getDefaultArtwork();
         $artwork = Artwork::fromState($artworkAlsArray);
         $this->artworks[] = $artwork;
     }
+
+    // Kunstwerke für den Künstler abrufen
     public function getArtworksForArtist()
     {
         return $this->artworks;
     }
 
+
+    // Einzelne Künstlerinformation als HTML ausgeben
     public function outputSingleArtist()
     {
+        // CSS-Styles definieren
         $css = '
         <style>
           
