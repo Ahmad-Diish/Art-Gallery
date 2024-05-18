@@ -1,5 +1,4 @@
 <?php
-// Require necessary files
 require_once("../Homepage/header.php");
 require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artworkManager.php");
