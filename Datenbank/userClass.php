@@ -1,33 +1,41 @@
 <?php
-require_once("userClass.php");
-class Artist
-{
-
-    private $customerID;
-    private $firstName;
-    private $lastName;
+class User {
+    private $firstname;
+    private $lastname;
     private $address;
+    private $postal;
     private $city;
     private $region;
     private $country;
-    private $postal;
     private $phone;
     private $email;
-    private $datenbank;
+    private $username;
+    private $password;
 
-    public function __construct($customerID, $firstName, $lastName, $address, $city, $region, $country, $postal, $phone, $email)
-    {
-        // Initialisierung der Eigenschaften...
-        $this->artistID = $customerID;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->nationality = $address;
-        $this->yearOfBirth = $city;
-        $this->yearOfDeath = $region;
-        $this->details = $country;
-        $this->artistLink = $postal;
-        $this->artistLink = $phone;
-        $this->artistLink = $email;
-
+    public function __construct($firstname, $lastname, $address, $postal, $city, $region, $country, $phone, $email, $username, $password) {
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->address = $address;
+        $this->postal = $postal;
+        $this->city = $city;
+        $this->region = $region;
+        $this->country = $country;
+        $this->phone = $phone;
+        $this->email = $email;
+        $this->username = $username;
+        $this->password = password_hash($password, PASSWORD_DEFAULT); // Passwort hashen
     }
+
+    public function getFirstname() { return $this->firstname; }
+    public function getLastname() { return $this->lastname; }
+    public function getAddress() { return $this->address; }
+    public function getPostal() { return $this->postal; }
+    public function getCity() { return $this->city; }
+    public function getRegion() { return $this->region; }
+    public function getCountry() { return $this->country; }
+    public function getPhone() { return $this->phone; }
+    public function getEmail() { return $this->email; }
+    public function getUsername() { return $this->username; }
+    public function getPasswordHash() { return $this->password; } // Methode um gehashtes Passwort zu bekommen
 }
+?>

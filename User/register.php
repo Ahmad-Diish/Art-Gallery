@@ -112,8 +112,12 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="lastname">
         </div>
         <div class="field input">
-            <label for="adress">Adress</label>
-            <input type="text" name="adress">
+            <label for="address">Address</label>
+            <input type="text" name="address">
+        </div>
+        <div class="field input">
+            <label for="password">Postal</label>
+            <input type="text" name="postal">
         </div>
         <div class="field input">
             <label for="password">City</label>
@@ -126,10 +130,6 @@ require_once("../Datenbank/userClass.php");
         <div class="field input">
             <label for="password">Country</label>
             <input type="text" name="country">
-        </div>
-        <div class="field input">
-            <label for="password">Postal</label>
-            <input type="text" name="postal">
         </div>
         <div class="field input">
             <label for="password">Phone</label>
