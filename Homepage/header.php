@@ -187,8 +187,8 @@
       <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
           <div class="user-info">
-          <a  href="login.php" class="sub-menu-link"><p>Login</p></a>
-          <a  href="register.php" class="sub-menu-link"><p>Registrieren</p></a>
+          <a  href="../User/login.php" class="sub-menu-link"><p>Login</p></a>
+          <a  href="../User/register.php" class="sub-menu-link"><p>Registrieren</p></a>
           </div>
         </div>
       </div>
