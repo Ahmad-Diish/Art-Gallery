@@ -98,7 +98,7 @@ require_once("../Homepage/header.php");
         </div>
         <button class="button1" type="submit" name="submit">Login</button>
         <div class="link">
-            Noch keinen Account? <a href="signup.php">Registrieren</a>
+            Noch keinen Account? <a href="register.php">Registrieren</a>
         </div>
     </form>
     </div>
