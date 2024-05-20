@@ -13,24 +13,15 @@ require_once("../Homepage/header.php");
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        *{
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
 
-        body{
-            background: #fffbeb;
-        }
-        
-        .container{
+        .container1{
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 90vh;
         }
 
-        .box{
+        .box1{
             background: #fdfdfd;
             display: flex;
             flex-direction: column;
@@ -40,25 +31,25 @@ require_once("../Homepage/header.php");
                         0 32px 64px -48px lightgrey;
         }
         
-        .form-box{
+        .form-box1{
             width: 500px;
             margin: 0px 10px;
         }
 
-        .form-box h2{
+        .form-box1 h2{
             font-size: 35px;
             font-weight: 300;
             padding-bottom: 10px;
             margin-bottom: 10px;
         }
 
-        .form-box form .field{
+        .form-box1 form .field{
             display: flex;
             margin-bottom: 10px;
             flex-direction: column;
         }
 
-        .form-box form .input input{
+        .form-box1 form .input input{
             height: 35px;
             width: 100%;
             font-size: 15px;
@@ -68,7 +59,7 @@ require_once("../Homepage/header.php");
             outline: none;
         }
 
-        button{
+        .button1{
             height: 35px;
             width: 100%;
             background: #d5a27c;
@@ -82,7 +73,7 @@ require_once("../Homepage/header.php");
             padding: 0px 10px;
         }
 
-        button:hover{
+        .button1:hover{
             opacity: 0.80;
         }
       
@@ -91,8 +82,8 @@ require_once("../Homepage/header.php");
 
 <body>
 
-<div class="container">
-<div class="box form-box">
+<div class="container1">
+<div class="box1 form-box1">
 <section class="signup-form">
     <h2>Login</h2>
     <div class="signup-form-form">
@@ -102,12 +93,12 @@ require_once("../Homepage/header.php");
             <input type="text" name="email">
         </div>
         <div class="field input">
-            <label for="password">Password</label>
+            <label for="password">Passwort</label>
             <input type="password" name="password">
         </div>
-        <button type="submit" name="submit">Login</button>
+        <button class="button1" type="submit" name="submit">Login</button>
         <div class="link">
-            Don't have an account? <a href="signup.php">Sign up now</a>
+            Noch keinen Account? <a href="signup.php">Registrieren</a>
         </div>
     </form>
     </div>

@@ -16,17 +16,8 @@ require_once("../Datenbank/userClass.php");
 
 
     <style>
-        *{
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        body{
-            background: #fffbeb;
-        }
-        
-        .container{
+      
+        .container1{
             margin-top: 50px;
             margin-bottom: 50px;
             display: flex;
@@ -35,7 +26,7 @@ require_once("../Datenbank/userClass.php");
             min-height: 90vh;
         }
 
-        .box{
+        .box1{
             background: #fdfdfd;
             display: flex;
             flex-direction: column;
@@ -45,25 +36,25 @@ require_once("../Datenbank/userClass.php");
                         0 32px 64px -48px lightgrey;
         }
         
-        .form-box{
+        .form-box1{
             width: 500px;
             margin: 0px 10px;
         }
 
-        .form-box h2{
+        .form-box1 h2{
             font-size: 35px;
             font-weight: 300;
             padding-bottom: 10px;
             margin-bottom: 10px;
         }
 
-        .form-box form .field{
+        .form-box1 form .field{
             display: flex;
             margin-bottom: 10px;
             flex-direction: column;
         }
 
-        .form-box form .input input{
+        .form-box1 form .input input{
             height: 35px;
             width: 100%;
             font-size: 15px;
@@ -73,7 +64,7 @@ require_once("../Datenbank/userClass.php");
             outline: none;
         }
 
-        button{
+        .button2{
             height: 35px;
             width: 100%;
             background: #d5a27c;
@@ -87,7 +78,7 @@ require_once("../Datenbank/userClass.php");
             padding: 0px 10px;
         }
 
-        button:hover{
+        .button2:hover{
             opacity: 0.80;
         }
       
@@ -97,30 +88,30 @@ require_once("../Datenbank/userClass.php");
 
 <body>
 
-<div class="container">
-<div class="box form-box">
+<div class="container1">
+<div class="box1 form-box1">
 <section class="signup-form">
-    <h2>Sign up</h2>
+    <h2>Registrieren</h2>
     <div class="signup-form-form">
     <form action="signup.inc.php" method="post">
         <div class="field input">
-            <label for="firstname">First name</label>
+            <label for="firstname">Vorname</label>
             <input type="text" name="firstname">
         </div>
         <div class="field input">
-            <label for="lastname">Last name</label>
+            <label for="lastname">Nachname</label>
             <input type="text" name="lastname">
         </div>
         <div class="field input">
-            <label for="address">Address</label>
+            <label for="address">Addresse</label>
             <input type="text" name="address">
         </div>
         <div class="field input">
-            <label for="password">Postal</label>
+            <label for="password">Postleitzahl</label>
             <input type="text" name="postal">
         </div>
         <div class="field input">
-            <label for="password">City</label>
+            <label for="password">Stadt</label>
             <input type="text" name="city">
         </div>
         <div class="field input">
@@ -128,11 +119,11 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="region">
         </div>
         <div class="field input">
-            <label for="password">Country</label>
+            <label for="password">Land</label>
             <input type="text" name="country">
         </div>
         <div class="field input">
-            <label for="password">Phone</label>
+            <label for="password">Telefon</label>
             <input type="text" name="phone">
         </div>
         <div class="field input">
@@ -140,7 +131,7 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="email">
         </div>
         <div class="field input">
-            <label for="password">Repeat E-Mail</label>
+            <label for="password">E-Mail wiederholen</label>
             <input type="text" name="emailrepeat">
         </div>
         <div class="field input">
@@ -148,16 +139,16 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="username">
         </div>
         <div class="field input">
-            <label for="password">Password</label>
+            <label for="password">Passwort</label>
             <input type="password" name="password">
         </div>
         <div class="field input">
-            <label for="password">Repeat Password</label>
+            <label for="password">Passwort wiederholen</label>
             <input type="password" name="passwordrepeat">
         </div>
-        <button type="submit" name="submit">Sign up</button>
+        <button class="button2" type="submit" name="submit">Registrieren</button>
         <div class="link">
-            Already have an account? <a href="login.php">Go to login </a>
+            Bereits registriert? <a href="login.php">Login</a>
         </div>
     </form>
     </div>
