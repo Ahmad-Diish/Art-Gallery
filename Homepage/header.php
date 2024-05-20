@@ -106,7 +106,7 @@
       transition: max-height 0.5s;
       box-shadow: 0 0 50px 0 lightgrey,
                         0 32px 64px -48px lightgrey;
-      z-index: -1;
+      z-index: 1000;
     }
 
   .sub-menu-wrap.open-menu{
