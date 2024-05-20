@@ -189,12 +189,8 @@
           <div class="user-info">
           <a  href="login.php" class="sub-menu-link"><p>Login</p></a>
           <a  href="register.php" class="sub-menu-link"><p>Registrieren</p></a>
-
-
           </div>
-
         </div>
-      
       </div>
     </nav>
 
