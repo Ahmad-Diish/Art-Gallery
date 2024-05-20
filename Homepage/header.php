@@ -94,6 +94,55 @@
     .person-btn:hover {
       color: #adb5bd;
     }
+
+    .sub-menu-wrap{
+      position: absolute;
+      border-radius: 20px;
+      top: 110%;
+      right: 2%;
+      width: 320px;
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 0.5s;
+      box-shadow: 0 0 50px 0 lightgrey,
+                        0 32px 64px -48px lightgrey;
+      z-index: -1;
+    }
+
+  .sub-menu-wrap.open-menu{
+    max-height: 400px;
+    
+  }
+
+    .sub-menu{
+      background-color: #f8f9fa;
+      padding: 20px;
+      margin: 10px;
+    }
+
+    .user-info{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+    }
+
+    .sub-menu-link{
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #6c757d;
+      margin: 12px 0;
+    }
+
+    .sub-menu-link p{
+      width: 100%;
+    }
+
+    .sub-menu-link:hover{
+      opacity: 0.80;
+    }
+
   </style>
 </head>
 
@@ -132,13 +181,32 @@
             <button class="btn search-btn" type="submit"><i class="bi bi-search"></i></button>
           </form>
           <button class="btn heart-btn"><i class="bi bi-heart"></i></button>
-          <button class="btn person-btn"><i class="bi bi-person"></i></button>
+          <button class="btn person-btn" onclick="toggleMenu()"><i class="bi bi-person"></i></button>
         </div>
+      </div>
+      <div class="sub-menu-wrap" id="subMenu">
+        <div class="sub-menu">
+          <div class="user-info">
+          <a  href="login.php" class="sub-menu-link"><p>Login</p></a>
+          <a  href="register.php" class="sub-menu-link"><p>Registrieren</p></a>
+
+
+          </div>
+
+        </div>
+      
       </div>
     </nav>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let subMenu = document.getElementById("subMenu");
+
+      function toggleMenu(){
+        subMenu.classList.toggle("open-menu");
+      }
+    </script>
   </header>
 </body>
 
