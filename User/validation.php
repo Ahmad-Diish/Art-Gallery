@@ -1,11 +1,14 @@
 <?php
-function validateEmails($email, $emailRepeat) {
+function validateEmails($email, $emailRepeat)
+{
     if ($email !== $emailRepeat) {
         return "Die E-Mail-Adressen stimmen nicht überein.";
     }
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Die E-Mail-Adresse ist ungültig.";
     }
+
     $userManager = new UserManager();
     if ($userManager->emailExists($email)) {
         return "Die Email existiert bereits.";
@@ -13,7 +16,8 @@ function validateEmails($email, $emailRepeat) {
     return null;
 }
 
-function validateUsername($username) {
+function validateUsername($username)
+{
     $userManager = new UserManager();
     if ($userManager->usernameExists($username)) {
         return "Der Username existiert bereits.";
@@ -21,7 +25,8 @@ function validateUsername($username) {
     return null;
 }
 
-function validatePassword($password, $passwordRepeat) {
+function validatePassword($password, $passwordRepeat)
+{
     $errors = array(); // Array für Fehlermeldungen
 
     if ($password !== $passwordRepeat) {

@@ -1,7 +1,7 @@
 <?php
-require_once("../Datenbank/userManager.php");
-require_once("../Datenbank/userClass.php");
-require_once("../User/validation.php");
+require_once ("../Datenbank/userManager.php");
+require_once ("../Datenbank/userClass.php");
+require_once ("../User/validation.php");
 
 session_start();
 
@@ -32,7 +32,7 @@ if (isset($_POST['submit'])) {
     }
 
     $usernameError = validateUsername($username);
-    if($usernameError){
+    if ($usernameError) {
         $errors[] = $usernameError;
     }
 
@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
         ", $errors);
         header("Location: register.php?error=validation&message=" . urlencode($errorMessage));
         exit();
-    }    
+    }
 
     // Wenn keine Fehler vorhanden sind, fahren Sie mit der Benutzerregistrierung fort
     try {
