@@ -97,25 +97,24 @@
 
     .sub-menu-wrap{
       position: absolute;
-      border-radius: 20px;
       top: 110%;
       right: 2%;
       width: 320px;
       max-height: 0px;
       overflow: hidden;
       transition: max-height 0.5s;
-      box-shadow: 0 0 50px 0 lightgrey,
-                        0 32px 64px -48px lightgrey;
-      z-index: 1000;
+      z-index: 1001;
+      background-color: white;
     }
 
   .sub-menu-wrap.open-menu{
     max-height: 400px;
+    background-color: white;
     
   }
 
     .sub-menu{
-      background-color: #f8f9fa;
+      background-color: white;
       padding: 20px;
       margin: 10px;
     }
