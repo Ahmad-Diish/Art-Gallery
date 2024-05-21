@@ -79,6 +79,8 @@ require_once("../Datenbank/userClass.php");
         .button2:hover{
             opacity: 0.80;
         }
+
+      
       
     </style>
 
@@ -90,6 +92,7 @@ require_once("../Datenbank/userClass.php");
 <div class="box1 form-box1">
 <section class="signup-form">
     <h2>Registrieren</h2>
+    <div class="required-fields"><p>*Pflichtfelder</p></div>
     <div class="signup-form-form">
     <form action="signup.inc.php" method="post">
         <div class="field input">
@@ -97,11 +100,11 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="firstname">
         </div>
         <div class="field input">
-            <label for="lastname">Nachname</label>
+            <label for="lastname">Nachname*</label>
             <input type="text" name="lastname">
         </div>
         <div class="field input">
-            <label for="address">Addresse</label>
+            <label for="address">Addresse*</label>
             <input type="text" name="address">
         </div>
         <div class="field input">
@@ -109,7 +112,7 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="postal">
         </div>
         <div class="field input">
-            <label for="password">Stadt</label>
+            <label for="password">Stadt*</label>
             <input type="text" name="city">
         </div>
         <div class="field input">
@@ -117,7 +120,7 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="region">
         </div>
         <div class="field input">
-            <label for="password">Land</label>
+            <label for="password">Land*</label>
             <input type="text" name="country">
         </div>
         <div class="field input">
@@ -125,23 +128,23 @@ require_once("../Datenbank/userClass.php");
             <input type="text" name="phone">
         </div>
         <div class="field input">
-            <label for="password">E-Mail</label>
+            <label for="password">E-Mail*</label>
             <input type="text" name="email">
         </div>
         <div class="field input">
-            <label for="password">E-Mail wiederholen</label>
+            <label for="password">E-Mail wiederholen*</label>
             <input type="text" name="emailrepeat">
         </div>
         <div class="field input">
-            <label for="password">Username</label>
+            <label for="password">Username*</label>
             <input type="text" name="username">
         </div>
         <div class="field input">
-            <label for="password">Passwort</label>
+            <label for="password">Passwort*</label>
             <input type="password" name="password">
         </div>
         <div class="field input">
-            <label for="password">Passwort wiederholen</label>
+            <label for="password">Passwort wiederholen*</label>
             <input type="password" name="passwordrepeat">
         </div>
         <button class="button2" type="submit" name="submit">Registrieren</button>
