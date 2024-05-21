@@ -1,14 +1,18 @@
 <?php
+// Einbindung der Datei, die die Klasse Artwork enthält
 require_once("../Datenbank/ArtworkClass.php");
 
+// Definition der Klasse Genre
 class Genre
 {
+    // Private Variablen zur Speicherung der Eigenschaften eines Genres
     private int $genreID;
     private string $genreName;
     private string $era;
     private string $description;
     private string $link;
 
+    // Konstruktor zur Initialisierung eines Genre-Objekts mit den angegebenen Werten
     public function __construct(int $genreID, string $genreName, string $era, string $description, string $link)
     {
         $this->genreID = $genreID;
@@ -18,26 +22,31 @@ class Genre
         $this->link = $link;
     }
 
+    // Getter-Methode für genreID
     public function getGenreID(): int
     {
         return $this->genreID;
     }
 
+    // Getter-Methode für genreName
     public function getGenreName(): string
     {
         return $this->genreName;
     }
 
+    // Getter-Methode für era
     public function getEra(): string
     {
         return $this->era;
     }
 
+    // Getter-Methode für description
     public function getDescription(): string
     {
         return $this->description;
     }
 
+    // Statische Methode zur Erstellung eines Genre-Objekts aus einem Array
     public static function fromState(array $genre): Genre
     {
         $genreID = $genre["GenreID"] ?? null;
@@ -48,13 +57,16 @@ class Genre
         return new self($genreID, $genreName, $era, $description, $link);
     }
 
+    // Statische Methode zur Erstellung eines Standard-Genre-Objekts
     public static function getDefaultGenre(): Genre
     {
         return new self(-1, -1, "", "", "");
     }
 
+    // Methode zur Ausgabe der Genre-Informationen als HTML-Karte
     public function outputGenres(): void
     {
+        // CSS für die Darstellung der Karte
         $css = '
         <style>
          .card {
@@ -108,28 +120,35 @@ class Genre
         // Ausgabe des CSS
         echo $css;
 
-
+        // HTML-Struktur für die Karte
         echo '<div class="col-md-3 col-lg-2 mb-4">';
         echo '<div class="card">';
 
+        // Pfad zum Bild des Genres
         $image = "../assets/images/Art_Images v3/images/genres/square-medium/" . $this->getGenreID() . ".jpg";
+        // Überprüfung, ob das Bild vorhanden ist
         $checkedImage = checkKunstwerkImage($image);
         $checkedImage = "'" . $checkedImage . "'";
+        // Bild und Link zur Detailseite des Genres
         echo '<a href="../Pages/SingleGenre.php?genreID=' . $this->getGenreID() . '">';
         echo '<img src=' . $checkedImage . ' class="card-img" alt=' . $this->getGenreName() . '>';
         echo '</a>';
 
+        // Titel des Genres mit Link zur Detailseite
         echo '<a href="../Pages/singleGenre.php?genreID=' . $this->getGenreID() . '" class="card-title">' . $this->getGenreName() . '</a>';
 
+        // Abschluss der HTML-Struktur
         echo '</div>';
         echo '</div>';
     }
+
+    // Methode zur Ausgabe der Informationen eines einzelnen Genres
     public function outputSingleGenre()
     {
+        // CSS für die Darstellung der Genre-Informationen
         $css =
         '
             <style>
-
                .titleGenre {
                 text-align: center;
                 color: #923f0e;
@@ -138,19 +157,17 @@ class Genre
                 margin-bottom: 50px;
                     }
                 .genre-info {
-
-                    background-color: #f5f5dc; /* Light brown background */
+                    background-color: #f5f5dc; /* Hellbrauner Hintergrund */
                     padding: 30px ;
                     text-align: center;
-                    color: #923f0e; /* Darker brown font color */
+                    color: #923f0e; /* Dunkelbraune Schriftfarbe */
                     border-radius: 30px;
                     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
                     margin-bottom: 100px;
                     margin-top: 50px;
                     position: relative;
-                    overflow: hidden; /* Hide overflow for smoother appearance */
+                    overflow: hidden; /* Verbergen des Überlaufs für eine glattere Darstellung */
                     }
-
                     .genre-info:before {
                     content: "";
                     position: absolute;
@@ -158,15 +175,14 @@ class Genre
                     left: 0;        
                     border-radius: 30px;
                     }
-
             </style>
         ';
 
         // Ausgabe des CSS
         echo $css;
 
+        // HTML-Struktur für die Genre-Informationen
         echo '<body style="background-color: #fffbeb;">';
-        //  echo '<div class="container mt-5">';
         echo '<h3 class="titleGenre">' . $this->getGenreName() . '</h3>';
         echo '<p class="genre-info">' . $this->getDescription() . '</p>';
         echo '<div class="row">';
@@ -177,7 +193,9 @@ class Genre
         echo '<input type="hidden" name="genreID" value="' . $this->getGenreID() . '">';
         echo '</form>';
 
+        // Abschluss der HTML-Struktur
         echo '</div>';
         echo '</div>';
     }
 }
+?>
