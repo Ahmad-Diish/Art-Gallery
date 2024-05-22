@@ -166,4 +166,3 @@ require_once("../Datenbank/userClass.php");
 require_once("../Homepage/footer.php");
 ?>
 
-?>
