@@ -2,7 +2,7 @@
 require_once("../Homepage/header.php");
 require_once("../Datenbank/userManager.php");
 require_once("../Datenbank/userClass.php");
-
+require_once("../User/validation.php");
 ?>
 
 <!DOCTYPE html>
@@ -80,8 +80,14 @@ require_once("../Datenbank/userClass.php");
             opacity: 0.80;
         }
 
-      
-      
+        .error-message {
+            color: red;
+            margin-top: 0px;
+            /* Adjusted margin top */
+            margin-bottom: 3px;
+            /* Adjusted margin bottom */
+            font-size: 14px;
+        }
     </style>
 
 </head>
@@ -147,6 +153,14 @@ require_once("../Datenbank/userClass.php");
             <label for="password">Passwort wiederholen*</label>
             <input type="password" name="passwordrepeat">
         </div>
+        <?php
+                        if (isset($_GET['error']) && isset($_GET['message'])) {
+                            $errors = explode("\n", htmlspecialchars($_GET['message']));
+                            foreach ($errors as $error) {
+                                echo '<p class="error-message">' . $error . '</p>';
+                            }
+                        }
+                        ?>
         <button class="button2" type="submit" name="submit">Registrieren</button>
         <div class="link">
             Bereits registriert? <a href="login.php">Login</a>
