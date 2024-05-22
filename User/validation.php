@@ -45,7 +45,7 @@ function validatePassword($password, $passwordRepeat)
         $errors[] = "Das Passwort muss mindestens einen Großbuchstaben enthalten.";
     }
 
-    if (!preg_match("/[!@#$%^&*()\-_=+{};:,<.>]/", $password)) {
+    if (!preg_match("/[!?@#$%^&*()\-_=+{};:,<.>]/", $password)) {
         $errors[] = "Das Passwort muss mindestens ein Sonderzeichen enthalten.";
     }
 

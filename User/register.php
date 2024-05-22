@@ -1,8 +1,8 @@
 <?php
-require_once("../Homepage/header.php");
-require_once("../Datenbank/userManager.php");
-require_once("../Datenbank/userClass.php");
-require_once("../User/validation.php");
+require_once ("../Homepage/header.php");
+require_once ("../Datenbank/userManager.php");
+require_once ("../Datenbank/userClass.php");
+require_once ("../User/validation.php");
 ?>
 
 <!DOCTYPE html>
@@ -154,13 +154,13 @@ require_once("../User/validation.php");
             <input type="password" name="passwordrepeat">
         </div>
         <?php
-                        if (isset($_GET['error']) && isset($_GET['message'])) {
-                            $errors = explode("\n", htmlspecialchars($_GET['message']));
-                            foreach ($errors as $error) {
-                                echo '<p class="error-message">' . $error . '</p>';
-                            }
-                        }
-                        ?>
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = explode("\n", htmlspecialchars($_GET['message']));
+            foreach ($errors as $error) {
+                echo '<p class="error-message">' . $error . '</p>';
+            }
+        }
+        ?>
         <button class="button2" type="submit" name="submit">Registrieren</button>
         <div class="link">
             Bereits registriert? <a href="login.php">Login</a>
@@ -177,6 +177,6 @@ require_once("../User/validation.php");
 
 
 <?php
-require_once("../Homepage/footer.php");
+require_once ("../Homepage/footer.php");
 ?>
 

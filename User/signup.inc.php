@@ -22,8 +22,8 @@ if (isset($_POST['submit'])) {
 
     $errors = array(); // Array für Fehlermeldungen
 
-    if (empty($firstname) || empty($lastname) || empty($address) || empty($postal) || empty($city) || empty($region) || empty($country) || empty($phone) || empty($email) || empty($emailRepeat) || empty($username) || empty($password) || empty($passwordRepeat)) {
-        $errors[] = "Bitte füllen Sie alle Felder aus.";
+    if (empty($lastname) || empty($address) || empty($city) || empty($country) || empty($email) || empty($emailRepeat) || empty($username) || empty($password) || empty($passwordRepeat)) {
+        $errors[] = "Bitte füllen Sie die mit * gekennzeichneten Felder aus.";
     }
 
     $emailError = validateEmails($email, $emailRepeat);
@@ -37,9 +37,9 @@ if (isset($_POST['submit'])) {
     }
 
     // Validiere die Passwörter
-    $passwordErrors = validatePassword($password, $passwordRepeat);
-    if (!empty($passwordErrors)) {
-        $errors = array_merge($errors, $passwordErrors);
+    $passwordError = validatePassword($password, $passwordRepeat);
+    if ($passwordError){
+        $errors[] =$passwordError;
     }
 
     if (!empty($errors)) {
