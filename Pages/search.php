@@ -1,38 +1,34 @@
 <?php
 require_once("../Homepage/header.php");
-require_once("../Datenbank/datenbank.php");
+require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artistClass.php");
-require_once("../Datenbank/");
 
-// Verbindung zur Datenbank herstellen
-$conn = mysqli_connect("localhost:4306", "root", "", "art");
+// Funktion zum Durchführen der Suche
+function performSearch($conn) {
+    // Wenn das Formular abgesendet wurde
+    if (isset($_POST['submit-search'])) {
+        // Benutzereingabe bereinigen
+        $search = mysqli_real_escape_string($conn, $_POST['search']);
 
-if (!$conn) {
-    die("Verbindung fehlgeschlagen: " . mysqli_connect_error());
-}
+        // SQL-Abfrage erstellen
+        $sql = "SELECT * FROM artist WHERE FirstName LIKE '%$search%'";
+        $result = mysqli_query($conn, $sql);
 
-// Überprüfen, ob das Formular abgesendet wurde
-if (isset($_POST['submit-search'])) {
-    // Benutzereingabe bereinigen
-    $search = mysqli_real_escape_string($conn, $_POST['search']);
-
-    // SQL-Abfrage erstellen
-    $sql = "SELECT * FROM artist WHERE FirstName LIKE '%$search%'";
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-        // Ergebnisse ausgeben
-        while($row = mysqli_fetch_assoc($result)) {
-            echo "Ergebnis: " . $row['FirstName'] . "<br>";
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Ergebnisse ausgeben
+            while($row = mysqli_fetch_assoc($result)) {
+                echo "Ergebnis: " . htmlspecialchars($row['FirstName']) . "<br>"; // Vermeidung von XSS-Angriffen
+            }
+        } else {
+            echo "Keine Ergebnisse gefunden.";
         }
-    } else {
-        echo "Keine Ergebnisse gefunden.";
     }
 }
 
-// Verbindung schließen
-mysqli_close($conn);
+// Aufruf der Funktion mit der Verbindung als Parameter
+performSearch($conn);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,3 +49,6 @@ mysqli_close($conn);
 <?php
 require_once("../Homepage/footer.php");
 ?>
+
+
+
