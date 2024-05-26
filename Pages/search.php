@@ -1,34 +1,14 @@
 <?php
 require_once("../Homepage/header.php");
+require_once("../Datenbank/datenbank.php");
 require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artistClass.php");
 
-// Funktion zum Durchführen der Suche
-function performSearch($conn) {
-    // Wenn das Formular abgesendet wurde
-    if (isset($_POST['submit-search'])) {
-        // Benutzereingabe bereinigen
-        $search = mysqli_real_escape_string($conn, $_POST['search']);
+// Verbindung zur Datenbank herstellen
+$conn = new Datenbank();
+$conn->connect(); // Stellt die Verbindung her
 
-        // SQL-Abfrage erstellen
-        $sql = "SELECT * FROM artist WHERE FirstName LIKE '%$search%'";
-        $result = mysqli_query($conn, $sql);
-
-        if ($result && mysqli_num_rows($result) > 0) {
-            // Ergebnisse ausgeben
-            while($row = mysqli_fetch_assoc($result)) {
-                echo "Ergebnis: " . htmlspecialchars($row['FirstName']) . "<br>"; // Vermeidung von XSS-Angriffen
-            }
-        } else {
-            echo "Keine Ergebnisse gefunden.";
-        }
-    }
-}
-
-// Aufruf der Funktion mit der Verbindung als Parameter
-performSearch($conn);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,12 +23,48 @@ performSearch($conn);
         <input class="form-control me-2" type="text" name="search" placeholder="Suche" aria-label="Search">
         <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
     </form>
+
+    <?php
+    // Wenn das Formular abgesendet wurde
+    if (isset($_POST['submit-search'])) {
+        // Benutzereingabe bereinigen und vor XSS-Angriffen schützen
+        $search = htmlspecialchars($_POST['search']);
+        $search = "%$search%";
+
+        // Bereite ein Statement zur Ausführung vor
+        $stmt = $conn->prepareStatement("SELECT * FROM artist WHERE FirstName LIKE :search OR LastName LIKE :search");
+        
+        // Binde die Parameter
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $queryResult = count($result);
+
+        echo "Es wurden " . $queryResult . " Ergebnisse gefunden:";
+
+        if ($queryResult > 0) {
+            // Ergebnisse ausgeben
+            foreach ($result as $row) {
+                echo "<div class='artist-box'>
+                    <p>" . htmlspecialchars($row['FirstName']) . "</p>
+                    <p>" . htmlspecialchars($row['LastName']) . "</p>
+                </div>"; 
+            }
+        } else {
+            echo "Keine Ergebnisse gefunden.";
+        }
+    }
+    ?>
 </body>
 </html>
 
 <?php
 require_once("../Homepage/footer.php");
 ?>
+
+
+
 
 
 
