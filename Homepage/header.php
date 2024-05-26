@@ -175,9 +175,9 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex" method="post" action="search.php">
+          <form class="d-flex" method="POST" action="search.php">
             <input class="form-control me-2" type="text" name="search" placeholder="Suche" aria-label="Search">
-            <button class="btn search-btn" type="submit"><i class="bi bi-search"></i></button>
+            <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
           </form>
           <button class="btn heart-btn"><i class="bi bi-heart"></i></button>
           <button class="btn person-btn" onclick="toggleMenu()"><i class="bi bi-person"></i></button>
