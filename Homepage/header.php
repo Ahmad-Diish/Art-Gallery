@@ -175,7 +175,7 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex" method="POST" action="search.php">
+          <form class="d-flex" method="POST" action="../Pages/search.php">
             <input class="form-control me-2" type="text" name="search" placeholder="Suche" aria-label="Search">
             <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
           </form>

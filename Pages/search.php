@@ -43,6 +43,10 @@ mysqli_close($conn);
 </head>
 <body>
     <h1>Suchergebnisse</h1>
+    <form class="d-flex" method="POST" action="../Pages/search.php">
+        <input class="form-control me-2" type="text" name="search" placeholder="Suche" aria-label="Search">
+        <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
+    </form>
 </body>
 </html>
 
