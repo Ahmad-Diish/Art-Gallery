@@ -1,13 +1,7 @@
 <?php
 require_once("../Homepage/header.php");
-require_once("../Datenbank/datenbank.php");
 require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artistClass.php");
-
-// Verbindung zur Datenbank herstellen
-$conn = new Datenbank();
-$conn->connect(); // Stellt die Verbindung her
-
 ?>
 
 <!DOCTYPE html>
@@ -25,30 +19,24 @@ $conn->connect(); // Stellt die Verbindung her
     </form>
 
     <?php
-    // Wenn das Formular abgesendet wurde
     if (isset($_POST['submit-search'])) {
-        // Benutzereingabe bereinigen und vor XSS-Angriffen schützen
-        $search = htmlspecialchars($_POST['search']);
-        $search = "%$search%";
+        $search = mysqli_real_escape_string($conn, $_POST['sarch']);
 
         // Bereite ein Statement zur Ausführung vor
-        $stmt = $conn->prepareStatement("SELECT * FROM artist WHERE FirstName LIKE :search OR LastName LIKE :search");
-        
-        // Binde die Parameter
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM artist WHERE FirstName LIKE '%$search%' OR LastName LIKE '%$search%'";
+    
+        $result = mysqli_query($conn, $sql);
 
-        $queryResult = count($result);
+        $queryResult = mysqli_num_rows($result);
 
         echo "Es wurden " . $queryResult . " Ergebnisse gefunden:";
 
         if ($queryResult > 0) {
             // Ergebnisse ausgeben
-            foreach ($result as $row) {
+            while($row = mysqli_fetch_assoc($result)) {
                 echo "<div class='artist-box'>
-                    <p>" . htmlspecialchars($row['FirstName']) . "</p>
-                    <p>" . htmlspecialchars($row['LastName']) . "</p>
+                    <p>".$row['FirstName']."</p>
+                    <p>" .$row['LastName']."</p>
                 </div>"; 
             }
         } else {
