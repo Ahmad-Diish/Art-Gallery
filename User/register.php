@@ -108,7 +108,7 @@ require_once ("../User/validation.php");
             <input type="text" name="lastname">
         </div>
         <div class="field input">
-            <label for="address">Addresse*</label>
+            <label for="address">Adresse*</label>
             <input type="text" name="address">
         </div>
         <div class="field input">

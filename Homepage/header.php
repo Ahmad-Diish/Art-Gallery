@@ -7,6 +7,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     // Logout-Logik
     session_destroy();
     $redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '../Homepage/index.php';
+    if (basename($redirect) == 'account.php') {
+      $redirect = '../Homepage/index.php';
+  }
     header("Location: $redirect");
     exit();
 }
