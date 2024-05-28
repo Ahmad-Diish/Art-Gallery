@@ -19,7 +19,7 @@ class Artist
     private $datenbank;
 
     private $imagePath;
-
+    private static $PDO;
      // Konstruktor zum Initialisieren der Eigenschaften
     public function __construct($artistId, $firstName, $lastName, $nationality, $yearOfBirth, $yearOfDeath, $details, $artistLink, $isFavorite)
     {
@@ -81,6 +81,30 @@ class Artist
     {
         return $this->isFavorite;
     }
+
+    // suchen 
+    public static function setDatabase($datenbank)
+    {
+        self::$PDO = $datenbank;
+    }
+
+    public static function searchArtists($firstName, $lastName)
+    {
+        $sql = "SELECT * FROM artists WHERE FirstName LIKE :firstName AND LastName LIKE :lastName";
+        $stmt = self::$PDO->prepare($sql);
+        $stmt->execute([
+            ':firstName' => '%' . $firstName . '%',
+            ':lastName' => '%' . $lastName . '%'
+        ]);
+
+        $artists = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $artists[] = self::fromState($row);
+        }
+
+        return $artists;
+    }
+    
 
 
     // Erzeugt ein Artist-Objekt aus einem assoziativen Array
@@ -393,6 +417,7 @@ h2 {
        
     }
 }
+
 
 function checkArtistImage($verzeichnis)
 {

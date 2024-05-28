@@ -1,7 +1,14 @@
 <?php
 require_once("../Homepage/header.php");
-require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artistClass.php");
+require_once("../Datenbank/artistManager.php");
+// Database connection
+$datenbank = new Datenbank();
+$datenbank->connect();
+$PDO = $datenbank->getConnection();
+
+// Set the database connection for the Artist class
+Artist::setDatabase($PDO);
 ?>
 
 <!DOCTYPE html>
@@ -13,34 +20,25 @@ require_once("../Datenbank/artistClass.php");
 </head>
 <body>
     <h1>Suchergebnisse</h1>
-    <form class="d-flex" method="POST" action="../Pages/search.php">
-        <input class="form-control me-2" type="text" name="search" placeholder="Suche" aria-label="Search">
+    <form class="d-flex" method="POST" action="">
+        <input class="form-control me-2" type="text" name="firstName" placeholder="Vorname" aria-label="Search">
+        <input class="form-control me-2" type="text" name="lastName" placeholder="Nachname" aria-label="Search">
         <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
     </form>
 
     <?php
     if (isset($_POST['submit-search'])) {
-        $search = mysqli_real_escape_string($conn, $_POST['sarch']);
+        $firstName = $_POST['firstName'] ?? '';
+        $lastName = $_POST['lastName'] ?? '';
 
-        // Bereite ein Statement zur Ausführung vor
-        $sql = "SELECT * FROM artist WHERE FirstName LIKE '%$search%' OR LastName LIKE '%$search%'";
-    
-        $result = mysqli_query($conn, $sql);
+        $results = Artist::searchArtists($firstName, $lastName);
 
-        $queryResult = mysqli_num_rows($result);
-
-        echo "Es wurden " . $queryResult . " Ergebnisse gefunden:";
-
-        if ($queryResult > 0) {
-            // Ergebnisse ausgeben
-            while($row = mysqli_fetch_assoc($result)) {
-                echo "<div class='artist-box'>
-                    <p>".$row['FirstName']."</p>
-                    <p>" .$row['LastName']."</p>
-                </div>"; 
+        if (!empty($results)) {
+            foreach ($results as $artist) {
+                $artist->outputArtist();
             }
         } else {
-            echo "Keine Ergebnisse gefunden.";
+            echo "<p>Keine Künstler gefunden.</p>";
         }
     }
     ?>

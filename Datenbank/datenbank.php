@@ -66,7 +66,10 @@ class datenbank
        }   
         return $this->conn->prepare($query);  
     }
-
+    public function getConnection()
+    {
+        return $this->conn;
+    }
 
     /**
      * Überprüft, ob eine Verbindung zur Datenbank besteht.
