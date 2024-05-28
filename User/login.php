@@ -1,6 +1,6 @@
 <?php
+session_start();
 require_once("../Homepage/header.php");
-
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +74,13 @@ require_once("../Homepage/header.php");
         .button1:hover{
             opacity: 0.80;
         }
+
+        .error-message {
+            color: red;
+            margin-top: 0px;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
       
     </style>
 </head>
@@ -88,12 +95,22 @@ require_once("../Homepage/header.php");
     <form action="login.inc.php" method="post">
         <div class="field input">
             <label for="email">E-Mail/Username</label>
-            <input type="text" name="email">
+            <input type="text" name="identifier">
         </div>
         <div class="field input">
             <label for="password">Passwort</label>
             <input type="password" name="password">
         </div>
+
+        <?php
+        if (isset($_SESSION['login_errors'])) {
+            foreach ($_SESSION['login_errors'] as $error) {
+                echo '<p class="error-message">' . htmlspecialchars($error) . '</p>';
+            }
+            unset($_SESSION['login_errors']);
+        }
+        ?>
+
         <button class="button1" type="submit" name="submit">Login</button>
         <div class="link">
             Noch keinen Account? <a href="register.php">Registrieren</a>
@@ -103,8 +120,6 @@ require_once("../Homepage/header.php");
     </div>
     </div>
 </section>
-
-
     
 </body>
 </html>

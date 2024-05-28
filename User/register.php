@@ -83,9 +83,7 @@ require_once ("../User/validation.php");
         .error-message {
             color: red;
             margin-top: 0px;
-            /* Adjusted margin top */
             margin-bottom: 3px;
-            /* Adjusted margin bottom */
             font-size: 14px;
         }
     </style>
