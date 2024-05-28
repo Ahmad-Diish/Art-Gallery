@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     error_log("Formulardaten empfangen: identifier=$identifier");
 
     // SQL-Abfrage vorbereiten und ausführen, um Daten aus beiden Tabellen zu holen
-    $sql = "SELECT l.CustomerID, l.Pass 
+    $sql = "SELECT l.CustomerID, l.Pass, l.UserName, c.Email 
             FROM customerlogon l
             LEFT JOIN customers c ON l.CustomerID = c.CustomerID
             WHERE c.Email = :identifier OR l.UserName = :identifier";
@@ -46,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Erfolgreiche Anmeldung
         $_SESSION["CustomerID"] = $result["CustomerID"];
+        $_SESSION["username"] = $result["UserName"];
         error_log("Login erfolgreich für Benutzer-ID: " . $result["CustomerID"]);
 
         header("Location: ../Homepage/index.php?login=success");
