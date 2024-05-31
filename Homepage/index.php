@@ -2,6 +2,7 @@
 require_once("header.php");
 require_once("../Datenbank/artworkManager.php");
 require_once("../Datenbank/artistManager.php");
+require_once("../Datenbank/reviewManager.php");
 require_once("carousel.php");
 
 
@@ -26,7 +27,7 @@ $artistManager = new ArtistManager($conn);
        <div class="container mt-5">
             <h2>Top Kunstwerk</h2>
             <div class="row mt-5" style="justify-content: space-between;">
-                <!-- Top Künstler -->
+              
                 <?php
                  
                  $artworkManager->TopArtwork();
@@ -35,16 +36,16 @@ $artistManager = new ArtistManager($conn);
             </div>
             <h2>Häufigsten rezensierten Künstler</h2>
             <div class="row mt-5" style="justify-content: space-between;">
-                <!-- Top Kunstwerk -->
+             
                 <?php
                     $artistManager->displayTopArtists();
                 ?>
             </div>
             <h2>Aktuellsten Rezensionen</h2>
             <div class="row mt-5">
-                <!-- neueste Feedback -->
+
                 <?php
-               
+                  $reviewManager->displayTopReview();
                 ?>
             </div>
 </div>
