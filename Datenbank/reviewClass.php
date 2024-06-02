@@ -206,56 +206,7 @@ class Review
     
         echo "</div>";
         echo '<p>'.$this->getComment().'</p>' ;
-    
-        // if (isset($_SESSION["user"])) {
-        //     $isAuthor = $_SESSION["user"]->getId() === $this->getCustomerId();
-        //     if ($_SESSION["user"]->isAdmin() || $isAuthor) {
-        //         echo '<button type="button" class="btn btn-sm button_user_löschen" data-bs-toggle="modal" data-bs-target="#ReviewModal" data-review-id="' . $reviewId . '" data-customer-name="' . $customerName . '">Löschen</button>';
-        //     }
-        // }
          echo "</div>";
-    
-        // // Modal
-        // echo '<div class="modal fade" id="ReviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-        //         <div class="modal-dialog" role="document">
-        //             <div class="modal-content">
-        //                 <div class="modal-header">
-        //                     <h5 class="modal-title" id="reviewModalLabel"></h5>
-        //                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        //                 </div>
-        //                 <div class="modal-body">
-        //                     <form action="../php/deleteReview.php" method="get">
-        //                         <input type="hidden" name="reviewId" value="">
-        //                         <p>Sind Sie sicher, dass Sie den Kommentar von <span id="modalCustomerName"></span> löschen möchten?</p>
-        //                         <div class="buttons_Single_Artwork">
-        //                             <button type="submit" name="action" value="delete" class="btn btn-secondary button_style">Löschen</button>
-        //                             <button type="button" class="btn btn-secondary button_style" data-bs-dismiss="modal">Abbrechen</button>
-        //                         </div>
-        //                     </form>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //       </div>';
-    
-        // // Modal Script
-        // echo "<script>
-        //         document.addEventListener('DOMContentLoaded', function() {
-        //             var reviewModal = document.getElementById('ReviewModal');
-        //             reviewModal.addEventListener('show.bs.modal', function(event) {
-        //                 var button = event.relatedTarget;
-        //                 var reviewId = button.getAttribute('data-review-id');
-        //                 var customerName = button.getAttribute('data-customer-name');
-    
-        //                 var modalTitle = reviewModal.querySelector('.modal-title');
-        //                 var modalReviewIdInput = reviewModal.querySelector('input[name=\"reviewId\"]');
-        //                 var modalCustomerNameSpan = reviewModal.querySelector('#modalCustomerName');
-    
-        //                 modalTitle.textContent = 'Bestätigung';
-        //                 modalReviewIdInput.value = reviewId;
-        //                 modalCustomerNameSpan.textContent = customerName;
-        //             });
-        //         });
-        //       </script>";
     }
     
 

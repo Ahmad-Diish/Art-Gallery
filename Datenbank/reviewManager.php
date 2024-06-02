@@ -4,8 +4,8 @@ require_once("../Datenbank/reviewClass.php");
 
 class ReviewManager
 {
-    
-    
+
+
     private $collectionAllReview = array();
     private $datenbank;
     private $review;
@@ -74,8 +74,8 @@ class ReviewManager
             $this->datenbank->connect();
             $anfrage = "SELECT re.ReviewId 
                         FROM Artworks a
-                        JOIN reviews re ON a.ArtWorkID = re.ArtWorkId
-                        WHERE a.ArtWorkID = :artworksID";
+                        JOIN reviews re ON a.ArtWorkId = re.ArtWorkId
+                        WHERE a.ArtWorkId = :artworksID";
             $stmt = $this->datenbank->prepareStatement($anfrage);
             $stmt->bindParam(':artworksID', $artworksID);
             $stmt->execute();
@@ -88,10 +88,10 @@ class ReviewManager
             $this->datenbank->close();
         }
     }
-    
-    public function displayReview($artworkID)
+
+    public function displayReview($ArtWorkId)
     {
-        $reviews = $this->getReviewsByArtworksID($artworkID);
+        $reviews = $this->getReviewsByArtworksID($ArtWorkId);
 
         foreach ($reviews as $reviewId) {
             $reviewData = $this->getReviewByID($reviewId);
@@ -129,38 +129,21 @@ class ReviewManager
             $this->datenbank->close();
         }
     }
-
-    public function addReview($artworkId, $customerId, $rating, $comment)
-    {
-        try {
-            $this->datenbank->connect();
-            $sql = "INSERT INTO reviews (ArtWorkId, CustomerId, ReviewDate, Rating, Comment) VALUES (?, ?, NOW(), ?, ?)";
-            $stmt = $this->datenbank->prepareStatement($sql);
-            $stmt->execute([$artworkId, $customerId, $rating, $comment]);
-            return true;
-        } catch (PDOException $e) {
-            echo "Fehler: " . $e->getMessage();
-            return false;
-        } finally {
-            $this->datenbank->close();
-        }
-    }
-
-    public function removeReview($reviewId)
-    {
-        try {
-            $this->datenbank->connect();
-            $sql = "DELETE FROM reviews WHERE ReviewId = :reviewId";
-            $stmt = $this->datenbank->prepareStatement($sql);
-            $stmt->bindValue(':reviewId', $reviewId);
-            $stmt->execute();
-            return $stmt->rowCount() > 0;
-        } catch (PDOException $e) {
-            echo "Fehler: " . $e->getMessage();
-            return false;
-        } finally {
-            $this->datenbank->close();
-        }
+    public function addComment($ArtworkId, $customerID, $commentText, $rating)
+{
+    try {
+        $this->datenbank->connect();
+        $anfrage = "INSERT INTO reviews (ArtWorkId, CustomerId, Comment, Rating, ReviewDate) VALUES (:ArtWorkId, :customerID, :comment, :Rating, NOW())";
+        $stmt = $this->datenbank->prepareStatement($anfrage);
+        $stmt->bindParam(':ArtWorkId', $ArtworkId);
+        $stmt->bindParam(':customerID', $customerID);
+        $stmt->bindParam(':comment', $commentText);
+        $stmt->bindParam(':Rating', $rating);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Fehler: " . $e->getMessage();
+    } finally {
+        $this->datenbank->close();
     }
 }
-?>
+}

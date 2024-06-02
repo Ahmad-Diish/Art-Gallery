@@ -157,6 +157,18 @@ class Artwork
         $googleLink = $artwork["GoogleLink"] ?? null;
         return new self($artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink);
     }
+    public function setReviewsForArtwork($reviewAlsArray)
+    {
+       $review = Review::getDefaultReview();
+       $review = Review::fromState($reviewAlsArray);
+       $this->reviews[] = $review;
+    }
+ 
+    
+    public function getReviewsForArtwork()
+    {
+       return $this->reviews;
+    }
 
     public function setSubjectsForArtwork($subjectAlsArray)
     {
@@ -333,31 +345,52 @@ class Artwork
    </div>';
         return $galleryInfos;
     }
-    public function SubjectLinks() {
+    public function SubjectLinks()
+    {
+        $css = '
+      <style>
+    .textColor_gold{
+        font-family: "Arial";
+        color: #666;
+       }
+      </style>
+    ';
+
+        echo $css;
         $subjects = $this->subjecti->getSubjectByArtworksID($this->getArtWorksID());
         $subjectLinks = '';
 
         foreach ($subjects as $subject) {
             $subjectId = $subject['SubjectID'];
             $subjectName = htmlspecialchars($subject['SubjectName']);
-            $subjectLinks .= '<a class="textColor_gold" href="../Pages/singleSubject.php?SubjectId=' . $subjectId . '">' . $subjectName . '</a><br>';
+            $subjectLinks .= '<a class="textColor_gold" href="../Pages/singleSubject.php?subjectId=' . $subjectId . '">' . $subjectName . '</a><br>';
         }
 
         return $subjectLinks;
     }
-    public function genresLinks() {
-        $Genres = $this->genrei->getGenresByArtworksID($this->getArtWorksID()); // Ändern von subjecti auf genrei
+    public function genresLinks()
+    {
+        $css = '
+       <style>
+       .textColor_gold{
+        font-family: "Arial";
+        color: #666;
+        }
+       </style>
+    ';
+        echo $css;
+        $Genres = $this->genrei->getGenresByArtworksID($this->getArtWorksID());
         $GenreLinks = '';
-    
+
         foreach ($Genres as $Genre) {
             $GenreId = $Genre['GenreID'];
-            $genreName = htmlspecialchars($Genre['GenreName']); // Ändern von $subjectName auf $genreName
-            $GenreLinks .= '<a class="textColor_gold" href="../Pages/SingleGenre.php?GenreId=' . $GenreId . '">' . $genreName . '</a><br>'; // Ändern von $subjectName auf $genreName
+            $genreName = htmlspecialchars($Genre['GenreName']);
+            $GenreLinks .= '<a class="textColor_gold" href="../Pages/singleGenre.php?genreID=' . $GenreId . '">' . $genreName . '</a><br>';
         }
-    
+
         return $GenreLinks;
     }
-    
+
 
     public function outputSingleArtwork()
     {
@@ -449,7 +482,7 @@ class Artwork
         // Die code Grundlagen
         $arti = new ArtistManager($this->datenbank);
         $this->artist = $arti->getArtist($this->getArtistId());
- 
+
         echo '<h1 class="card-title">' . $this->getArtworkTitle() . '</h1>';
         echo '<h5>By' . " " . '<a class="By" href=../Pages/singleArtist.php?artistID='  . $this->getArtistId() . '>' . $this->artist->getArtistFirstName() . " " . $this->artist->getArtistLastName() . '</a></h5>';
 
@@ -484,7 +517,7 @@ class Artwork
         echo '<tr><th>Home:</th><td>' . $this->collapse() . ' </td></tr>';
         echo '<tr><th>Genres:</th><td>' . $this->genresLinks() . ' </td></tr>';
         echo '<tr><th>Subjekte:</th><td>' . $this->SubjectLinks() . ' </td></tr>';
-        echo'</td></tr>';
+        echo '</td></tr>';
         echo '</table>';
         echo '</div>';
 

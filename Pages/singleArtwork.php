@@ -1,41 +1,65 @@
 <?php
+ob_start();
 require_once("../Homepage/header.php");
 require_once("../Datenbank/artworkManager.php");
 require_once("../Datenbank/artworkClass.php");
-// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
+require_once("../Datenbank/reviewClass.php");
+require_once("../Datenbank/reviewManager.php");
+
+// Create a database connection
+$datenbank = new datenbank();
+$reviewManager = new ReviewManager($datenbank);
 
 $conn = new Datenbank();
 $artworkManager = new ArtworkManager($conn);
 
-$isLoggedIn = false;
-if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
 
-    $isLoggedIn = true;
-}
+$artworkID = $_GET['artworkID'] ?? null;
 
-$modalOpen = isset($_GET['modal']) && $_GET['modal'] == 'ja';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $commentText = $_POST['comment'] ?? '';
+    $artworkID = $_POST['artworkID'] ?? null;
+    $customerID = $_POST['customerID'] ?? null;
+    $rating = $_POST['rating'] ?? 0;
 
-//* wenn die Bewertung ausgeführt wird , wird die Webseite nochmal mit Parameter artworkId geladen , um die Fehler zu vermeiden
-//$artworkID = isset($_GET["parameter"]) ? $_GET["parameter"] : null;
-
-//* wenn der Benutzer auf dem Kunstwerk anklickt , wird der Kunstwerk allein gezeigt . 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-    //Beim Reload wegen Hinzufügen/Entfernen in/von Favourite
-    $artworkID = isset($_GET["parameter"]) ? $_GET["parameter"] : null;
-
-    // Überprüfe, ob die artworkID im URL-Parameter vorhanden ist
-    if (isset($_GET['artworkID'])) {
-
-        $artworkID = $_GET['artworkID'];
+    if ($commentText && $artworkID && $customerID && $rating) {
+        $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
+        header("Location: ../Homepage/index.php");
+        exit;
+        
+    } else {
+        echo "<p>Fehler: Alle Felder müssen ausgefüllt werden.</p>";
     }
-} else {
-
-    echo "<p>Fehler: Kunstwerk-ID nicht angegeben.</p>";
 }
 
-$artwork = $artworkManager->getArtwork($artworkID);
+// Stelle sicher, dass die Künstler-ID gültig ist, bevor du sie abrufst
+try {
+    if (!is_numeric($artworkID) || $artworkID <= 0) {
+        handleError();
+        exit;
+    }
+    $artwork = $artworkManager->getArtwork($artworkID);
+} catch (Exception $e) {
+    error_log('Error fetching artist data: ' . $e->getMessage());
+    handleError();
+
+    exit;
+}
+
+function handleError()
+{
 ?>
+    <div class="error-container">
+        <h2>Fehler</h2>
+        <p>Entschuldigung, es gab einen Fehler beim Abrufen der Künstlerinformationen. Bitte versuchen Sie es später erneut.</p>
+        <button onclick="window.location.href='../Pages/artworks.php'">Zurück zu den Künstler Galeria</button>
+    </div>
+<?php
+    require("../Homepage/footer.php");
+}
+
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,10 +71,21 @@ $artwork = $artworkManager->getArtwork($artworkID);
     <style>
         body {
             background-color: #fffbeb;
-            font-family: Arial, sans-serif;  
+            font-family: Arial, sans-serif;
         }
 
         .comments-section {
+            margin: 100px;
+            border-top: 2px solid #fef3c7;
+            border: 25px solid #fef3c7;
+            border-radius: 30px;
+            overflow: hidden;
+            border-radius: 10px;
+            background-color: #fef3c7;
+            margin-top: 100px;
+        }
+
+        .reviews-section {
             margin: 100px;
             border-top: 2px solid #fef3c7;
             border: 25px solid #fef3c7;
@@ -145,6 +180,12 @@ $artwork = $artworkManager->getArtwork($artworkID);
             color: gray;
             cursor: pointer;
         }
+
+        #rating-select {
+            margin-bottom: 20px;
+            color: #923f0e;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -159,73 +200,70 @@ $artwork = $artworkManager->getArtwork($artworkID);
         </div>
 
         <!-- HTML -->
-        <div class="comments-section">
-            <h2>Kommentare</h2>
+        <!DOCTYPE html>
+        <html lang="de">
 
-            <!-- Kommentare -->
-            <div class="comment">
-                <div class="comment-info">
-                    <span class="comment-author">Benutzername</span>
-                    <span class="comment-date">Veröffentlichungsdatum</span>
-                </div>
-                <p class="comment-text">Kommentartext hier</p>
-                <div class="rating">
-                    <?php
-                    // Anzahl der maximalen Sterne
-                    $maxRating = 5;
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Bewertungen und Kommentare</title>
+            <link rel="stylesheet" href="styles.css"> <!-- Stil-Datei einbinden -->
+        </head>
 
-                    // Schleife zum Erzeugen der Sterne
-                    for ($i = 1; $i <= 5; $i++) {
-                        if ($i <= 5) {
-                            echo "<span class='star filled'>&#9733;</span>"; // Gefüllter Stern
-                        } else {
-                            echo "<span class='star'>&#9733;</span>"; // Leerer Stern
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="comment-actions">
-                    <button class="delete-comment-btn">Löschen</button>
-                </div>
+        <body>
+
+            <!-- Bewertungen -->
+            <div class="reviews-section">
+                <h2>Bewertungen</h2>
+
+                <?php
+                // Zeige die Top-Bewertungen an
+                $reviewManager->displayReview($artworkID);
+                ?>
+
             </div>
 
-            <!-- Kommentarformular -->
-            <form class="comment-form">
-                <input type="text" class="comment-author-input" placeholder="Name">
-                <textarea class="comment-textarea" placeholder="Fügen Sie Ihren Kommentar hier hinzu"></textarea>
-                <button type="submit" class="submit-comment-btn">Kommentar hinzufügen</button>
-            </form>
-        </div>
+            <!-- Kommentare -->
+            <div class="comments-section">
+                <h2>Kommentare</h2>
+
+                <!-- Kommentare anzeigen -->
+                <div class="comment">
+                    <div class="comment-info">
+                        <span class="comment-author">Benutzername</span>
+                    </div>
+                </div>
+                <!-- Kommentarformular -->
+                <form class="comment-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?artworkID=' . $artworkID; ?>">
+
+                    <!-- Sternebewertung -->
+                    <label for="rating-select">Bewertung:</label>
+                    <select name="rating" id="rating-select">
+                        <option value="0">Keine Bewertung</option>
+                        <option value="1">1 Stern</option>
+                        <option value="2">2 Sterne</option>
+                        <option value="3">3 Sterne</option>
+                        <option value="4">4 Sterne</option>
+                        <option value="5">5 Sterne</option>
+                    </select>
+                    <input type="hidden" name="artworkID" value="<?php echo $artworkID; ?>">
+                    <input type="hidden" name="customerID" value="<?php echo $_SESSION['CustomerID']; ?>">
+                    <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"></textarea>
+
+                    <button type="submit" class="submit-comment-btn">Kommentar hinzufügen</button>
+                </form>
+
+
+
+
+
+            </div>
+
+        </body>
+
+        </html>
 
         <?php
-        // Verbindung zur Datenbank herstellen
-        // $db_connection = mysqli_connect("localhost", "Benutzername", "Passwort", "Datenbankname");
 
-        // Überprüfen, ob das Formular gesendet wurde
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Daten aus dem Formular abrufen
-            $name = $_POST['name'];
-            $comment = $_POST['comment'];
-
-            // SQL-Befehl, um Kommentar in die Datenbank einzufügen
-            $sql = "INSERT INTO comments (name, comment, created_at) VALUES ('$name', '$comment', NOW())";
-
-            // Kommentar in die Datenbank einfügen
-            // mysqli_query($db_connection, $sql);
-
-            // Nach dem Einfügen zurück zur Seite weiterleiten
-            // header("Location: index.php");
-            // exit();
-        }
+        require_once("../Homepage/footer.php");
         ?>
-
-
-
-    </body>
-</body>
-
-</html>
-
-<?php
-require_once("../Homepage/footer.php");
-?>
