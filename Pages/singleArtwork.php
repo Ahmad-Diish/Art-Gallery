@@ -16,20 +16,7 @@ $artworkManager = new ArtworkManager($conn);
 
 $artworkID = $_GET['artworkID'] ?? null;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $commentText = $_POST['comment'] ?? '';
-    $artworkID = $_POST['artworkID'] ?? null;
-    $customerID = $_POST['customerID'] ?? null;
-    $rating = $_POST['rating'] ?? 0;
 
-    if ($commentText && $artworkID && $customerID && $rating) {
-        $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
-        header("Location: ../Homepage/index.php");
-        exit;
-    } else {
-        echo "<p>Fehler: Alle Felder müssen ausgefüllt werden.</p>";
-    }
-}
 
 // Stelle sicher, dass die Künstler-ID gültig ist, bevor du sie abrufst
 try {
@@ -273,6 +260,21 @@ function handleError()
                         <input type="hidden" name="customerID" value="<?php echo $_SESSION['CustomerID']; ?>">
                         <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"></textarea>
 
+                        <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                            $commentText = $_POST['comment'] ?? '';
+                            $artworkID = $_POST['artworkID'] ?? null;
+                            $customerID = $_POST['customerID'] ?? null;
+                            $rating = $_POST['rating'] ?? 0;
+
+                            if ($commentText && $artworkID && $customerID && $rating) {
+                                $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
+                                header("Location: ../Homepage/index.php");
+                                exit;
+                            } else {
+                                echo "<p>Fehler: Alle Felder ausgefüllt werden.</p>";
+                            }
+                        }
+                        ?>
                         <button type="submit" class="submit-comment-btn">Kommentar hinzufügen</button>
                     </form>
 
