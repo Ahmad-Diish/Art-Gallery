@@ -49,6 +49,8 @@ class Artwork
 
     private $datenbank;
 
+    private static $PDO;
+
     //Konstruktor der Klasse Artwork.
 
 
@@ -129,6 +131,27 @@ class Artwork
         return $this->medium;
     }
 
+        // suchen 
+        public static function setDatabase($datenbank)
+        {
+            self::$PDO = $datenbank;
+        }
+    
+        public static function searchArtworks($title)
+        {
+            $sql = "SELECT * FROM artworks WHERE Title LIKE :title";
+            $stmt = self::$PDO->prepare($sql);
+            $stmt->execute([
+                ':firstName' => '%' . $title . '%'
+            ]);
+    
+            $artworks = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $artworks[] = self::fromState($row);
+            }
+    
+            return $artworks;
+        }
 
     public static function getDefaultArtwork(): Artwork
     {

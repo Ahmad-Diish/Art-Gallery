@@ -2,6 +2,8 @@
 require_once("../Homepage/header.php");
 require_once("../Datenbank/artistClass.php");
 require_once("../Datenbank/artistManager.php");
+require_once("../Datenbank/artworkClass.php");
+require_once("../Datenbank/artworkManager.php");
 // Database connection
 $datenbank = new Datenbank();
 $datenbank->connect();
@@ -39,6 +41,21 @@ Artist::setDatabase($PDO);
             }
         } else {
             echo "<p>Keine Künstler gefunden.</p>";
+        }
+    }
+    
+
+    if (isset($_POST['submit-search'])) {
+        $firstName = $_POST['title'] ?? '';
+
+        $results = Artwork::searchArtworks($title);
+
+        if (!empty($results)) {
+            foreach ($results as $artist) {
+                $artwork->outputArtworks();
+            }
+        } else {
+            echo "<p>Keine Kunstwerke gefunden.</p>";
         }
     }
     ?>
