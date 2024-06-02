@@ -203,6 +203,11 @@ function handleError()
             text-decoration: underline;
 
         }
+
+        h6 {
+            color: red;
+            
+        }
     </style>
 </head>
 
@@ -238,9 +243,6 @@ function handleError()
 
                     <!-- Kommentare anzeigen -->
                     <div class="comment">
-                        <div class="comment-info">
-                            <span class="comment-author">Benutzername</span>
-                        </div>
                     </div>
 
                     <!-- Kommentarformular -->
@@ -271,7 +273,7 @@ function handleError()
                                 header("Location: ../Homepage/index.php");
                                 exit;
                             } else {
-                                echo "<p>Fehler: Alle Felder ausgefüllt werden.</p>";
+                                echo "<h6> Alle Felder müssen ausgefüllt werden.</h6>";
                             }
                         }
                         ?>
