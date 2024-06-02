@@ -4,6 +4,7 @@ require_once("../Datenbank/artistClass.php");
 require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artworkClass.php");
 require_once("../Datenbank/artworkManager.php");
+
 // Datenbankverbindung
 $datenbank = new Datenbank();
 $datenbank->connect();
@@ -67,7 +68,6 @@ Artwork::setDatabase($PDO);
 <?php
 require_once("../Homepage/footer.php");
 ?>
-
 
 
 
