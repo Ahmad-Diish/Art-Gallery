@@ -156,14 +156,14 @@ require_once ("../Homepage/header.php");
                 <p>Gruppe 3</p>
                 <p>Email: omar.al_sharaa@th-wildau.de</p>
                 <p>Telefon: +49 123 456789</p>
-                <p>USE CASE: 1-2-3-4-5-8-11-15-16-17 </p>
+                <p>USE CASE: 1-2-3-5-8-11-14-15-16-17 </p>
             </div>
             <div class="team-member">
                 <h2>Rami </h2>
                 <p>Gruppe 3</p>
                 <p>Email: rami.balasem@th-wildau.de</p>
                 <p>Telefon: +49 123 456789</p>
-                <p>USE CASE: 1-2-3-4-7-13-14-15-16-17 </p>
+                <p>USE CASE: 1-2-3-7-13-15 </p>
             </div>
             <div class="team-member">
                 <h2>Saskia</h2>
