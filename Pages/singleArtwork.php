@@ -269,8 +269,12 @@ function handleError()
                             $rating = $_POST['rating'] ?? 0;
 
                             if ($commentText && $artworkID && $customerID && $rating) {
+                                
+                                $referer = $_SERVER['HTTP_REFERER'];
+                                
                                 $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
-                                header("Location: ../Homepage/index.php");
+                               
+                                header("Location: $referer");
                                 exit;
                             } else {
                                 echo "<h6> Alle Felder müssen ausgefüllt werden.</h6>";
