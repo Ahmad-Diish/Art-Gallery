@@ -212,10 +212,13 @@ class Review
         echo "<div class='review' id='review-$reviewId'>";
         echo "<div class='review-header'>";
         echo "<p class='review-author'>Kommentator: $customerName</p>";
-        echo "<form method='POST' action='../Datenbank/deleteReview.php' style='display:inline;'>";
-        echo "<input type='hidden' name='ReviewId' value='$reviewId'>";
-        echo "<button type='submit' class='submit-comment-delete-btn'>Kommentar löschen</button>";
-        echo "</form>";
+        if (isset($_SESSION['CustomerID'])) :
+            echo "<form method='POST' action='../Datenbank/deleteReview.php' style='display:inline;'>";
+            echo "<input type='hidden' name='ReviewId' value='$reviewId'>";
+            echo "<button type='submit' class='submit-comment-delete-btn'>Kommentar löschen</button>";
+            echo "</form>";
+        endif;
+        
         echo "</div>";
         echo "<p class='review-date'>Review Date: $reviewDate</p>";
         echo "<div class='rating'>";
