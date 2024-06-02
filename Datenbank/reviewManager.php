@@ -129,6 +129,7 @@ class ReviewManager
             $this->datenbank->close();
         }
     }
+
     public function addComment($ArtworkId, $customerID, $commentText, $rating)
 {
     try {
@@ -146,4 +147,30 @@ class ReviewManager
         $this->datenbank->close();
     }
 }
+
+    // public function deleteComment($reviewId)
+    // {
+    //     try {
+    //         // Verbindung zur Datenbank herstellen
+    //         $this->datenbank->connect();
+
+    //         // SQL-Anfrage zum Löschen des Kommentars
+    //         $anfrage = "DELETE FROM reviews WHERE ReviewId = :reviewId";
+    //         $stmt = $this->datenbank->prepareStatement($anfrage);
+
+    //         // Parameter binden
+    //         $stmt->bindParam(':reviewId', $reviewId);
+
+    //         // Anfrage ausführen
+    //         $stmt->execute();
+
+    //         echo "Kommentar erfolgreich gelöscht.";
+    //     } catch (PDOException $e) {
+    //         // Fehlermeldung ausgeben
+    //         echo "Fehler: " . $e->getMessage();
+    //     } finally {
+    //         // Verbindung zur Datenbank schließen
+    //         $this->datenbank->close();
+    //     }
+    // }
 }

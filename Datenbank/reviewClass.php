@@ -8,6 +8,8 @@ require_once("../Datenbank/reviewManager.php");
 // Create a database connection
 $datenbank = new datenbank();
 $reviewManager = new ReviewManager($datenbank);
+
+
 class Review
 {
     private $reviewId;
@@ -106,6 +108,7 @@ class Review
         }
     }
 
+
     // Output the review with customer details
     public function outputReview()
     {
@@ -143,18 +146,6 @@ class Review
             color: gold;
         }
         
-        .button_user_löschen {
-            background-color: #ff6666;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .button_user_löschen:hover {
-            background-color: #cc5555;
-        }
         
         .modal-content {
             border-radius: 10px;
@@ -179,36 +170,66 @@ class Review
             background-color: #7b2f08;
         }
         
-    
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submit-comment-delete-btn {
+            background-color: #923f0e;
+            color: white; 
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-comment-delete-btn:hover {
+            background-color: #d32f2f; 
+        }
             
         </style>
         ';
-            // Ausgabe des CSS
-            echo $css;
-            
+        // Ausgabe des CSS
+        echo $css;
+
+
+
         $reviewId = htmlspecialchars($this->getReviewId());
         $customer = $this->fetchCustomerDetails($this->getCustomerId());
         $customerName = $customer ? htmlspecialchars($customer['FirstName'] . " " . $customer['LastName']) : "Unknown Customer";
-    
+
         $reviewDate = htmlspecialchars($this->getReviewDate());
         $rating = $this->getRating();
-    
+
         $maxRating = 5;
-    
+
         echo "<div class='review' id='review-$reviewId'>";
+        echo "<div class='review-header'>";
         echo "<p class='review-author'>Kommentator: $customerName</p>";
+        echo "<form method='POST' action='delete_comment.php' style='display:inline;'>";
+        echo "<input type='hidden' name='reviewId' value='$reviewId'>";
+        echo "<button type='submit' class='submit-comment-delete-btn'>Kommentar löschen</button>";
+        echo "</form>";
+        echo "</div>";
         echo "<p class='review-date'>Review Date: $reviewDate</p>";
         echo "<div class='rating'>";
-        
+
         for ($i = 1; $i <= $maxRating; $i++) {
             echo $i <= $rating ? "<span class='star filled'>&#9733;</span>" : "<span class='star'>&#9733;</span>";
         }
-    
+
         echo "</div>";
-        echo '<p>'.$this->getComment().'</p>' ;
-         echo "</div>";
+        echo '<p>' . $this->getComment() . '</p>';
+        echo "</div>";
     }
-    
+
 
     public function showAverageRating(): void
     {
@@ -220,6 +241,3 @@ class Review
         echo "</div>";
     }
 }
-?>
-
-
