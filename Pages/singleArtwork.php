@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
         header("Location: ../Homepage/index.php");
         exit;
-        
     } else {
         echo "<p>Fehler: Alle Felder müssen ausgefüllt werden.</p>";
     }
@@ -186,6 +185,37 @@ function handleError()
             color: #923f0e;
             border-radius: 5px;
         }
+
+
+        .login-notice {
+            background-color: #fef3c7;
+            border: 2px solid #923f0e;
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            margin-bottom: 6rem;
+            margin-right: 10rem;
+            margin-left: 10rem;
+            margin-top: 6rem;
+        }
+
+        .login-notice p {
+            color: #923f0e;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .login-link {
+            color: #923f0e;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+
+        }
     </style>
 </head>
 
@@ -213,6 +243,47 @@ function handleError()
         <body>
 
             <!-- Bewertungen -->
+
+            <?php if (isset($_SESSION['CustomerID'])) : ?>
+                <!-- Kommentare -->
+                <div class="comments-section">
+                    <h2>Kommentare</h2>
+
+                    <!-- Kommentare anzeigen -->
+                    <div class="comment">
+                        <div class="comment-info">
+                            <span class="comment-author">Benutzername</span>
+                        </div>
+                    </div>
+
+                    <!-- Kommentarformular -->
+                    <form class="comment-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?artworkID=' . $artworkID; ?>">
+
+                        <!-- Sternebewertung -->
+                        <label for="rating-select">Bewertung:</label>
+                        <select name="rating" id="rating-select">
+                            <option value="0">Keine Bewertung</option>
+                            <option value="1">1 Stern</option>
+                            <option value="2">2 Sterne</option>
+                            <option value="3">3 Sterne</option>
+                            <option value="4">4 Sterne</option>
+                            <option value="5">5 Sterne</option>
+                        </select>
+                        <input type="hidden" name="artworkID" value="<?php echo $artworkID; ?>">
+                        <input type="hidden" name="customerID" value="<?php echo $_SESSION['CustomerID']; ?>">
+                        <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"></textarea>
+
+                        <button type="submit" class="submit-comment-btn">Kommentar hinzufügen</button>
+                    </form>
+
+
+                </div>
+
+            <?php else : ?>
+                <div class="login-notice">
+                    <p>Sie müssen <a href="../user/login.php" class="login-link">eingeloggt</a> sein, um Kommentare hinzuzufügen</p>
+                </div>
+            <?php endif; ?>
             <div class="reviews-section">
                 <h2>Bewertungen</h2>
 
@@ -222,43 +293,6 @@ function handleError()
                 ?>
 
             </div>
-
-            <!-- Kommentare -->
-            <div class="comments-section">
-                <h2>Kommentare</h2>
-
-                <!-- Kommentare anzeigen -->
-                <div class="comment">
-                    <div class="comment-info">
-                        <span class="comment-author">Benutzername</span>
-                    </div>
-                </div>
-                <!-- Kommentarformular -->
-                <form class="comment-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?artworkID=' . $artworkID; ?>">
-
-                    <!-- Sternebewertung -->
-                    <label for="rating-select">Bewertung:</label>
-                    <select name="rating" id="rating-select">
-                        <option value="0">Keine Bewertung</option>
-                        <option value="1">1 Stern</option>
-                        <option value="2">2 Sterne</option>
-                        <option value="3">3 Sterne</option>
-                        <option value="4">4 Sterne</option>
-                        <option value="5">5 Sterne</option>
-                    </select>
-                    <input type="hidden" name="artworkID" value="<?php echo $artworkID; ?>">
-                    <input type="hidden" name="customerID" value="<?php echo $_SESSION['CustomerID']; ?>">
-                    <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"></textarea>
-
-                    <button type="submit" class="submit-comment-btn">Kommentar hinzufügen</button>
-                </form>
-
-
-
-
-
-            </div>
-
         </body>
 
         </html>
