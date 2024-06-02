@@ -1,5 +1,4 @@
 <?php
-
 require_once("../Datenbank/reviewClass.php");
 
 class ReviewManager
@@ -131,46 +130,36 @@ class ReviewManager
     }
 
     public function addComment($ArtworkId, $customerID, $commentText, $rating)
-{
-    try {
-        $this->datenbank->connect();
-        $anfrage = "INSERT INTO reviews (ArtWorkId, CustomerId, Comment, Rating, ReviewDate) VALUES (:ArtWorkId, :customerID, :comment, :Rating, NOW())";
-        $stmt = $this->datenbank->prepareStatement($anfrage);
-        $stmt->bindParam(':ArtWorkId', $ArtworkId);
-        $stmt->bindParam(':customerID', $customerID);
-        $stmt->bindParam(':comment', $commentText);
-        $stmt->bindParam(':Rating', $rating);
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Fehler: " . $e->getMessage();
-    } finally {
-        $this->datenbank->close();
+    {
+        try {
+            $this->datenbank->connect();
+            $anfrage = "INSERT INTO reviews (ArtWorkId, CustomerId, Comment, Rating, ReviewDate) VALUES (:ArtWorkId, :customerID, :comment, :Rating, NOW())";
+            $stmt = $this->datenbank->prepareStatement($anfrage);
+            $stmt->bindParam(':ArtWorkId', $ArtworkId);
+            $stmt->bindParam(':customerID', $customerID);
+            $stmt->bindParam(':comment', $commentText);
+            $stmt->bindParam(':Rating', $rating);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Fehler: " . $e->getMessage();
+        } finally {
+            $this->datenbank->close();
+        }
     }
-}
 
-    // public function deleteComment($reviewId)
-    // {
-    //     try {
-    //         // Verbindung zur Datenbank herstellen
-    //         $this->datenbank->connect();
-
-    //         // SQL-Anfrage zum Löschen des Kommentars
-    //         $anfrage = "DELETE FROM reviews WHERE ReviewId = :reviewId";
-    //         $stmt = $this->datenbank->prepareStatement($anfrage);
-
-    //         // Parameter binden
-    //         $stmt->bindParam(':reviewId', $reviewId);
-
-    //         // Anfrage ausführen
-    //         $stmt->execute();
-
-    //         echo "Kommentar erfolgreich gelöscht.";
-    //     } catch (PDOException $e) {
-    //         // Fehlermeldung ausgeben
-    //         echo "Fehler: " . $e->getMessage();
-    //     } finally {
-    //         // Verbindung zur Datenbank schließen
-    //         $this->datenbank->close();
-    //     }
-    // }
+    public function deleteComment($reviewId)
+    {
+        try {
+            $this->datenbank->connect();
+            $anfrage = "DELETE FROM reviews WHERE ReviewId = :ReviewId";
+            $stmt = $this->datenbank->prepareStatement($anfrage);
+            $stmt->bindParam(':ReviewId', $reviewId);
+            $stmt->execute();
+            echo "Kommentar erfolgreich gelöscht.";
+        } catch (PDOException $e) {
+            echo "Fehler: " . $e->getMessage();
+        } finally {
+            $this->datenbank->close();
+        }
+    }
 }

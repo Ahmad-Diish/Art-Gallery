@@ -9,7 +9,6 @@ require_once("../Datenbank/reviewManager.php");
 $datenbank = new datenbank();
 $reviewManager = new ReviewManager($datenbank);
 
-
 class Review
 {
     private $reviewId;
@@ -213,8 +212,8 @@ class Review
         echo "<div class='review' id='review-$reviewId'>";
         echo "<div class='review-header'>";
         echo "<p class='review-author'>Kommentator: $customerName</p>";
-        echo "<form method='POST' action='delete_comment.php' style='display:inline;'>";
-        echo "<input type='hidden' name='reviewId' value='$reviewId'>";
+        echo "<form method='POST' action='../Datenbank/deleteReview.php' style='display:inline;'>";
+        echo "<input type='hidden' name='ReviewId' value='$reviewId'>";
         echo "<button type='submit' class='submit-comment-delete-btn'>Kommentar löschen</button>";
         echo "</form>";
         echo "</div>";
