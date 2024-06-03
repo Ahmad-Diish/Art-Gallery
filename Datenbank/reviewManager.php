@@ -151,7 +151,7 @@ class ReviewManager
     public function addComment($ArtworkId, $customerID, $commentText, $rating)
 {
     if ($this->userHasCommented($ArtworkId, $customerID)) {
-        echo "<h6>Fehler: Sie haben bereits einen Kommentar zu diesem Kunstwerk abgegeben.</h6>";
+        echo "<h6>Sie haben bereits einen Kommentar zu diesem Kunstwerk abgegeben.</h6>";
         return;
     }
 
