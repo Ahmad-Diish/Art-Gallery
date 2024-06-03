@@ -1,101 +1,88 @@
 <?php
-require_once("../Datenbank/datenbank.php");
-require_once("../Datenbank/genreRepository.php");
-
+require_once("../Homepage/header.php");
+require_once("../Datenbank/genreManager.php");
+require_once("../Datenbank/artworkManager.php");
 
 $conn = new Datenbank();
-$genreRepository = new GenreRepository($conn);
+$genreManager = new GenreManager($conn);
+$genre = Genre::getDefaultGenre();
+$artworkManager = new ArtworkManager($conn);
 
+// Check if the Genre ID is provided in the URL parameters
+if (isset($_GET['genreID'])) {
+$genreID = $_GET['genreID'];
+} else {
+// If Genre ID is not provided, handle the error (e.g., redirect to an error page)
+echo "genre ID not provided.";
+exit; // Exit the script to prevent further execution
+}
 
+if (!is_numeric($genreID) || $genreID <= 0) {
+// Handle ungültige Genre-ID (z. B. Fehlermeldung anzeigen)
+echo "Ungültige Genre-ID!";
+exit;
+}
 
+$artworks = $genreManager->getArtworksByGenreId($genreID);
 
-
-
-$genreId = isset($_GET["genre_id"]) ? $_GET["genre_id"] : null;
-
-
-if (!$genreId) {
-    header("Location: error.php");
-    exit;
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 
-$genre = $genreRepository->getGenreByID($genreId);
-
-
-if (!$genre) {
-    header("Location: error.php");
-    exit;
-}
-
-$artworks = $genreRepository->getArtworksForGenre($genreId);
 ?>
 
-<!DOCTYPE html>
-<html lang="de">
+<singleGenre>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Single Genre</title>
-    <link rel="stylesheet" href="../Homepage/genres">
-    <style>
-   body {
-                background-color: #fffbeb;
-             
-            }
+<style>
+body {
+background-color: #fffbeb;
 
-            
+}
 
-            .title {
-                text-align: center;
-                font-size: 3rem;
-                margin-bottom: 2rem;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                position: relative;
-                overflow: hidden;
-                color: #923f0e;
-            }
-
-            .title::before {
-                content: 'Display Single Genre';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                color: #fef3c7;
-                overflow: hidden;
-                animation: animate 3s linear infinite;
-            }
-
-            @keyframes animate {
-                0% {
-                    transform: translateY(-100%);
-                }
-                100% {
-                    transform: translateY(100%);
-                }
-            }
-    </style>
+.title {
+text-align: center;
+font-size: 3rem;
+margin-bottom: 2rem;
+text-transform: uppercase;
+letter-spacing: 2px;
+position: relative;
+overflow: hidden;
+color: #923f0e;
+}
+</style>
 </head>
+
 <body>
-    <div class="container mt-4">
-        <h2><?php echo $genre['GenreName']; ?></h2>
-        <p><?php echo $genre['Description']; ?></p>
-        <h3>Kunstwerke in diesem Genre</h3>
-        <div class="row mt-4">
-            <?php foreach ($artworks as $artwork) { ?>
-                <div class="col-md-3 col-lg-2 mb-4">
-                    <div class="card">
-                        <img src="<?php echo $artwork['Image']; ?>" class="card-img" alt="<?php echo $artwork['Title']; ?>">
-                        <div class="card-body">
-                            <a href="../Pages/singleArtwork.php?artwork_id=<?php echo $artwork['ArtWorkID']; ?>" class="card-title"><?php echo $artwork['Title']; ?></a>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-        </div>
-    </div>
+<div class="container mt-4">
+<?php
+
+// Display the Genre based on the provided Genre ID
+$genreManager->displayGenreById($genreID);
+
+
+?>
+
+
+<?php
+echo '<div class="row">';
+if ($artworks) {
+// Output the artwork details
+foreach ($artworks as $artwork) {
+// Add a debugging statement
+//var_dump($artwork);
+
+$artworkObject = Artwork::fromState($artwork); // Falls erforderlich, um ein Artwork-Objekt aus dem Array zu erstellen
+$artworkObject->outputArtworks();
+}
+} else {
+// Handle the case where no artwork is found for the Genre
+echo "No artwork found for the Genre.";
+}
+echo '</div>'; // Close row
+?>
+
+</div>
 </body>
-</html>
+</singleGenre>
+<?php require("../Homepage/footer.php"); ?>
