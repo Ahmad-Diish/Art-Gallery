@@ -129,23 +129,48 @@ class ReviewManager
         }
     }
 
-    public function addComment($ArtworkId, $customerID, $commentText, $rating)
+    private function userHasCommented($ArtworkId, $customerId)
     {
         try {
             $this->datenbank->connect();
-            $anfrage = "INSERT INTO reviews (ArtWorkId, CustomerId, Comment, Rating, ReviewDate) VALUES (:ArtWorkId, :customerID, :comment, :Rating, NOW())";
+            $anfrage = "SELECT COUNT(*) as count FROM reviews WHERE ArtWorkId = :ArtWorkId AND CustomerId = :CustomerId";
             $stmt = $this->datenbank->prepareStatement($anfrage);
             $stmt->bindParam(':ArtWorkId', $ArtworkId);
-            $stmt->bindParam(':customerID', $customerID);
-            $stmt->bindParam(':comment', $commentText);
-            $stmt->bindParam(':Rating', $rating);
+            $stmt->bindParam(':CustomerId', $customerId);
             $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['count'] > 0;
         } catch (PDOException $e) {
             echo "Fehler: " . $e->getMessage();
+            return false;
         } finally {
             $this->datenbank->close();
         }
     }
+
+    public function addComment($ArtworkId, $customerID, $commentText, $rating)
+{
+    if ($this->userHasCommented($ArtworkId, $customerID)) {
+        echo "<h6>Fehler: Sie haben bereits einen Kommentar zu diesem Kunstwerk abgegeben.</h6>";
+        return;
+    }
+
+    try {
+        $this->datenbank->connect();
+        $anfrage = "INSERT INTO reviews (ArtWorkId, CustomerId, Comment, Rating, ReviewDate) VALUES (:ArtWorkId, :customerID, :comment, :Rating, NOW())";
+        $stmt = $this->datenbank->prepareStatement($anfrage);
+        $stmt->bindParam(':ArtWorkId', $ArtworkId);
+        $stmt->bindParam(':customerID', $customerID);
+        $stmt->bindParam(':comment', $commentText);
+        $stmt->bindParam(':Rating', $rating);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Fehler: " . $e->getMessage();
+    } finally {
+        $this->datenbank->close();
+    }
+}
+
 
     public function deleteComment($reviewId)
     {

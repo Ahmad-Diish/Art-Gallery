@@ -206,7 +206,7 @@ function handleError()
 
         h6 {
             color: red;
-            
+
         }
     </style>
 </head>
@@ -269,18 +269,24 @@ function handleError()
                             $rating = $_POST['rating'] ?? 0;
 
                             if ($commentText && $artworkID && $customerID && $rating) {
-                                
                                 $referer = $_SERVER['HTTP_REFERER'];
-                                
+
+                                ob_start(); // Output buffering start
                                 $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
-                               
-                                header("Location: $referer");
-                                exit;
+                                $output = ob_get_clean(); // Get the buffered output
+
+                                if (strpos($output, 'Fehler:') === false) {
+                                    header("Location: $referer");
+                                    exit;
+                                } else {
+                                    echo $output; // Display the error message
+                                }
                             } else {
                                 echo "<h6> Alle Felder müssen ausgefüllt werden.</h6>";
                             }
                         }
                         ?>
+
                         <button type="submit" class="submit-comment-btn">Kommentar hinzufügen</button>
                     </form>
 
