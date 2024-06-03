@@ -1,11 +1,12 @@
 <?php
-require_once("../Homepage/header.php");
+require_once ("../Homepage/header.php");
 echo "<tr><td>&nbsp;</td></tr>";
-require_once("../Datenbank/userManager.php");
-require_once("../Datenbank/userClass.php");
-require_once("../User/account.vali.php");
+require_once ("../Datenbank/userManager.php");
+require_once ("../Datenbank/userClass.php");
+require_once ("../User/account.vali.php");
 
-function emptystr($s, $defval) {
+function emptystr($s, $defval)
+{
     $res = trim($s);
     return (strlen($res) == 0) ? $defval : $res;
 }
@@ -28,42 +29,33 @@ if (isset($_SESSION['username'])) {
         echo "Benutzer nicht gefunden.";
         exit();
     }
-
-    // Hole das Passwort aus der customerlogon-Tabelle und füge es zu $userData hinzu
-    $userPasswordData = $userManager->getUserPasswordById($userData['CustomerID']);
-    error_log("userPasswordData1: " . $userPasswordData);
-    if ($userPasswordData) {
-        $userData['Password'] = $userPasswordData;
-    } else {
-        $userData['Password'] = '';
-    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
     // Validierung
-    if ($_POST['username'] !== $userData['UserName']) {
-        $usernameError = $validator->validateUsername($_POST['username'], $userData['CustomerID']);
+    if ($_POST['username'] !== $userData->getUsername()) {
+        $usernameError = $validator->validateUsername($_POST['username']);
         if ($usernameError) {
             $errorMessages['username'] = $usernameError;
         }
     }
 
-    if ($_POST['email'] !== $userData['Email']) {
-        $emailError = $validator->validateEmail($_POST['email'], $userData['CustomerID']);
+    if ($_POST['email'] !== $userData->getEmail()) {
+        $emailError = $validator->validateEmail($_POST['email']);
         if ($emailError) {
             $errorMessages['email'] = $emailError;
         }
     }
 
-    if ($_POST['phone'] !== $userData['Phone']) {
-        $phoneError = $validator->validatePhone($_POST['phone'], $userData['CustomerID']);
+    if ($_POST['phone'] !== $userData->getPhone()) {
+        $phoneError = $validator->validatePhone($_POST['phone']);
         if ($phoneError) {
             $errorMessages['phone'] = $phoneError;
         }
     }
 
-    if (!empty($_POST['oldpassword']) && !empty($_POST['newpassword']) && !empty($_POST['newpasswordconfirm'])) {
-        $passwordErrors = $validator->validatePassword($_POST['oldpassword'], $_POST['newpassword'], $userData['CustomerID']);
+    if (!empty($_POST['newpassword']) || !empty($_POST['newpasswordconfirm'])) {
+        $passwordErrors = $validator->validatePassword($_POST['oldpassword'], $_POST['newpassword'], $userData->getId());
         if (!empty($passwordErrors)) {
             foreach ($passwordErrors as $error) {
                 if (strpos($error, 'Das alte Passwort') !== false) {
@@ -74,47 +66,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                     $errorMessages['newpassword'] = (isset($errorMessages['newpassword']) ? $errorMessages['newpassword'] : "") . "<br/>" . $error;
                 }
             }
-        } 
-        
+        }
+
         if ($_POST['newpassword'] !== $_POST['newpasswordconfirm']) {
             $errorMessages['newpasswordconfirm'] = "Die neuen Passwörter stimmen nicht überein.";
         }
     }
 
     if (empty($errorMessages)) {
-        // Aktualisiere die Felder direkt, ohne Validierung
-        $userData['FirstName'] = $_POST['firstname'] ?? $userData['FirstName'];
-        $userData['LastName'] = $_POST['lastname'] ?? $userData['LastName'];
-        $userData['Address'] = $_POST['address'] ?? $userData['Address'];
-        $userData['Postal'] = $_POST['postal'] ?? $userData['Postal'];
-        $userData['City'] = $_POST['city'] ?? $userData['City'];
-        $userData['Region'] = $_POST['region'] ?? $userData['Region'];
-        $userData['Country'] = $_POST['country'] ?? $userData['Country'];
-        $userData['Phone'] = $_POST['phone'] ?? $userData['Phone'];
-        $userData['Email'] = $_POST['email'] ?? $userData['Email'];
-        $userData['UserName'] = $_POST['username'] ?? $userData['UserName'];
-
-        if (!empty($_POST['newpassword'])) {
-            $userData['Password'] = password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
-        } else {
-            $userData['Password'] = $userManager->getUserPasswordById($userData['CustomerID']); // Verwende das aktuelle Passwort, wenn kein neues Passwort gesetzt wird.
-            error_log("userPasswordData2: " . $userData['Password']);
-        }
-
         // Initialisiere das User-Objekt
         $user = new User(
-            $userData['FirstName'],
-            $userData['LastName'],
-            $userData['Address'],
-            $userData['Postal'],
-            $userData['City'],
-            $userData['Region'],
-            $userData['Country'],
-            $userData['Phone'],
-            $userData['Email'],
-            $userData['UserName'],
-            $userData['Password'],
-            $userData['CustomerID']
+            $_POST['firstname'] ?? $userData->getFirstname(),
+            $_POST['lastname'] ?? $userData->getLastname(),
+            $_POST['address'] ?? $userData->getAddress(),
+            $_POST['postal'] ?? $userData->getPostal(),
+            $_POST['city'] ?? $userData->getCity(),
+            $_POST['region'] ?? $userData->getRegion(),
+            $_POST['country'] ?? $userData->getCountry(),
+            $_POST['phone'] ?? $userData->getPhone(),
+            $_POST['email'] ?? $userData->getEmail(),
+            $_POST['username'] ?? $userData->getUsername(),
+            !empty($_POST['newpassword']) ? password_hash($_POST['newpassword'], PASSWORD_DEFAULT) : $userData->getPasswordHash(),
+            $userData->getId()
         );
 
         // Aktualisiere die Datenbank
@@ -237,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
 <body>
 
 <?php if (!empty($successMessage)): ?>
-    <p class="success-message"><?php echo $successMessage; ?></p>
+        <p class="success-message"><?php echo $successMessage; ?></p>
 <?php endif; ?>
 
 <div class="container1">
@@ -246,60 +219,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
         <form action="account.php" method="post">
             <div class="field">
                 <label for="firstname">Vorname:</label>
-                <input type="text" name="firstname" value="<?php echo isset($userData['FirstName']) ? $userData['FirstName'] : ''; ?>">
+                <input type="text" name="firstname" value="<?php echo $userData->getFirstname() ? $userData->getFirstname() : ''; ?>">
             </div>
 
             <div class="field">
                 <label for="lastname">Nachname:</label>
-                <input type="text" name="lastname" value="<?php echo isset($userData['LastName']) ? $userData['LastName'] : ''; ?>">
+                <input type="text" name="lastname" value="<?php echo $userData->getLastname() ? $userData->getLastname(): ''; ?>">
             </div>
 
             <div class="field">
                 <label for="address">Adresse:</label>
-                <input type="text" name="address" value="<?php echo isset($userData['Address']) ? $userData['Address'] : ''; ?>">
+                <input type="text" name="address" value="<?php echo $userData->getAddress() ? $userData->getAddress(): ''; ?>">
             </div>
 
             <div class="field">
                 <label for="postal">Postleitzahl:</label>
-                <input type="text" name="postal" value="<?php echo isset($userData['Postal']) ? $userData['Postal'] : ''; ?>">
+                <input type="text" name="postal" value="<?php echo $userData->getPostal() ? $userData->getPostal() : ''; ?>">
             </div>
 
             <div class="field">
                 <label for="city">Stadt:</label>
-                <input type="text" name="city" value="<?php echo isset($userData['City']) ? $userData['City'] : ''; ?>">
+                <input type="text" name="city" value="<?php echo $userData->getCity() ? $userData->getCity() : ''; ?>">
             </div>
 
             <div class="field">
                 <label for="region">Region:</label>
-                <input type="text" name="region" value="<?php echo isset($userData['Region']) ? $userData['Region'] : ''; ?>">
+                <input type="text" name="region" value="<?php echo $userData->getRegion() ? $userData->getRegion() : ''; ?>">
             </div>
 
             <div class="field">
                 <label for="country">Land:</label>
-                <input type="text" name="country" value="<?php echo isset($userData['Country']) ? $userData['Country'] : ''; ?>">
+                <input type="text" name="country" value="<?php echo $userData->getCountry() ? $userData->getCountry() : ''; ?>">
             </div>
 
             <div class="field">
                 <label for="phone">Telefon:</label>
-                <input type="text" name="phone" value="<?php echo isset($userData['Phone']) ? $userData['Phone'] : ''; ?>">
+                <input type="text" name="phone" value="<?php echo $userData->getPhone() ? $userData->getPhone() : ''; ?>">
                 <?php if (isset($errorMessages['phone'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="email">E-Mail:</label>
-                <input type="text" name="email" value="<?php echo isset($userData['Email']) ? $userData['Email'] : ''; ?>">
+                <input type="text" name="email" value="<?php echo $userData->getEmail() ? $userData->getEmail() : ''; ?>">
                 <?php if (isset($errorMessages['email'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['email']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['email']; ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="username">Username:</label>
-                <input type="text" name="username" value="<?php echo isset($userData['UserName']) ? $userData['UserName'] : ''; ?>">
+                <input type="text" name="username" value="<?php echo $userData->getUsername() ? $userData->getUsername() : ''; ?>">
                 <?php if (isset($errorMessages['username'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['username']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['username']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -307,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                 <label for="oldpassword">Altes Passwort:</label>
                 <input type="password" name="oldpassword" value="">
                 <?php if (isset($errorMessages['oldpassword'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['oldpassword']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['oldpassword']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -315,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                 <label for="newpassword">Neues Passwort:</label>
                 <input type="password" name="newpassword" value="">
                 <?php if (isset($errorMessages['newpassword'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['newpassword']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['newpassword']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -323,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                 <label for="newpasswordconfirm">Neues Passwort bestätigen:</label>
                 <input type="password" name="newpasswordconfirm" value="">
                 <?php if (isset($errorMessages['newpasswordconfirm'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['newpasswordconfirm']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['newpasswordconfirm']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -331,7 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
                 <input type="submit" name="save_changes" value="Speichern"/>
             </div>
             <?php if (isset($errorMessages['general'])): ?>
-                <p class="error-message"><?php echo $errorMessages['general']; ?></p>
+                    <p class="error-message"><?php echo $errorMessages['general']; ?></p>
             <?php endif; ?>
         </form>
     </div>

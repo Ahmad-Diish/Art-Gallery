@@ -126,17 +126,30 @@ class UserManager
     {
         try {
             // SQL-Statement für Abfrage
-            $sql = "SELECT * FROM customers,customerlogon WHERE customerlogon.UserName = :username AND customerlogon.CustomerID = customers.CustomerID"; 
+            $sql = "SELECT * FROM customers,customerlogon WHERE customerlogon.UserName = :username AND customerlogon.CustomerID = customers.CustomerID";
 
             $stmt = $this->db->prepareStatement($sql);
             $stmt->bindValue(':username', $username);
             $stmt->execute();
-            
+
             // Überprüfe, ob Ergebnisse vorhanden sind
             if ($stmt->rowCount() > 0) {
                 // Fetch as associative array
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-                // return new User($stmt->fetch(PDO::FETCH_ASSOC))
+                $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+                return new User(
+                    $userData['FirstName'],
+                    $userData['LastName'],
+                    $userData['Address'],
+                    $userData['Postal'],
+                    $userData['City'],
+                    $userData['Region'],
+                    $userData['Country'],
+                    $userData['Phone'],
+                    $userData['Email'],
+                    $userData['UserName'],
+                    $userData['Pass'],
+                    $userData['CustomerID']
+                );
             } else {
                 // Benutzer mit dem angegebenen Benutzernamen wurde nicht gefunden
                 return null;
@@ -187,25 +200,14 @@ class UserManager
         }
     }
 
-    public function getUserById($id) {
-        try {
-            $sql = "SELECT * FROM customers WHERE CustomerID = :id";
-            $stmt = $this->db->prepareStatement($sql);
-            $stmt->bindValue(':id', $id);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            return null;
-        }
-    }
-
-    public function getUserPasswordById($userId) {
+    public function getUserPasswordById($userId)
+    {
         try {
             $sql = "SELECT Pass AS Password FROM customerlogon WHERE CustomerID = :id";
             $stmt = $this->db->prepareStatement($sql);
             $stmt->bindValue(':id', $userId);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC)["Password"]; 
+            return $stmt->fetch(PDO::FETCH_ASSOC)["Password"];
         } catch (Exception $e) {
             return null;
         }
