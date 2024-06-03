@@ -53,18 +53,16 @@ if (isset($_POST['submit'])) {
     // Wenn keine Fehler vorhanden sind, fahren Sie mit der Benutzerregistrierung fort
     try {
         $userManager = new UserManager();
-        $user = new User($firstname, $lastname, $address, $postal, $city, $region, $country, $phone, $email, $username, $password);
+        $user = new User($firstname, $lastname, $address, $postal, $city, $region, $country, $phone, $email, $username, password_hash($password, PASSWORD_DEFAULT));
 
         if ($userManager->addUser($user)) {
             header("Location: ../Homepage/index.php?signup=success");
             exit();
         } else {
-            error_log("Fehler beim Hinzufügen des Benutzers in die Datenbank.");
             header("Location: register.php?error=sqlerror");
             exit();
         }
     } catch (Exception $e) {
-        error_log("Fehler beim Hinzufügen des Benutzers: " . $e->getMessage());
         header("Location: register.php?error=exception");
         exit();
     }

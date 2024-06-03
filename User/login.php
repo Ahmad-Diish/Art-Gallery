@@ -103,6 +103,7 @@ require_once("../Homepage/header.php");
         </div>
 
         <?php
+
         if (isset($_SESSION['login_errors'])) {
             foreach ($_SESSION['login_errors'] as $error) {
                 echo '<p class="error-message">' . htmlspecialchars($error) . '</p>';

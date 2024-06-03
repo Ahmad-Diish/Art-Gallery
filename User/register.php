@@ -100,7 +100,7 @@ require_once ("../User/validation.php");
     <div class="signup-form-form">
     <form action="signup.inc.php" method="post">
         <div class="field input">
-            <label for="firstname">Vorname</label>
+            <label for="firstname">Vorname*</label>
             <input type="text" name="firstname">
         </div>
         <div class="field input">
@@ -171,8 +171,6 @@ require_once ("../User/validation.php");
   
 </body>
 </html>
-
-
 
 <?php
 require_once ("../Homepage/footer.php");

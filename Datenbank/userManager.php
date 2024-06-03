@@ -19,8 +19,8 @@ class UserManager
         $sqlCustomer = "INSERT INTO customers (CustomerID, firstname, lastname, address, postal, city, region, country, phone, email) 
                         VALUES (:customer_id, :firstname, :lastname, :address, :postal, :city, :region, :country, :phone, :email)";
 
-        $sqlCustomerLogon = "INSERT INTO customerlogon (CustomerID, username, Pass) 
-                             VALUES (:customer_id, :username, :Pass)";
+        $sqlCustomerLogon = "INSERT INTO customerlogon (CustomerID, username, Pass, DateJoined) 
+                             VALUES (:customer_id, :username, :Pass, :DateJoined)";
 
         try {
             // Beginne Transaktion
@@ -33,16 +33,17 @@ class UserManager
             $maxID = $result['max_id'];
             $newID = $maxID + 1;
 
-            // Füge Benutzername und Passwort in customerlogon-Tabelle ein
+            // Füge Benutzername, Passwort und DateJoined in customerlogon-Tabelle ein
             $stmtCustomerLogon = $this->db->prepareStatement($sqlCustomerLogon);
             $stmtCustomerLogon->bindValue(':customer_id', $newID);
             $stmtCustomerLogon->bindValue(':username', $user->getUsername());
             $stmtCustomerLogon->bindValue(':Pass', $user->getPasswordHash());
+            $stmtCustomerLogon->bindValue(':DateJoined', date('Y-m-d H:i:s'));
             $stmtCustomerLogon->execute();
 
             $stmtCustomer = $this->db->prepareStatement($sqlCustomer);
             $stmtCustomer->bindValue(':customer_id', $newID);
-            $stmtCustomer->bindValue(':firstname', $user->getFirstname() ?: NULL);
+            $stmtCustomer->bindValue(':firstname', $user->getFirstname());
             $stmtCustomer->bindValue(':lastname', $user->getLastname());
             $stmtCustomer->bindValue(':address', $user->getAddress());
             $stmtCustomer->bindValue(':postal', $user->getPostal() ?: NULL);
@@ -66,7 +67,6 @@ class UserManager
         } catch (Exception $e) {
             // Bei Fehler Rollback durchführen und Fehlermeldung ausgeben
             $this->db->rollBack();
-            error_log("Fehler beim Hinzufügen des Benutzers: " . $e->getMessage());
             return false;
         }
     }
@@ -84,7 +84,6 @@ class UserManager
 
             return $result['count'] > 0;
         } catch (Exception $e) {
-            error_log("Fehler beim Überprüfen der E-Mail-Existenz: " . $e->getMessage());
             return false;
         }
     }
@@ -102,13 +101,114 @@ class UserManager
 
             return $result['count'] > 0;
         } catch (Exception $e) {
-            error_log("Fehler beim Überprüfen des Benutzernamens: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public function phoneExists($phone)
+    {
+        try {
+            // SQL-Statement für die Abfrage
+            $sql = "SELECT COUNT(Phone) AS 'count' FROM `customers` WHERE Phone = :phone";
+
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':phone', $phone);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result['count'] > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function getUserByUsername($username)
+    {
+        try {
+            // SQL-Statement für Abfrage
+            $sql = "SELECT * FROM customers,customerlogon WHERE customerlogon.UserName = :username AND customerlogon.CustomerID = customers.CustomerID"; 
+
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':username', $username);
+            $stmt->execute();
+            
+            // Überprüfe, ob Ergebnisse vorhanden sind
+            if ($stmt->rowCount() > 0) {
+                // Fetch as associative array
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+                // return new User($stmt->fetch(PDO::FETCH_ASSOC))
+            } else {
+                // Benutzer mit dem angegebenen Benutzernamen wurde nicht gefunden
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function updateUser(User $user)
+    {
+        try {
+            $sqlCustomer = "UPDATE customers SET FirstName = :firstname, LastName = :lastname, Address = :address, Postal = :postal, City = :city, Region = :region, Country = :country, Phone = :phone, Email = :email WHERE CustomerID = :id";
+            $sqlCustomerLogon = "UPDATE customerlogon SET DateLastModified = :DateLastModified, Pass = :password WHERE CustomerID = :id";
+
+            $this->db->beginTransaction();
+
+            $stmtCustomer = $this->db->prepareStatement($sqlCustomer);
+            $stmtCustomer->bindValue(':id', $user->getId());
+            $stmtCustomer->bindValue(':firstname', $user->getFirstname());
+            $stmtCustomer->bindValue(':lastname', $user->getLastname());
+            $stmtCustomer->bindValue(':address', $user->getAddress());
+            $stmtCustomer->bindValue(':postal', $user->getPostal());
+            $stmtCustomer->bindValue(':city', $user->getCity());
+            $stmtCustomer->bindValue(':region', $user->getRegion());
+            $stmtCustomer->bindValue(':country', $user->getCountry());
+            $stmtCustomer->bindValue(':phone', $user->getPhone());
+            $stmtCustomer->bindValue(':email', $user->getEmail());
+
+            $stmtCustomerLogon = $this->db->prepareStatement($sqlCustomerLogon);
+            $stmtCustomerLogon->bindValue(':id', $user->getId());
+            $stmtCustomerLogon->bindValue(':DateLastModified', date('Y-m-d H:i:s'));
+            $stmtCustomerLogon->bindValue(':password', $user->getPasswordHash());
+
+            $stmtCustomer->execute();
+            $stmtCustomerLogon->execute();
+
+            if ($stmtCustomer->rowCount() > 0 || $stmtCustomerLogon->rowCount() > 0) {
+                $this->db->commit();
+                return true;
+            } else {
+                $this->db->rollBack();
+                return false;
+            }
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return false;
+        }
+    }
+
+    public function getUserById($id) {
+        try {
+            $sql = "SELECT * FROM customers WHERE CustomerID = :id";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function getUserPasswordById($userId) {
+        try {
+            $sql = "SELECT Pass AS Password FROM customerlogon WHERE CustomerID = :id";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':id', $userId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC)["Password"]; 
+        } catch (Exception $e) {
+            return null;
         }
     }
 }
 ?>
-
-
-
-

@@ -28,6 +28,38 @@
       font-size: 1.5em;
       
     }
+
+    .newsletter-table input[type="email"] {
+      height: 40px;
+      padding: 10px;
+      border: 0px;
+      border-radius: 5px 0 0 5px;
+      width: 100%;
+    }
+
+    .newsletter-table button {
+      height: 40px;
+      padding: 10px;
+      border: 0px;
+      border-radius: 0 5px 5px 0;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      margin-bottom: -14px;
+    }
+
+    .newsletter-table td {
+      padding: 0px;
+    }
+
+    .newsletter-table {
+      width: 100%;
+      display: table;
+    }
+
+    .newsletter-table td {
+      vertical-align: middle;
+    }
     
   </style>
 </head>
@@ -65,10 +97,12 @@
           <h3>Newsletter</h3>
           <p>Abonnieren Sie unseren Newsletter, um über die neuesten Kunstwerke, Ausstellungen und Aktionen informiert zu bleiben.</p>
           <form>
-            <div class="input-group mb-3">
-              <input type="email" class="form-control" placeholder="Ihre E-Mail-Adresse" aria-label="Ihre E-Mail-Adresse" aria-describedby="button-addon2">
-              <button class="btn btn-primary" type="button" id="button-addon2">Abonnieren</button>
-            </div>
+          <table class="newsletter-table">
+              <tr>
+                <td><input type="email" class="form-control" placeholder="Ihre E-Mail-Adresse" aria-label="Ihre E-Mail-Adresse" aria-describedby="button-addon2"></td>
+                <td><button class="btn btn-primary" type="button" id="button-addon2">Abonnieren</button></td>
+              </tr>
+            </table>
           </form>
         </div>
       </div>
