@@ -24,21 +24,13 @@ Artwork::setDatabase($PDO);
 </head>
 <body>
     <h1>Suchergebnisse</h1>
-    <form class="d-flex" method="POST" action="">
-        <input class="form-control me-2" type="text" name="firstName" placeholder="Vorname" aria-label="Suche">
-        <input class="form-control me-2" type="text" name="lastName" placeholder="Nachname" aria-label="Suche">
-        <input class="form-control me-2" type="text" name="title" placeholder="Titel" aria-label="Suche">
-        <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
-    </form>
 
     <?php
     if (isset($_POST['submit-search'])) {
-        $firstName = $_POST['firstName'] ?? '';
-        $lastName = $_POST['lastName'] ?? '';
-        $title = $_POST['title'] ?? '';
+        $searchQuery = $_POST['searchQuery'] ?? '';
 
         // Suche nach Künstlern
-        $artistResults = Artist::searchArtists($firstName, $lastName);
+        $artistResults = Artist::searchArtists($searchQuery);
 
         if (!empty($artistResults)) {
             echo "<h2>Künstler</h2>";
@@ -50,7 +42,7 @@ Artwork::setDatabase($PDO);
         }
 
         // Suche nach Kunstwerken
-        $artworkResults = Artwork::searchArtworks($title);
+        $artworkResults = Artwork::searchArtworks($searchQuery);
 
         if (!empty($artworkResults)) {
             echo "<h2>Kunstwerke</h2>";
@@ -68,6 +60,10 @@ Artwork::setDatabase($PDO);
 <?php
 require_once("../Homepage/footer.php");
 ?>
+
+
+
+
 
 
 

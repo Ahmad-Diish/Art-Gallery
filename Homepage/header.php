@@ -8,8 +8,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     session_destroy();
     $redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '../Homepage/index.php';
     if (basename($redirect) == 'account.php') {
-      $redirect = '../Homepage/index.php';
-  }
+        $redirect = '../Homepage/index.php';
+    }
     header("Location: $redirect");
     exit();
 }
@@ -47,8 +47,8 @@ function renderHeader()
                     </li>
                 </ul>
                 <form class="d-flex align-items-center" method="POST" action="../Pages/search.php">
-                    <input class="form-control me-2" type="text" name="search" placeholder="Suche" aria-label="Search">
-                    <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
+                <input class="form-control me-2" type="text" name="searchQuery" placeholder="Suche" aria-label="Suche">
+                <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
                 </form>';
 
     if (isset($_SESSION['username'])) {
@@ -170,7 +170,7 @@ renderHeader();
         }
 
         .form-control {
-          margin-top: 14px;
+            margin-top: 14px;
         }
 
         .heart-btn,

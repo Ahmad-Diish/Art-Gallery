@@ -88,12 +88,11 @@ class Artist
         self::$PDO = $datenbank;
     }
 
-    public static function searchArtists($firstName, $lastName)
+    public static function searchArtists($lastName)
     {
-        $sql = "SELECT * FROM artists WHERE FirstName LIKE :firstName AND LastName LIKE :lastName";
+        $sql = "SELECT * FROM artists WHERE LastName LIKE :lastName";
         $stmt = self::$PDO->prepare($sql);
         $stmt->execute([
-            ':firstName' => '%' . $firstName . '%',
             ':lastName' => '%' . $lastName . '%'
         ]);
 

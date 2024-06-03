@@ -131,27 +131,27 @@ class Artwork
         return $this->medium;
     }
 
-        // suchen 
-        public static function setDatabase($datenbank)
-        {
-            self::$PDO = $datenbank;
+    // suchen 
+    public static function setDatabase($datenbank)
+    {
+        self::$PDO = $datenbank;
+    }
+
+    public static function searchArtworks($title)
+    {
+        $sql = "SELECT * FROM artworks WHERE Title LIKE :title";
+        $stmt = self::$PDO->prepare($sql);
+        $stmt->execute([
+            ':title' => '%' . $title . '%'
+        ]);
+
+        $artworks = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $artworks[] = self::fromState($row);
         }
-    
-        public static function searchArtworks($title)
-        {
-            $sql = "SELECT * FROM artworks WHERE Title LIKE :title";
-            $stmt = self::$PDO->prepare($sql);
-            $stmt->execute([
-                ':firstName' => '%' . $title . '%'
-            ]);
-    
-            $artworks = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $artworks[] = self::fromState($row);
-            }
-    
-            return $artworks;
-        }
+
+        return $artworks;
+    }
 
     public static function getDefaultArtwork(): Artwork
     {
@@ -182,15 +182,15 @@ class Artwork
     }
     public function setReviewsForArtwork($reviewAlsArray)
     {
-       $review = Review::getDefaultReview();
-       $review = Review::fromState($reviewAlsArray);
-       $this->reviews[] = $review;
+        $review = Review::getDefaultReview();
+        $review = Review::fromState($reviewAlsArray);
+        $this->reviews[] = $review;
     }
- 
-    
+
+
     public function getReviewsForArtwork()
     {
-       return $this->reviews;
+        return $this->reviews;
     }
 
     public function setSubjectsForArtwork($subjectAlsArray)
