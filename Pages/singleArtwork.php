@@ -38,7 +38,7 @@ function handleError()
     <div class="error-container">
         <h2>Fehler</h2>
         <p>Entschuldigung, es gab einen Fehler beim Abrufen der Künstlerinformationen. Bitte versuchen Sie es später erneut.</p>
-        <button onclick="window.location.href='../Pages/artworks.php'">Zurück zu den Künstler Galeria</button>
+        <button onclick="window.location.href='../Pages/artworks.php'">Zurück zu den Künstler Galerie</button>
     </div>
 <?php
     require("../Homepage/footer.php");

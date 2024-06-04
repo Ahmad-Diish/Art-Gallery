@@ -1,6 +1,6 @@
 <?php
-require_once ("../Homepage/header.php");
-require_once ("../Datenbank/artworkManager.php");
+require_once("../Homepage/header.php");
+require_once("../Datenbank/artworkManager.php");
 
 
 // Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
@@ -36,10 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <style>
         /* Stile für die Sortierfelder */
         body {
-            
+
             background-color: #fffbeb;
-           
+
         }
+
         h2 {
             text-align: center;
             color: #923f0e;
@@ -47,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-TOP: 70px;
             margin-bottom: 100px;
         }
-        label{
+
+        label {
             color: #923f0e;
             margin-bottom: 50px;
         }
@@ -82,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="container mt-5">
-        <h2>Kunstwerke Galeria</h2>
+        <h2>Kunstwerke Galerie</h2>
         <!-- Sorting Options -->
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <label for="Sortiere">Sortiere nach:</label>
@@ -119,5 +121,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <?php
-require_once ("../Homepage/footer.php");
+require_once("../Homepage/footer.php");
 ?>
