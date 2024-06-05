@@ -1,6 +1,6 @@
 <?php
 // Einbindung der Datei, die die Klasse Artwork enthält
-require_once("../Datenbank/ArtworkClass.php");
+require_once("../Datenbank/artworkClass.php");
 
 // Definition der Klasse Genre
 class Genre
