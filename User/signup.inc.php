@@ -19,6 +19,13 @@ if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $passwordRepeat = trim($_POST['passwordrepeat']);
+    
+    $firstname = capitalizeFirstName($firstname);
+    $lastname = capitalizeLastName($lastname);
+    $city = capitalizeCity($city);
+    $address = capitalizeAddress($address);
+
+    $address = expandAddressAbbreviations($address);
 
     $errors = array();
     $generalError = false;
@@ -28,7 +35,6 @@ if (isset($_POST['submit'])) {
     foreach ($requiredFields as $field) {
         if (empty($$field)) {
             $generalError = true;
-            $errors[$field] = "Bitte füllen Sie dieses Feld aus.";
         }
     }
 
@@ -38,9 +44,30 @@ if (isset($_POST['submit'])) {
 
     // Weiterprüfen, auch wenn Pflichtfelder fehlen, um spezifische Fehler zu erfassen
     if (!empty($firstname)) {
-        $firstnameErrors = validateFirstname($firstname);
+        $firstnameErrors = validateFirstName($firstname);
         if (!empty($firstnameErrors)) {
             $errors['firstname'] = implode("\n", $firstnameErrors);
+        }
+    }
+
+    if (!empty($lastname)) {
+        $lastnameErrors = validateLastName($lastname);
+        if (!empty($lastnameErrors)) {
+            $errors['lastname'] = implode("\n", $lastnameErrors);
+        }
+    }
+
+    if (!empty($city)) {
+        $cityErrors = validateCity($city);
+        if (!empty($cityErrors)) {
+            $errors['city'] = implode("\n", $cityErrors);
+        }
+    }
+
+    if (!empty($address)) {
+        $addressErrors = validateAddress($address);
+        if (!empty($addressErrors)) {
+            $errors['address'] = implode("\n", $addressErrors);
         }
     }
 

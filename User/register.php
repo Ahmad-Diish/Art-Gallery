@@ -118,10 +118,32 @@ require_once ("../User/validation.php");
             <label for="lastname">Nachname*</label>
             <input type="text" name="lastname">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['lastname'])) {
+                $lastnameErrors = explode("\n", $errors['lastname']);
+                foreach ($lastnameErrors as $error) {
+                    echo '<p class="error-message">' . $error . '</p>';
+                }
+            }
+        }
+        ?>
         <div class="field input">
             <label for="address">Adresse*</label>
             <input type="text" name="address">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['address'])) {
+                $addressErrors = explode("\n", $errors['address']);
+                foreach ($addressErrors as $error) {
+                    echo '<p class="error-message">' . $error . '</p>';
+                }
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Postleitzahl</label>
             <input type="text" name="postal">
@@ -130,6 +152,17 @@ require_once ("../User/validation.php");
             <label for="password">Stadt*</label>
             <input type="text" name="city">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['city'])) {
+                $cityErrors = explode("\n", $errors['city']);
+                foreach ($cityErrors as $error) {
+                    echo '<p class="error-message">' . $error . '</p>';
+                }
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Region</label>
             <input type="text" name="region">

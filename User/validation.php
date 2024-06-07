@@ -33,7 +33,7 @@ function validatePassword($password, $passwordRepeat)
         $errors[] = "Die Passwörter stimmen nicht überein.";
     }
 
-    if (strlen($password) < 12) {
+    if (mb_strlen($password) < 12) {
         $errors[] = "Das Passwort muss mindestens 12 Zeichen lang sein.";
     }
 
@@ -52,7 +52,7 @@ function validatePassword($password, $passwordRepeat)
     return $errors;
 }
 
-function validateFirstname($firstname) {
+function validateFirstName($firstname) {
 
     $errors = array();
 
@@ -64,11 +64,106 @@ function validateFirstname($firstname) {
         $errors[] = "Der Vorname darf keine Sonderzeichen enthalten.";
     }
 
-    if (strlen($firstname) < 2) {
+    if (mb_strlen($firstname) < 2) {
         $errors[] = "Der Vorname muss mindestens 2 Zeichen lang sein.";
     }
 
     return $errors;
 }
 
+function capitalizeFirstName($firstname) {
+    if (!empty($firstname)) {
+        $firstname = ucfirst(strtolower($firstname));
+    }
+    return $firstname;
+}
+
+function validateLastName($lastname) {
+
+    $errors = array();
+
+    if (preg_match('/[0-9]/', $lastname)) {
+        $errors[] = "Der Nachname darf keine Zahlen enthalten.";
+    }
+
+    if (preg_match('/[!?@#$%^&*()\-_=+{};:,<.>]/', $lastname)) {
+        $errors[] = "Der Nachname darf keine Sonderzeichen enthalten.";
+    }
+
+    if (mb_strlen($lastname) < 2) {
+        $errors[] = "Der Nachname muss mindestens 2 Zeichen lang sein.";
+    }
+
+    return $errors;
+}
+
+function capitalizeLastName($lastname) {
+    if (!empty($lastname)) {
+        $lastname = ucfirst(strtolower($lastname));
+    }
+    return $lastname;
+}
+
+function validateCity($city){
+    
+    $errors = array();
+
+    if(preg_match('/[0-9]/', $city)){
+        $errors[] = "Der Stadtname darf keine Zahlen enthalten.";
+    }
+
+    if(preg_match('/[!?@#$%^&*()\_=+{};:,<>]/', $city)){
+        $errors[] = "Der Stadtname darf dieses nicht Sonderzeichen enthalten";
+    }
+
+    return $errors;
+}
+
+function capitalizeCity($city) {
+    if (!empty($city)) {
+        $city = ucfirst(strtolower($city));
+    }
+    return $city;
+}
+
+function validateAddress($address){
+    $errors = array();
+
+    if(preg_match('/[!?@#$%^&*()\_=+{};:,<>]/', $address))
+    {
+        $errors[] = "Die Addresse darf dieses Sonderzeichen nicht enthalten.";
+    }
+
+    if (!preg_match('/^[a-zA-ZäöüÄÖÜß\s\-]+(\s\d+)?$/', $address)) {
+        $errors[] = "Es dürfen keine Zahlen mitten im Straßennamen enthalten sein.";
+    }
+
+    return $errors;
+}
+
+function capitalizeAddress($address) {
+    if (!empty($address)) {
+        $address = ucfirst(strtolower($address));
+    }
+    return $address;
+}
+
+function expandAddressAbbreviations($address) {
+    // Liste der Abkürzungen und deren vollständige Formen
+    $abbreviations = [
+        'Str.' => 'Straße',
+        'Pl.' => 'Platz',
+        'Str' => 'Straße',
+        'Pl' => 'Platz',
+        'Hbf' => 'Hauptbahnhof',
+        'Bhf' => 'Bahnhof',
+    ];
+
+    // Ersetze Abkürzungen mit den vollständigen Formen
+    foreach ($abbreviations as $abbr => $full) {
+        $address = preg_replace('/\b' . preg_quote($abbr, '/') . '\b/i', $full, $address);
+    }
+
+    return $address;
+}
 ?>
