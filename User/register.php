@@ -86,6 +86,10 @@ require_once ("../User/validation.php");
             margin-bottom: 3px;
             font-size: 14px;
         }
+
+        .spaced-error-message {
+        margin-top: 15px;
+    }
     </style>
 
 </head>
@@ -148,6 +152,14 @@ require_once ("../User/validation.php");
             <label for="password">Postleitzahl</label>
             <input type="text" name="postal">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['postal'])) {
+                echo '<p class="error-message">' . $errors['postal'] . '</p>';
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Stadt*</label>
             <input type="text" name="city">
@@ -167,10 +179,32 @@ require_once ("../User/validation.php");
             <label for="password">Region</label>
             <input type="text" name="region">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['region'])) {
+                $regionErrors = explode("\n", $errors['region']);
+                foreach ($regionErrors as $error) {
+                    echo '<p class="error-message">' . $error . '</p>';
+                }
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Land*</label>
             <input type="text" name="country">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['country'])) {
+                $countryErrors = explode("\n", $errors['country']);
+                foreach ($countryErrors as $error) {
+                    echo '<p class="error-message">' . $error . '</p>';
+                }
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Telefon</label>
             <input type="text" name="phone">
@@ -179,10 +213,26 @@ require_once ("../User/validation.php");
             <label for="password">E-Mail*</label>
             <input type="text" name="email">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['email'])) {
+                echo '<p class="error-message">' . nl2br(htmlentities($errors['email'])) . '</p>';
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">E-Mail wiederholen*</label>
             <input type="text" name="emailrepeat">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['emailrepeat'])) {
+                echo '<p class="error-message">' . nl2br(htmlentities($errors['emailrepeat'])) . '</p>';
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Username*</label>
             <input type="text" name="username">
@@ -191,6 +241,14 @@ require_once ("../User/validation.php");
             <label for="password">Passwort*</label>
             <input type="password" name="password">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['password'])) {
+                echo '<p class="error-message">' . nl2br(htmlentities($errors['password'])) . '</p>';
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Passwort wiederholen*</label>
             <input type="password" name="passwordrepeat">
@@ -198,21 +256,19 @@ require_once ("../User/validation.php");
         <?php
         if (isset($_GET['error']) && isset($_GET['message'])) {
             $errors = json_decode(urldecode($_GET['message']), true);
-            if (isset($errors['general'])) {
-                echo '<p class="error-message">' . $errors['general'] . '</p>';
+            if (isset($errors['passwordrepeat'])) {
+                echo '<p class="error-message">' . nl2br(htmlentities($errors['passwordrepeat'])) . '</p>';
             }
         }
         ?>
-       <?php
-       if (isset($_GET['error']) && isset($_GET['message'])) {
-           $errors = json_decode(urldecode($_GET['message']));
-           foreach ($errors as $error) {
-               if (strpos($error, "Passwort") !== false) {
-                   echo '<p class="error-message">' . nl2br($error . "\n") . '</p>';
-               }
-           }
-       }
-       ?>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['general'])) {
+                echo '<p class="error-message spaced-error-message">' . $errors['general'] . '</p>';
+            }
+        }
+        ?>
         <button class="button2" type="submit" name="submit">Registrieren</button>
         <div class="link">
             Bereits registriert? <a href="login.php">Login</a>

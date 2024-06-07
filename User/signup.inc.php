@@ -57,13 +57,6 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    if (!empty($city)) {
-        $cityErrors = validateCity($city);
-        if (!empty($cityErrors)) {
-            $errors['city'] = implode("\n", $cityErrors);
-        }
-    }
-
     if (!empty($address)) {
         $addressErrors = validateAddress($address);
         if (!empty($addressErrors)) {
@@ -71,13 +64,46 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    if (!empty($email) || !empty($emailRepeat)) {
-        $emailError = validateEmails($email, $emailRepeat);
-        if ($emailError) {
-            $errors['email'] = $emailError;
+    if (!empty($postal)) {
+        $postalError = validatePostal($postal, $country);
+        if ($postalError) {
+            $errors['postal'] = $postalError;
         }
     }
 
+    if (!empty($city)) {
+        $cityErrors = validateCity($city);
+        if (!empty($cityErrors)) {
+            $errors['city'] = implode("\n", $cityErrors);
+        }
+    }
+
+    if (!empty($region)) {
+        $regionError = validateRegion($region);
+        if ($regionError) {
+            $errors['region'] = $regionError;
+        }
+    }
+    
+    if (!empty($country)) {
+        $countryError = validateCountry($country);
+        if ($countryError) {
+            $errors['country'] = $countryError;
+        }
+    }
+
+    if (!empty($email) || !empty($emailRepeat)) {
+        $emailErrors = validateEmails($email, $emailRepeat);
+        if (!empty($emailErrors)) {
+            if (isset($emailErrors['email'])) {
+                $errors['email'] = $emailErrors['email'];
+            }
+            if (isset($emailErrors['emailrepeat'])) {
+                $errors['emailrepeat'] = $emailErrors['emailrepeat'];
+            }
+        }
+    }
+    
     if (!empty($username)) {
         $usernameError = validateUsername($username);
         if ($usernameError) {
@@ -88,9 +114,14 @@ if (isset($_POST['submit'])) {
     if (!empty($password) || !empty($passwordRepeat)) {
         $passwordErrors = validatePassword($password, $passwordRepeat);
         if (!empty($passwordErrors)) {
-            $errors['password'] = implode("\n", $passwordErrors);
+            if (isset($passwordErrors['password'])) {
+                $errors['password'] = $passwordErrors['password'];
+            }
+            if (isset($passwordErrors['passwordrepeat'])) {
+                $errors['passwordrepeat'] = $passwordErrors['passwordrepeat'];
+            }
         }
-    }
+    }    
 
     $allRequiredFieldsEmpty = true;
     foreach ($requiredFields as $field) {
