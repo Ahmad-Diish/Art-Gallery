@@ -32,7 +32,7 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
             margin-bottom: 100px;
         }
 
-        label{
+        label {
             color: #923f0e;
             margin-bottom: 50px;
         }
@@ -73,9 +73,9 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
 
 <body>
     <div class="container mt-5">
-        <h2>Künstler Galeria</h2>
+        <h2>Künstler Galerie</h2>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        </select>
+            </select>
             <label for="Rangfolge">Rangfolge:</label>
             <select class="" aria-label="Default select example" name="sortierreihenfolge">
                 <option value="aufsteigend" <?php echo ($sortierreihenfolge == 'aufsteigend') ? 'selected' : ''; ?>> Aufsteigend</option>

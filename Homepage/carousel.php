@@ -1,15 +1,5 @@
 <?php
-//Todo
-//*Es sollte auch ein Karussell (siehe Bootstrap-Site) mit mindestens drei Folien enthalten. Jede Folie sollte als Werbung für das Angebot der Website dienen (z. B. Marketing). Wenn die Folien Kunstwerke zeigen, sollten diese zufällig ausgewählt werden.//erledigt *//
 
-
-
-
-/**
- * Wählt zufällig ein Bild aus einem Verzeichnis aus.
- *
- * @return string Der Dateiname des ausgewählten Bildes.
- */
 function zufallsBildAuswahl()
 {
 

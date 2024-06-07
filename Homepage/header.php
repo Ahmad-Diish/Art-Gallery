@@ -36,7 +36,7 @@ function renderHeader()
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Mehr über der Kunstwerk
+                            Galerie erkunden
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="../Pages/artists.php">Künstler</a></li>

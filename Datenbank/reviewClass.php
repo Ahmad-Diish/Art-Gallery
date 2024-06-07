@@ -212,34 +212,32 @@ class Review
         echo "<div class='review' id='review-$reviewId'>";
         echo "<div class='review-header'>";
         echo "<p class='review-author'>Kommentator: $customerName</p>";
-        if (isset($_SESSION['CustomerID'])) :
-            echo "<form method='POST' action='../Datenbank/deleteReview.php' style='display:inline;'>";
-            echo "<input type='hidden' name='ReviewId' value='$reviewId'>";
-            echo "<button type='submit' class='submit-comment-delete-btn'>Kommentar löschen</button>";
-            echo "</form>";
-        endif;
-        
-        echo "</div>";
-        echo "<p class='review-date'>Review Date: $reviewDate</p>";
-        echo "<div class='rating'>";
+        if (isset($_SESSION['CustomerID'])) : ?>
+            <form class="deleteForm" method="POST" action="../Datenbank/deleteReview.php" style="display:inline;">
+                <input type="hidden" name="ReviewId" value="<?php echo $reviewId; ?>">
+                <button type="submit" class="submit-comment-delete-btn" onclick="return confirm('Sind Sie sicher, dass Sie diesen Kommentar löschen möchten?')">Kommentar löschen</button>
+            </form> <?php endif;
+                echo "</div>";
+                echo "<p class='review-date'>Review Date: $reviewDate</p>";
+                echo "<div class='rating'>";
 
-        for ($i = 1; $i <= $maxRating; $i++) {
-            echo $i <= $rating ? "<span class='star filled'>&#9733;</span>" : "<span class='star'>&#9733;</span>";
+                for ($i = 1; $i <= $maxRating; $i++) {
+                    echo $i <= $rating ? "<span class='star filled'>&#9733;</span>" : "<span class='star'>&#9733;</span>";
+                }
+
+                echo "</div>";
+                echo '<p>' . $this->getComment() . '</p>';
+                echo "</div>";
+            }
+
+
+            public function showAverageRating(): void
+            {
+                $maxRating = 5;
+                echo "<div class='average-rating'>";
+                for ($i = 1; $i <= $maxRating; $i++) {
+                    echo $i <= $this->rating ? "<span class='star filled'>&#9733;</span>" : "<span class='star'>&#9733;</span>";
+                }
+                echo "</div>";
+            }
         }
-
-        echo "</div>";
-        echo '<p>' . $this->getComment() . '</p>';
-        echo "</div>";
-    }
-
-
-    public function showAverageRating(): void
-    {
-        $maxRating = 5;
-        echo "<div class='average-rating'>";
-        for ($i = 1; $i <= $maxRating; $i++) {
-            echo $i <= $this->rating ? "<span class='star filled'>&#9733;</span>" : "<span class='star'>&#9733;</span>";
-        }
-        echo "</div>";
-    }
-}

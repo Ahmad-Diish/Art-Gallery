@@ -67,35 +67,35 @@ class ArtworkManager
     // für Artist
     public function getArtwork($id)
     {
-        $result = $this->getArtworkByID($id);
-        if ($result === null) {
-            throw new Exception('the ArtworksID is not available');
+        try {
+            $result = $this->getArtworkByID($id);
+            if ($result === null) {
+                throw new Exception('The ArtworkID is not available');
+            }
+            $this->artworki = Artwork::fromState($result);
+            return $this->artworki;
+        } catch (Exception $e) {
+            throw new Exception('Error fetching artwork: ' . $e->getMessage());
         }
-
-        $this->artworki = Artwork::fromState($result);
-        return $this->artworki;
     }
-    
-    // für Artist
+
     private function getArtworkByID($artworkId)
     {
         $this->datenbank->connect();
-        try{
+        try {
             $anfrage = "SELECT * FROM artworks WHERE ArtWorkID = :artworkId";
-
             $stmt = $this->datenbank->prepareStatement($anfrage);
-
             $stmt->bindParam(':artworkId', $artworkId);
-
             $stmt->execute();
-
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result === false) {
+                $result = null;
+            }
         } catch (Exception $ex) {
-            exit('could not retrieve Artwork' . $ex->getMessage());
+            throw new Exception('Could not retrieve Artwork: ' . $ex->getMessage());
         } finally {
             $this->datenbank->close();
         }
-        
         return $result;
     }
 
