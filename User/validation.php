@@ -27,7 +27,7 @@ function validateUsername($username)
 
 function validatePassword($password, $passwordRepeat)
 {
-    $errors = array(); // Array für Fehlermeldungen
+    $errors = array();
 
     if ($password !== $passwordRepeat) {
         $errors[] = "Die Passwörter stimmen nicht überein.";
@@ -51,4 +51,24 @@ function validatePassword($password, $passwordRepeat)
 
     return $errors;
 }
+
+function validateFirstname($firstname) {
+
+    $errors = array();
+
+    if (preg_match('/[0-9]/', $firstname)) {
+        $errors[] = "Der Vorname darf keine Zahlen enthalten.";
+    }
+
+    if (preg_match('/[!?@#$%^&*()\-_=+{};:,<.>]/', $firstname)) {
+        $errors[] = "Der Vorname darf keine Sonderzeichen enthalten.";
+    }
+
+    if (strlen($firstname) < 2) {
+        $errors[] = "Der Vorname muss mindestens 2 Zeichen lang sein.";
+    }
+
+    return $errors;
+}
+
 ?>

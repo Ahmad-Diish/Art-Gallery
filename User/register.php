@@ -103,6 +103,17 @@ require_once ("../User/validation.php");
             <label for="firstname">Vorname*</label>
             <input type="text" name="firstname">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['firstname'])) {
+                $firstnameErrors = explode("\n", $errors['firstname']);
+                foreach ($firstnameErrors as $error) {
+                    echo '<p class="error-message">' . $error . '</p>';
+                }
+            }
+        }
+        ?>
         <div class="field input">
             <label for="lastname">Nachname*</label>
             <input type="text" name="lastname">
@@ -153,12 +164,22 @@ require_once ("../User/validation.php");
         </div>
         <?php
         if (isset($_GET['error']) && isset($_GET['message'])) {
-            $errors = explode("\n", htmlspecialchars($_GET['message']));
-            foreach ($errors as $error) {
-                echo '<p class="error-message">' . $error . '</p>';
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['general'])) {
+                echo '<p class="error-message">' . $errors['general'] . '</p>';
             }
         }
         ?>
+       <?php
+       if (isset($_GET['error']) && isset($_GET['message'])) {
+           $errors = json_decode(urldecode($_GET['message']));
+           foreach ($errors as $error) {
+               if (strpos($error, "Passwort") !== false) {
+                   echo '<p class="error-message">' . nl2br($error . "\n") . '</p>';
+               }
+           }
+       }
+       ?>
         <button class="button2" type="submit" name="submit">Registrieren</button>
         <div class="link">
             Bereits registriert? <a href="login.php">Login</a>

@@ -20,37 +20,71 @@ if (isset($_POST['submit'])) {
     $password = trim($_POST['password']);
     $passwordRepeat = trim($_POST['passwordrepeat']);
 
-    $errors = array(); // Array für Fehlermeldungen
+    $errors = array();
+    $generalError = false;
 
-    if (empty($lastname) || empty($address) || empty($city) || empty($country) || empty($email) || empty($emailRepeat) || empty($username) || empty($password) || empty($passwordRepeat)) {
-        $errors[] = "Bitte füllen Sie die mit * gekennzeichneten Felder aus.";
+    // Überprüfen, ob Pflichtfelder leer sind
+    $requiredFields = ['firstname','lastname', 'address', 'city', 'country', 'email', 'emailRepeat', 'username', 'password', 'passwordRepeat'];
+    foreach ($requiredFields as $field) {
+        if (empty($$field)) {
+            $generalError = true;
+            $errors[$field] = "Bitte füllen Sie dieses Feld aus.";
+        }
     }
 
-    $emailError = validateEmails($email, $emailRepeat);
-    if ($emailError) {
-        $errors[] = $emailError;
+    if ($generalError) {
+        $errors['general'] = "Bitte füllen Sie die mit * gekennzeichneten Felder aus.";
     }
 
-    $usernameError = validateUsername($username);
-    if ($usernameError) {
-        $errors[] = $usernameError;
+    // Weiterprüfen, auch wenn Pflichtfelder fehlen, um spezifische Fehler zu erfassen
+    if (!empty($firstname)) {
+        $firstnameErrors = validateFirstname($firstname);
+        if (!empty($firstnameErrors)) {
+            $errors['firstname'] = implode("\n", $firstnameErrors);
+        }
     }
 
-    // Validiere die Passwörter
-    $passwordError = validatePassword($password, $passwordRepeat);
-    if ($passwordError){
-        $errors[] =$passwordError;
+    if (!empty($email) || !empty($emailRepeat)) {
+        $emailError = validateEmails($email, $emailRepeat);
+        if ($emailError) {
+            $errors['email'] = $emailError;
+        }
+    }
+
+    if (!empty($username)) {
+        $usernameError = validateUsername($username);
+        if ($usernameError) {
+            $errors['username'] = $usernameError;
+        }
+    }
+
+    if (!empty($password) || !empty($passwordRepeat)) {
+        $passwordErrors = validatePassword($password, $passwordRepeat);
+        if (!empty($passwordErrors)) {
+            $errors['password'] = implode("\n", $passwordErrors);
+        }
+    }
+
+    $allRequiredFieldsEmpty = true;
+    foreach ($requiredFields as $field) {
+        if (!empty($$field)) {
+            $allRequiredFieldsEmpty = false;
+            break;
+        }
+    }
+
+    if ($allRequiredFieldsEmpty) {
+        $errors = array('general' => "Bitte füllen Sie die mit * gekennzeichneten Felder aus.");
     }
 
     if (!empty($errors)) {
         // Wenn es Fehler gibt, leite zurück zur Registrierungsseite und zeige die Fehlermeldungen an
-        $errorMessage = implode(" 
-        ", $errors);
+        $errorMessage = json_encode($errors);
         header("Location: register.php?error=validation&message=" . urlencode($errorMessage));
         exit();
     }
 
-    // Wenn keine Fehler vorhanden sind, fahren Sie mit der Benutzerregistrierung fort
+    // Wenn keine Fehler vorhanden sind, fahre mit der Benutzerregistrierung fort
     try {
         $userManager = new UserManager();
         $user = new User($firstname, $lastname, $address, $postal, $city, $region, $country, $phone, $email, $username, password_hash($password, PASSWORD_DEFAULT));
