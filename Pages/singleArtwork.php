@@ -299,13 +299,17 @@ function handleError()
                         <input type="hidden" name="artworkID" value="<?php echo $artworkID; ?>">
                         <input type="hidden" name="customerID" value="<?php echo $_SESSION['CustomerID']; ?>">
                         <!-- Kommentarfeld mit htmlspecialchars() bearbeiten -->
-                        <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"><?php echo htmlspecialchars($_POST['comment'] ?? ''); ?></textarea>
+                        <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"><?php echo htmlspecialchars($_POST['comment'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
                         <!-- Überprüfung und Absenden des Kommentars -->
-                        <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                        <?php
+                        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $commentText = $_POST['comment'] ?? '';
                             $artworkID = $_POST['artworkID'] ?? null;
                             $customerID = $_POST['customerID'] ?? null;
                             $rating = $_POST['rating'] ?? 0;
+
+                            // Sanitize user input
+                            $commentText = htmlspecialchars($commentText, ENT_QUOTES, 'UTF-8');
 
                             if ($commentText && $artworkID && $customerID && $rating) {
                                 $referer = $_SERVER['HTTP_REFERER'];
