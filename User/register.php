@@ -237,6 +237,14 @@ require_once ("../User/validation.php");
             <label for="password">Username*</label>
             <input type="text" name="username">
         </div>
+        <?php
+        if (isset($_GET['error']) && isset($_GET['message'])) {
+            $errors = json_decode(urldecode($_GET['message']), true);
+            if (isset($errors['username'])) {
+                echo '<p class="error-message">' . nl2br(htmlentities($errors['username'])) . '</p>';
+            }
+        }
+        ?>
         <div class="field input">
             <label for="password">Passwort*</label>
             <input type="password" name="password">
@@ -245,7 +253,12 @@ require_once ("../User/validation.php");
         if (isset($_GET['error']) && isset($_GET['message'])) {
             $errors = json_decode(urldecode($_GET['message']), true);
             if (isset($errors['password'])) {
-                echo '<p class="error-message">' . nl2br(htmlentities($errors['password'])) . '</p>';
+                if (is_array($errors['password'])) {
+                    $passwordErrors = implode("\n", $errors['password']);
+                } else {
+                    $passwordErrors = $errors['password'];
+                }
+                echo '<p class="error-message">' . nl2br(htmlentities($passwordErrors)) . '</p>';
             }
         }
         ?>

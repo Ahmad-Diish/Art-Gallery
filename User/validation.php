@@ -151,11 +151,11 @@ function capitalizeCity($city) {
     return $city;
 }
 
-function validateRegion($region){
-
+function validateRegion($region)
+{
     $errors = array();
 
-    if(preg_match('/[0-9]/', $region)){
+    if (preg_match('/[0-9]/', $region)) {
         $errors[] = "Das Kürzel der Region darf keine Zahlen enthalten.";
     }
 
@@ -235,19 +235,19 @@ function validatePassword($password, $passwordRepeat)
     }
 
     if (mb_strlen($password) < 12) {
-        $errors['password'] = "Das Passwort muss mindestens 12 Zeichen lang sein.";
+        $errors['password'] [] = "Das Passwort muss mindestens 12 Zeichen lang sein.";
     }
 
     if (!preg_match("/[0-9]/", $password)) {
-        $errors['password'] = "Das Passwort muss mindestens eine Zahl enthalten.";
+        $errors['password'] [] = "Das Passwort muss mindestens eine Zahl enthalten.";
     }
 
     if (!preg_match("/[A-Z]/", $password)) {
-        $errors['password'] = "Das Passwort muss mindestens einen Großbuchstaben enthalten.";
+        $errors['password'] [] = "Das Passwort muss mindestens einen Großbuchstaben enthalten.";
     }
 
     if (!preg_match("/[!?@#$%^&*()\-_=+{};:,<.>]/", $password)) {
-        $errors['password'] = "Das Passwort muss mindestens ein Sonderzeichen enthalten.";
+        $errors['password'] [] = "Das Passwort muss mindestens ein Sonderzeichen enthalten.";
     }
 
     return $errors;
