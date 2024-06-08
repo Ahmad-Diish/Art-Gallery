@@ -1,14 +1,14 @@
 <?php
 require_once ("../Datenbank/userManager.php");
 require_once ("../Datenbank/userClass.php");
-require_once ("../User/register.vali.php");
+require_once ("../User/vali.php");
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
 $userManager = new UserManager();
-$validator = new RegistrationValidator();
+$validator = new Validator();
 
 $errorMessages = [];
 
@@ -43,6 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         }
     }
 
+    if (!empty($_POST['postal'])) {
+        $postalErrors = $validator->validatePostal($_POST['postal'], $_POST['country']);
+        if (!empty($postalErrors)) {
+            $errorMessages['postal'] = implode("<br/>", $postalErrors);
+        }
+    }
+
     if (!empty($_POST['city'])) {
         $cityErrors = $validator->validateCity($_POST['city']);
         if (!empty($cityErrors)) {
@@ -65,14 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     }
 
     if (!empty($_POST['phone'])) {
-        $phoneError = $validator->validatePhone($_POST['phone']);
+        $phoneError = $validator->validateRegistrationPhone($_POST['phone']);
         if ($phoneError) {
             $errorMessages['phone'] = $phoneError;
         }
     }
 
     if (!empty($_POST['email']) && !empty($_POST['emailrepeat'])) {
-        $emailErrors = $validator->validateEmail($_POST['email'], $_POST['emailrepeat']);
+        $emailErrors = $validator->validateRegistrationEmail($_POST['email'], $_POST['emailrepeat']);
         if (!empty($emailErrors['email'])) {
             $errorMessages['email'] = implode("<br/>", $emailErrors['email']);
         }
@@ -82,14 +89,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     } 
 
     if (!empty($_POST['username'])) {
-        $usernameError = $validator->validateUsername($_POST['username']);
+        $usernameError = $validator->validateRegisterUsername($_POST['username']);
         if ($usernameError) {
             $errorMessages['username'] = $usernameError;
         }
     }
 
     if (!empty($_POST['password']) && !empty($_POST['passwordrepeat'])) {
-        $passwordErrors = $validator->validatePassword($_POST['password'], $_POST['passwordrepeat']);
+        $passwordErrors = $validator->validateRegistrationPassword($_POST['password'], $_POST['passwordrepeat']);
         if (!empty($passwordErrors['password'])) {
             $errorMessages['password'] = implode("<br/>", $passwordErrors['password']);
         }
@@ -255,6 +262,9 @@ echo "<tr><td>&nbsp;</td></tr>";
             <div class="field">
                 <label for="postal">Postleitzahl</label>
                 <input type="text" name="postal">
+                <?php if (isset($errorMessages['postal'])): ?>
+                    <p class="error-message"><?php echo $errorMessages['postal']; ?></p>
+                <?php endif; ?>
             </div>
 
             <div class="field">

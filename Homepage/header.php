@@ -46,10 +46,16 @@ function renderHeader()
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex align-items-center" method="POST" action="../Pages/search.php">
-                <input class="form-control me-2" type="text" name="searchQuery" placeholder="Suche" aria-label="Suche">
-                <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
-                </form>';
+               <table>
+                    <tr>
+                        <td>
+                            <form class="d-flex align-items-center" method="POST" action="../Pages/search.php">
+                                <input class="form-control me-2" type="text" name="searchQuery" placeholder="Suche" aria-label="Suche">
+                                <button class="btn search-btn" type="submit" name="submit-search"><i class="bi bi-search"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>';
 
     if (isset($_SESSION['username'])) {
         // Benutzer ist eingeloggt
@@ -178,7 +184,7 @@ renderHeader();
             background-color: transparent;
             border: none;
             color: #fef3c7;
-            margin-top: -1px;
+            margin-top: -2px;
         }
 
         .heart-btn:hover,
@@ -197,6 +203,7 @@ renderHeader();
             color: #fef3c7;
             font-size: 1rem;
             margin-left: 1rem;
+            margin-top: -2px;
         }
 
         .username:hover {
