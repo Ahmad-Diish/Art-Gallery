@@ -1,6 +1,37 @@
 <?php
+require_once ("../Datenbank/userManager.php");
+
 session_start();
-require_once("../Homepage/header.php");
+
+
+$loginerr = null;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $identifier = trim($_POST["identifier"]); // Akzeptiert sowohl E-Mail als auch Benutzername
+    $password = $_POST["password"];
+    $um = new UserManager();
+    $user = null;
+
+
+    $loginres = $um->checkLogin($identifier, $password);
+
+    if (!isset($loginres['error'])) {
+
+        // Erfolgreiche Anmeldung
+        $_SESSION["CustomerID"] = $loginres['user']->getId();
+        $_SESSION["username"] = $loginres['user']->getUsername();
+
+        header("Location: ../Homepage/index.php");
+        exit();
+    } else {
+        $loginerr = $loginres['error'];
+    }
+}
+
+?>
+
+<?php
+require_once ("../Homepage/header.php");
 ?>
 
 <!DOCTYPE html>
@@ -87,12 +118,13 @@ require_once("../Homepage/header.php");
 
 <body>
 
+
 <div class="container1">
 <div class="box1 form-box1">
 <section class="signup-form">
     <h2>Login</h2>
     <div class="signup-form-form">
-    <form action="login.inc.php" method="post">
+    <form action="login.php" method="post">
         <div class="field input">
             <label for="email">E-Mail/Username</label>
             <input type="text" name="identifier">
@@ -104,11 +136,8 @@ require_once("../Homepage/header.php");
 
         <?php
 
-        if (isset($_SESSION['login_errors'])) {
-            foreach ($_SESSION['login_errors'] as $error) {
-                echo '<p class="error-message">' . htmlspecialchars($error) . '</p>';
-            }
-            unset($_SESSION['login_errors']);
+        if (isset($loginerr)) {
+            echo '<p class="error-message">' . htmlspecialchars($loginerr) . '</p>';
         }
         ?>
 
@@ -121,10 +150,9 @@ require_once("../Homepage/header.php");
     </div>
     </div>
 </section>
-    
+<?php
+require_once ("../Homepage/footer.php");
+?>    
 </body>
 </html>
 
-<?php
-require_once("../Homepage/footer.php");
-?>

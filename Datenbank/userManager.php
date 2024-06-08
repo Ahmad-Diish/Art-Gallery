@@ -12,6 +12,42 @@ class UserManager
         $this->db->connect();
     }
 
+    private function validateLogin($hashedPasswdFromDB, $plainPasswdFromUser)
+    {
+        $errors = null; // Array für Fehlermeldungen
+
+        if (!password_verify($plainPasswdFromUser, $hashedPasswdFromDB)) {
+            $errors = "Das eingegebene Passwort ist falsch.";
+        }
+
+        return $errors;
+    }
+
+
+    public function checkLogin($identifier, $password)
+    {
+        $result = array("error"=>"", "user"=> null);
+
+        // SQL-Abfrage vorbereiten und ausführen, um Daten aus beiden Tabellen zu holen
+        $sql = "select customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID from customers, customerlogon where ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
+        $stmt = $this->db->prepareStatement($sql);
+        $stmt->bindParam(":username", $identifier);
+        $stmt->bindParam(":email", $identifier);
+        $stmt->execute();
+        $dbres = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$dbres) {
+            $result['error'] = "Kein Benutzer mit diesem Benutzernamen oder dieser E-Mail-Adresse gefunden.";
+        } else {
+            $result['error'] = $this->validateLogin($dbres["Password"], $password);
+            if (!$result['error']) {
+                $result['user'] = $this->getUserByUsername($dbres["UserName"]);
+            }
+        }
+
+        return $result;
+    }
+
     public function addUser(User $user)
     {
         // SQL-Statements für beide Tabellen
