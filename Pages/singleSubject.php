@@ -70,7 +70,7 @@ if (isset($_GET['subjectId'])) {
 
    
     if (empty($artworks)) {
-        displayError("Entschuldigung, es gab einen Fehler beim Abrufen der Künstlerinformationen. Bitte versuchen Sie es später erneut.");
+        displayError("Entschuldigung, es gab einen Fehler beim Abrufen der Subjectinformationen. Bitte versuchen Sie es später erneut.");
         require("../Homepage/footer.php");
         exit;
     }
