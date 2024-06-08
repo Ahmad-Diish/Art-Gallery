@@ -1,6 +1,4 @@
 <?php
-require_once ("../Homepage/header.php");
-echo "<tr><td>&nbsp;</td></tr>";
 require_once ("../Datenbank/userManager.php");
 require_once ("../Datenbank/userClass.php");
 require_once ("../User/register.vali.php");
@@ -220,6 +218,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     </style>
 </head>
 <body>
+<?php
+require_once ("../Homepage/header.php");
+echo "<tr><td>&nbsp;</td></tr>";
+?>
 
 <div class="container1">
     <div class="box1 form-box1">
