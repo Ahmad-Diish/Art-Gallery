@@ -16,15 +16,14 @@ $successMessage = ""; // Erfolgsmeldung
 $errorMessages = []; // Fehlermeldungen
 $userData = null;
 
-if (isset($_SESSION['username'])) {
-    $userData = $userManager->getUserByUsername($_SESSION['username']);
+if (isset($_SESSION['UserData'])) {
+    $userData = $_SESSION['UserData'];
     
     // Prüfe, ob der Benutzer existiert
     if (!$userData) {
         echo "Benutzer nicht gefunden.";
         exit();
     }
-    error_log('userData gefunden:' . $userData->getUsername());
 }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
@@ -134,6 +133,7 @@ if (isset($_SESSION['username'])) {
         if ($userManager->updateUser($user)) {
             $successMessage = "Änderungen erfolgreich gespeichert.";
             $userData = $userManager->getUserByUsername($userData->getUsername());
+            $_SESSION['UserData'] = $userData;
         } else {
             $errorMessages['general'] = "Fehler beim Speichern der Änderungen.";
         }

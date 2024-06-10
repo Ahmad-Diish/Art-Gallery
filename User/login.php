@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Erfolgreiche Anmeldung
         $_SESSION["CustomerID"] = $loginres['user']->getId();
         $_SESSION["username"] = $loginres['user']->getUsername();
+        $_SESSION["UserData"] = $loginres['user'];
 
         header("Location: ../Homepage/index.php");
         exit();

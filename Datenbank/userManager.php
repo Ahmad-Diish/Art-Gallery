@@ -26,7 +26,7 @@ class UserManager
 
     public function checkLogin($identifier, $password)
     {
-        $result = array("error"=>"", "user"=> null);
+        $result = array("error" => "", "user" => null);
 
         // SQL-Abfrage vorbereiten und ausführen, um Daten aus beiden Tabellen zu holen
         $sql = "select customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID from customers, customerlogon where ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
@@ -184,10 +184,48 @@ class UserManager
                     $userData['Email'],
                     $userData['UserName'],
                     $userData['Pass'],
+                    $userData['Type'],
                     $userData['CustomerID']
                 );
             } else {
                 // Benutzer mit dem angegebenen Benutzernamen wurde nicht gefunden
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function getUsernameByCustomerID($id)
+    {
+        try {
+            $sql = "SELECT username FROM customerlogon WHERE customerId = :customerId";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':customerId', $id);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                return $result['username'];
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+    public function validateAdmin($id)
+    {
+        try {
+            // Abfrage, um zu prüfen, ob der Benutzer ein Admin ist
+            $sql = "SELECT Type FROM customerlogon WHERE customerId = :customerId";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue("i", $id);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result) {
+                return $result['type'];
+            } else {
                 return null;
             }
         } catch (Exception $e) {
@@ -247,6 +285,23 @@ class UserManager
         } catch (Exception $e) {
             return null;
         }
+    }
+
+    public function getAllUsers() {
+        $result = array();
+
+        $sql = "SELECT customerlogon.UserName FROM customerlogon;";
+        $stmt = $this->db->prepareStatement($sql);
+        $stmt->execute();
+
+        while ($userData = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $user = $this->getUserByUsername($userData["UserName"]);
+            if (isset($user)) {
+                array_push($result, $user);
+            }
+        }
+
+        return $result;
     }
 }
 ?>

@@ -1,4 +1,6 @@
 <?php
+require_once ("../Datenbank/userClass.php");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -57,9 +59,9 @@ function renderHeader()
                     </tr>
                 </table>';
 
-    if (isset($_SESSION['username'])) {
+    if (isset($_SESSION['UserData'])) {
         // Benutzer ist eingeloggt
-        $username = htmlspecialchars($_SESSION['username']);
+        $username = htmlspecialchars($_SESSION['UserData']->getUsername());
         echo '
                 <button class="btn heart-btn"><i class="bi bi-heart"></i></button>
                 <div class="user-menu">
