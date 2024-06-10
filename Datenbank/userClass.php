@@ -13,8 +13,9 @@ private $phone;
 private $email;
 private $username;
 private $password;
+private $type;
 
-public function __construct($firstname, $lastname, $address, $postal, $city, $region, $country, $phone, $email, $username, $password,$id = null) {
+public function __construct($firstname, $lastname, $address, $postal, $city, $region, $country, $phone, $email, $username, $password,$type ,$id = null) {
     $this->id = $id;
     $this->firstname = $firstname;
     $this->lastname = $lastname;
@@ -27,6 +28,7 @@ public function __construct($firstname, $lastname, $address, $postal, $city, $re
     $this->email = $email;
     $this->username = $username;
     $this->password = $password; 
+    $this->type = $type;
 }
 
 public function getId() { return $this->id; }
@@ -41,5 +43,6 @@ public function getPhone() { return $this->phone; }
 public function getEmail() { return $this->email; }
 public function getUsername() { return $this->username; }
 public function getPasswordHash() { return $this->password; } // Methode um gehashtes Passwort zu bekommen
+public function getType() { return $this->type;}
 }
 ?>
