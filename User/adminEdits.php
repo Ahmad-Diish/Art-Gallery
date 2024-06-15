@@ -124,6 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
             empty($_POST['email']) ? $userData->getEmail() : $_POST['email'],
             empty($_POST['username']) ? $userData->getUsername() : $_POST['username'],
             !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : $userData->getPasswordHash(),
+            $userData->getType(),
+            $userData->getState(),
             $userData->getId()
         );
 
@@ -131,7 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
         if ($userManager->updateUser($user)) {
             $successMessage = "Änderungen erfolgreich gespeichert.";
             $userData = $userManager->getUserByUsername($userData->getUsername());
-            $_SESSION['UserData'] = $userData;
+            // Aktualisiere nur die Session, wenn der aktuelle Benutzer bearbeitet wird
+            if ($userData->getUsername() === $_SESSION['UserData']->getUsername()) {
+                $_SESSION['UserData'] = $userData;
+            }
         } else {
             $errorMessages['general'] = "Fehler beim Speichern der Änderungen.";
         }
@@ -258,58 +263,58 @@ ob_end_flush();
 <body>
 
 <?php if (!empty($successMessage)): ?>
-                <p class="success-message"><?php echo $successMessage; ?></p>
+    <p class="success-message"><?php echo $successMessage; ?></p>
 <?php endif; ?>
 
 <div class="container1">
     <div class="box1 form-box1">
-    <h2><?php echo htmlspecialchars($userData->getUsername(), ENT_QUOTES, 'UTF-8'); ?></h2>
+        <h2><?php echo htmlspecialchars($userData->getUsername(), ENT_QUOTES, 'UTF-8'); ?></h2>
         <form action="adminEdits.php" method="post">
             <div class="field">
                 <label for="firstname">Vorname:</label>
-                <input type="text" name="firstname" value="<?php echo $userData->getFirstname() ? $userData->getFirstname() : ''; ?>">
+                <input type="text" name="firstname" value="<?php echo htmlspecialchars($userData->getFirstname(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['firstname'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['firstname']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['firstname'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="lastname">Nachname:</label>
-                <input type="text" name="lastname" value="<?php echo $userData->getLastname() ? $userData->getLastname() : ''; ?>">
+                <input type="text" name="lastname" value="<?php echo htmlspecialchars($userData->getLastname(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['lastname'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['lastname']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['lastname'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="address">Adresse:</label>
-                <input type="text" name="address" value="<?php echo $userData->getAddress() ? $userData->getAddress() : ''; ?>">
+                <input type="text" name="address" value="<?php echo htmlspecialchars($userData->getAddress(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['address'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['address']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['address'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="postal">Postleitzahl:</label>
-                <input type="text" name="postal" value="<?php echo $userData->getPostal() ? $userData->getPostal() : ''; ?>">
+                <input type="text" name="postal" value="<?php echo htmlspecialchars($userData->getPostal(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['postal'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['postal']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['postal'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="city">Stadt:</label>
-                <input type="text" name="city" value="<?php echo $userData->getCity() ? $userData->getCity() : ''; ?>">
+                <input type="text" name="city" value="<?php echo htmlspecialchars($userData->getCity(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['city'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['city']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['city'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="region">Region:</label>
-                <input type="text" name="region" value="<?php echo $userData->getRegion() ? $userData->getRegion() : ''; ?>">
+                <input type="text" name="region" value="<?php echo htmlspecialchars($userData->getRegion(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['region'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['region']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['region'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
@@ -317,8 +322,7 @@ ob_end_flush();
                 <label for="country">Land:</label>
                 <select name="country">
                     <?php
-                    $selectedCountry = $userData->getCountry();
-                    $selectedCountry = empty($selectedCountry) ? '' : $selectedCountry;
+                    $selectedCountry = htmlspecialchars($userData->getCountry(), ENT_QUOTES, 'UTF-8');
                     ?>
                     <option value="<?php echo $selectedCountry; ?>" selected><?php echo $selectedCountry; ?></option>
                     <?php
@@ -547,31 +551,31 @@ ob_end_flush();
                     ?>
                 </select>
                 <?php if (isset($errorMessages['country'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['country']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['country'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="phone">Telefon:</label>
-                <input type="text" name="phone" value="<?php echo $userData->getPhone() ? $userData->getPhone() : ''; ?>">
+                <input type="text" name="phone" value="<?php echo htmlspecialchars($userData->getPhone(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['phone'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['phone'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label for="email">E-Mail:</label>
-                <input type="text" name="email" value="<?php echo $userData->getEmail() ? $userData->getEmail() : ''; ?>">
+                <input type="text" name="email" value="<?php echo htmlspecialchars($userData->getEmail(), ENT_QUOTES, 'UTF-8'); ?>">
                 <?php if (isset($errorMessages['email'])): ?>
-                                <p class="error-message"><?php echo $errorMessages['email']; ?></p>
+                    <p class="error-message"><?php echo htmlspecialchars($errorMessages['email'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </div>
 
             <?php if (isset($errorMessages['general'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['general']; ?></p>
+                <p class="error-message"><?php echo htmlspecialchars($errorMessages['general'], ENT_QUOTES, 'UTF-8'); ?></p>
             <?php endif; ?>
 
-            <input type="hidden" name="user_to_edit" value="<?php echo $userData->getUsername() ?>"/>
+            <input type="hidden" name="user_to_edit" value="<?php echo htmlspecialchars($userData->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
 
             <div class="field">
                 <input type="submit" name="save_changes" value="Speichern"/>

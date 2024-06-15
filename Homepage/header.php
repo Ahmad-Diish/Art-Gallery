@@ -72,7 +72,7 @@ function renderHeader()
                             <div class="user-info">
                                 <a href="../User/account.php" class="sub-menu-link"><p>My Account</p></a>';
         if ($userType == 1) {
-            echo '<a href="../User/userUebersicht.php" class="sub-menu-link"><p>Übersicht</p></a>';
+            echo '<a href="../User/userUebersicht.php" class="sub-menu-link"><p>User Übersicht</p></a>';
         }
         echo '
                                 <a href="?action=logout&redirect=' . urlencode($currentUrl) . '" class="sub-menu-link"><p>Logout</p></a>

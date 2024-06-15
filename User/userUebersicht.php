@@ -16,7 +16,6 @@ if (!isset($_SESSION['UserData']) || $_SESSION['UserData']->getType() != 1) {
     exit();
 }
 
-
 $um = new UserManager();
 $userlist = $um->getAllUsers();
 $activeUsers = [];
@@ -28,14 +27,16 @@ if (isset($_POST['toggle_admin'])) {
     $user = $um->getUserByUsername($username);
     if ($user && ($um->canDemoteAdmin($user->getId()) || $user->getType() == 0)) {
         $um->toggleUserType($username);
-        $_SESSION['UserData'] = $um->getUserByUsername($username); // Update session data
-        echo '<script>location.reload();</script>';
+        // Aktualisiere nur die Session-Daten, wenn der aktuelle Benutzer betroffen ist
+        if ($username == $_SESSION['UserData']->getUsername()) {
+            $_SESSION['UserData']->setType($user->getType() == 1 ? 0 : 1);
+        }
+        header("Location: userUebersicht.php");
+        exit;
     } else {
         // Fehlerbehandlung, falls der letzte Admin nicht degradiert werden kann
         echo "Der letzte Administrator kann nicht degradiert werden.";
     }
-    header("Location: userUebersicht.php");
-    exit;
 }
 
 // Toggle user active status if requested
@@ -51,6 +52,10 @@ if (isset($_POST['toggle_status'])) {
         } else {
             $um->deactivateUser($username);
         }
+    }
+    // Aktualisiere nur die Session-Daten, wenn der aktuelle Benutzer betroffen ist
+    if ($username == $_SESSION['UserData']->getUsername()) {
+        $_SESSION['UserData']->setState($new_status);
     }
     header("Location: userUebersicht.php");
     exit;
@@ -335,7 +340,7 @@ ob_end_flush();
                         <?php } ?>
                     </table>
                 </details>
-                </div>
+            </div>
         </div>
     </div>
 </body>
