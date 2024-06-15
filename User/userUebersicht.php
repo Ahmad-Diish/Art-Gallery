@@ -35,7 +35,7 @@ if (isset($_POST['toggle_admin'])) {
         exit;
     } else {
         // Fehlerbehandlung, falls der letzte Admin nicht degradiert werden kann
-        echo "Der letzte Administrator kann nicht degradiert werden.";
+        $error = "Der letzte Administrator kann nicht degradiert werden.";
     }
 }
 
@@ -48,7 +48,7 @@ if (isset($_POST['toggle_status'])) {
         $um->activateUser($username);
     } else {
         if ($user && $user->getType() == 1 && !$um->canDemoteAdmin($user->getId())) {
-            echo "Der letzte Administrator kann nicht deaktiviert werden.";
+            $error = "Der letzte Administrator kann nicht deaktiviert werden.";
         } else {
             $um->deactivateUser($username);
         }
@@ -265,12 +265,22 @@ ob_end_flush();
         .inactive-users {
             margin-top: 20px;
         }
+
+        .error-message {
+            color: red;
+            margin-top: 0px;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container1">
         <div class="box1 form-box1">
             <h2>Benutzerübersicht</h2>
+            <?php if (isset($error)): ?>
+                <p class="error-message"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
             <table class="table">
                 <tr>
                     <th class="admin">Admin</th>

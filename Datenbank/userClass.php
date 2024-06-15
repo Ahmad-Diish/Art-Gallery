@@ -46,5 +46,9 @@ class User {
     public function getPasswordHash() { return $this->password; } // Methode um gehashtes Passwort zu bekommen
     public function getType() { return $this->type; }
     public function getState(){return $this->state; }
+
+    public function setState($state) {
+        $this->state = $state;
+    }
 }
 ?>
