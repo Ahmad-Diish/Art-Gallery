@@ -1,9 +1,21 @@
 <?php
-ob_start(); // Output buffering starten
+ob_start();
 
 require_once ("../Homepage/header.php");
 require_once ("../Datenbank/userManager.php");
 require_once ("../Datenbank/userClass.php");
+
+// Starten der Session, falls noch nicht geschehen
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Überprüfung, ob der Benutzer eingeloggt und ein Administrator ist
+if (!isset($_SESSION['UserData']) || $_SESSION['UserData']->getType() != 1) {
+    header("Location: ../Homepage/index.php");
+    exit();
+}
+
 
 $um = new UserManager();
 $userlist = $um->getAllUsers();
@@ -52,7 +64,7 @@ foreach ($userlist as $user) {
     }
 }
 
-ob_end_flush(); // Output buffering beenden und Puffer leeren
+ob_end_flush();
 ?>
 <!DOCTYPE html>
 <html lang="de">

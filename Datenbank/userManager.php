@@ -1,6 +1,6 @@
 <?php
-require_once("datenbank.php");
-require_once("userClass.php");
+require_once ("datenbank.php");
+require_once ("userClass.php");
 
 class UserManager
 {
@@ -28,7 +28,7 @@ class UserManager
         $result = array("error" => "", "user" => null);
 
         // SQL-Abfrage vorbereiten und ausführen, um Daten aus beiden Tabellen zu holen
-        $sql = "SELECT customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID FROM customers, customerlogon WHERE ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
+        $sql = "SELECT customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID, customerlogon.State as State FROM customers, customerlogon WHERE ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
         $stmt = $this->db->prepareStatement($sql);
         $stmt->bindParam(":username", $identifier);
         $stmt->bindParam(":email", $identifier);
@@ -38,13 +38,17 @@ class UserManager
         if (!$dbres) {
             $result['error'] = "Kein Benutzer mit diesem Benutzernamen oder dieser E-Mail-Adresse gefunden.";
         } else {
-            $result['error'] = $this->validateLogin($dbres["Password"], $password);
-            if (!$result['error']) {
-                $result['user'] = $this->getUserByUsername($dbres["UserName"]);
+            if ($dbres['State'] == 0) {
+                $result['error'] = "Ihr Konto wurde deaktiviert. Bitte wenden Sie sich an einen Administrator.";
+            } else {
+                $result['error'] = $this->validateLogin($dbres["Password"], $password);
+                if (!$result['error']) {
+                    $result['user'] = $this->getUserByUsername($dbres["UserName"]);
+                }
             }
-        }
 
-        return $result;
+            return $result;
+        }
     }
 
     public function addUser(User $user)

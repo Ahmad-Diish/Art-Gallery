@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 require_once ("../Homepage/header.php");
 echo "<tr><td>&nbsp;</td></tr>";
 require_once ("../Datenbank/userManager.php");
@@ -7,6 +9,11 @@ require_once ("../User/vali.php");
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+}
+
+if (!isset($_SESSION['UserData']) || $_SESSION['UserData']->getType() != 1) {
+    header("Location: ../Homepage/index.php");
+    exit();
 }
 
 $userManager = new UserManager();
@@ -133,6 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
     $username = $_POST['user_to_edit'];
     $userData = $userManager->getUserByUsername($username);
 }
+
+ob_end_flush();
 ?>
 
 <!DOCTYPE html>
