@@ -1,12 +1,23 @@
 <?php
+ob_start(); // Output buffering starten
+
 require_once ("../Homepage/header.php");
 require_once ("../Datenbank/userManager.php");
 require_once ("../Datenbank/userClass.php");
 
 $um = new UserManager();
 $userlist = $um->getAllUsers();
-?>
 
+// Toggle user type if requested
+if (isset($_POST['toggle_admin'])) {
+    $username = $_POST['user_to_toggle'];
+    $um->toggleUserType($username);
+    header("Location: userUebersicht.php"); // Redirect to avoid form resubmission
+    exit;
+}
+
+ob_end_flush(); // Output buffering beenden und Puffer leeren
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -47,6 +58,7 @@ $userlist = $um->getAllUsers();
             font-weight: 300;
             padding-bottom: 10px;
             margin-bottom: 10px;
+            color: #923f0e; /* Farbe des Titels */
         }
 
         .form-box1 form .field {
@@ -94,7 +106,7 @@ $userlist = $um->getAllUsers();
             color: red;
             margin-top: 0px;
             margin-bottom: 3px;
-            font-size: 14px;
+            font-size: 14px.
         }
 
         .form-box1 form .spaced-error-message {
@@ -102,13 +114,29 @@ $userlist = $um->getAllUsers();
         }
 
         .pencil-btn {
-            background: url('../assets/images/penicl-removebg-preview.png') no-repeat center center;
+            background: url('../assets/images/pencil-removebg-preview.png') no-repeat center center;
             background-size: contain;
             border: none;
             width: 32px;
             height: 32px;
             cursor: pointer;
             background-color: transparent;
+            vertical-align: middle;
+        }
+
+        .star-btn {
+            background: url('../assets/images/star.png') no-repeat center center;
+            background-size: contain;
+            border: none;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            background-color: transparent;
+            margin-top: 10px;
+        }
+
+        .star-btn.empty {
+            background: none;
         }
 
         .form-box1 .table {
@@ -118,24 +146,50 @@ $userlist = $um->getAllUsers();
 
         .form-box1 th, 
         .form-box1 td {
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid lightgrey; /* Dünne Linien für die Zeilen */
             text-align: left;
             padding: 8px;
+            position: relative; /* Notwendig für ::after */
+            vertical-align: middle; /* Mittige Ausrichtung */
         }
 
         .form-box1 th {
             border: none;
-            color: #923f0e;
+            color: #923f0e; /* Gleiche Farbe wie der Titel */
+            position: relative;
+            cursor: default; /* Verhindert, dass die Überschrift wie ein Link aussieht */
         }
 
-        .form-box1 .admin {
-            width: 20%; /* Schmale Spalte */
+        .form-box1 th::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 5px; /* Dicke des Strichs */
+            background-color: #923f0e; /* Farbe des Strichs */
+            position: absolute;
+            bottom: 0; /* Abstand zwischen dem Strich und dem Text */
+            left: 0;
         }
-        .form-box1 .username {
-            width: 45%; /* Breite Spalte */
-        }
+
+        .form-box1 .admin,
         .form-box1 .edit {
-            width: 35%;
+            width: 20%;
+            text-align: center;
+        }
+
+        .form-box1 .username {
+            width: 60%; /* Breite Spalte */
+        }
+
+        .form-box1 .admin form,
+        .form-box1 .edit form {
+            display: inline-block;
+        }
+
+        .form-box1 .admin form input,
+        .form-box1 .edit form input {
+            display: inline-block;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -143,23 +197,28 @@ $userlist = $um->getAllUsers();
     <div class="container1">
         <div class="box1 form-box1">
             <h2>Benutzerübersicht</h2>
-            <table>
+            <table class="table">
                 <tr>
                     <th class="admin">Admin</th>
                     <th class="u-name">Username</th>
-                    <th class="u-name"></th>
+                    <th class="edit"></th>
                 </tr>
                 <?php foreach ($userlist as $user) { ?>
-                                    <tr>
-                                        <td><?php echo $user->getType() == 1 ? '*' : '' ?></td>
-                                        <td><?php echo $user->getUsername() ?></td>
-                                        <td>
-                                        <form action="adminEdits.php" method="post">
-                                                    <input type="hidden" name="user_to_edit" value="<?php echo $user->getUsername() ?>"/>
-                                                    <input type="submit" class= pencil-btn name="submit-account" value=""/>
-                                            </form>
-                                        </td>
-                                    </tr>
+                    <tr>
+                        <td class="admin">
+                            <form action="userUebersicht.php" method="post">
+                                <input type="hidden" name="user_to_toggle" value="<?php echo htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
+                                <input type="submit" class="star-btn <?php echo $user->getType() == 1 ? '' : 'empty'; ?>" name="toggle_admin" value=""/>
+                            </form>
+                        </td>
+                        <td class="u2-name"><?php echo $user->getUsername(); ?></td>
+                        <td class="edit">
+                            <form action="adminEdits.php" method="post">
+                                <input type="hidden" name="user_to_edit" value="<?php echo htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
+                                <input type="submit" class="pencil-btn" name="submit-account" value=""/>
+                            </form>
+                        </td>
+                    </tr>
                 <?php } ?>
             </table>
         </div>

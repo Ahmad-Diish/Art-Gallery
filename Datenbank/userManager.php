@@ -233,6 +233,32 @@ class UserManager
         }
     }
 
+    public function toggleUserType($username)
+{
+    try {
+        $sql = "SELECT Type FROM customerlogon WHERE UserName = :username";
+        $stmt = $this->db->prepareStatement($sql);
+        $stmt->bindValue(':username', $username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            $newType = $result['Type'] == 1 ? 0 : 1;
+            $sqlUpdate = "UPDATE customerlogon SET Type = :newType WHERE UserName = :username";
+            $stmtUpdate = $this->db->prepareStatement($sqlUpdate);
+            $stmtUpdate->bindValue(':newType', $newType);
+            $stmtUpdate->bindValue(':username', $username);
+            $stmtUpdate->execute();
+
+            return $stmtUpdate->rowCount() > 0;
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
     public function updateUser(User $user)
     {
         try {

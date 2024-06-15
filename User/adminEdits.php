@@ -249,18 +249,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
 <body>
 
 <?php if (!empty($successMessage)): ?>
-            <p class="success-message"><?php echo $successMessage; ?></p>
+                <p class="success-message"><?php echo $successMessage; ?></p>
 <?php endif; ?>
 
 <div class="container1">
     <div class="box1 form-box1">
-        <h2>Meine Daten</h2>
+    <h2><?php echo htmlspecialchars($userData->getUsername(), ENT_QUOTES, 'UTF-8'); ?></h2>
         <form action="adminEdits.php" method="post">
             <div class="field">
                 <label for="firstname">Vorname:</label>
                 <input type="text" name="firstname" value="<?php echo $userData->getFirstname() ? $userData->getFirstname() : ''; ?>">
                 <?php if (isset($errorMessages['firstname'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['firstname']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['firstname']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -268,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="lastname">Nachname:</label>
                 <input type="text" name="lastname" value="<?php echo $userData->getLastname() ? $userData->getLastname() : ''; ?>">
                 <?php if (isset($errorMessages['lastname'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['lastname']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['lastname']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -276,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="address">Adresse:</label>
                 <input type="text" name="address" value="<?php echo $userData->getAddress() ? $userData->getAddress() : ''; ?>">
                 <?php if (isset($errorMessages['address'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['address']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['address']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -284,7 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="postal">Postleitzahl:</label>
                 <input type="text" name="postal" value="<?php echo $userData->getPostal() ? $userData->getPostal() : ''; ?>">
                 <?php if (isset($errorMessages['postal'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['postal']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['postal']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -292,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="city">Stadt:</label>
                 <input type="text" name="city" value="<?php echo $userData->getCity() ? $userData->getCity() : ''; ?>">
                 <?php if (isset($errorMessages['city'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['city']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['city']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -300,7 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="region">Region:</label>
                 <input type="text" name="region" value="<?php echo $userData->getRegion() ? $userData->getRegion() : ''; ?>">
                 <?php if (isset($errorMessages['region'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['region']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['region']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -538,7 +538,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                     ?>
                 </select>
                 <?php if (isset($errorMessages['country'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['country']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['country']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -546,7 +546,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="phone">Telefon:</label>
                 <input type="text" name="phone" value="<?php echo $userData->getPhone() ? $userData->getPhone() : ''; ?>">
                 <?php if (isset($errorMessages['phone'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -554,44 +554,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
                 <label for="email">E-Mail:</label>
                 <input type="text" name="email" value="<?php echo $userData->getEmail() ? $userData->getEmail() : ''; ?>">
                 <?php if (isset($errorMessages['email'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['email']; ?></p>
-                <?php endif; ?>
-            </div>
-
-            <div class="field">
-                <label for="username">Username:</label>
-                <input type="text" name="username" value="<?php echo $userData->getUsername() ? $userData->getUsername() : ''; ?>">
-                <?php if (isset($errorMessages['username'])): ?>
-                            <p class="error-message"><?php echo $errorMessages['username']; ?></p>
-                <?php endif; ?>
-            </div>
-
-            <div class="field">
-                <label for="oldpassword">Altes Passwort:</label>
-                <input type="password" name="oldpassword" value="">
-                <?php if (isset($errorMessages['oldpassword'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['oldpassword']; ?></p>
-                <?php endif; ?>
-            </div>
-
-            <div class="field">
-                <label for="password">Neues Passwort:</label>
-                <input type="password" name="password" value="">
-                <?php if (isset($errorMessages['password'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['password']; ?></p>
-                <?php endif; ?>
-            </div>
-
-            <div class="field">
-                <label for="passwordrepeat">Neues Passwort bestätigen:</label>
-                <input type="password" name="passwordrepeat" value="">
-                <?php if (isset($errorMessages['passwordrepeat'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['passwordrepeat']; ?></p>
+                                <p class="error-message"><?php echo $errorMessages['email']; ?></p>
                 <?php endif; ?>
             </div>
 
             <?php if (isset($errorMessages['general'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['general']; ?></p>
+                            <p class="error-message"><?php echo $errorMessages['general']; ?></p>
             <?php endif; ?>
 
             <input type="hidden" name="user_to_edit" value="<?php echo $userData->getUsername() ?>"/>
