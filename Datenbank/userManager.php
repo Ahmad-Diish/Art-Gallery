@@ -1,6 +1,6 @@
 <?php
-require_once ("datenbank.php");
-require_once ("userClass.php");
+require_once("datenbank.php");
+require_once("userClass.php");
 
 class UserManager
 {
@@ -23,13 +23,12 @@ class UserManager
         return $errors;
     }
 
-
     public function checkLogin($identifier, $password)
     {
         $result = array("error" => "", "user" => null);
 
         // SQL-Abfrage vorbereiten und ausführen, um Daten aus beiden Tabellen zu holen
-        $sql = "select customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID from customers, customerlogon where ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
+        $sql = "SELECT customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID FROM customers, customerlogon WHERE ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
         $stmt = $this->db->prepareStatement($sql);
         $stmt->bindParam(":username", $identifier);
         $stmt->bindParam(":email", $identifier);
@@ -56,7 +55,7 @@ class UserManager
                         VALUES (:customer_id, :firstname, :lastname, :address, :postal, :city, :region, :country, :phone, :email)";
 
         $sqlCustomerLogon = "INSERT INTO customerlogon (CustomerID, username, Pass, DateJoined) 
-                             VALUES (:customer_id, :username, :Pass, :DateJoined)";
+                             VALUES (:customer_id, :username, :Pass, :DateJoined, :State)";
 
         try {
             // Beginne Transaktion
@@ -75,6 +74,7 @@ class UserManager
             $stmtCustomerLogon->bindValue(':username', $user->getUsername());
             $stmtCustomerLogon->bindValue(':Pass', $user->getPasswordHash());
             $stmtCustomerLogon->bindValue(':DateJoined', date('Y-m-d H:i:s'));
+            $stmtCustomerLogon->bindValue(':State', 1);
             $stmtCustomerLogon->execute();
 
             $stmtCustomer = $this->db->prepareStatement($sqlCustomer);
@@ -185,10 +185,50 @@ class UserManager
                     $userData['UserName'],
                     $userData['Pass'],
                     $userData['Type'],
+                    $userData['State'],
                     $userData['CustomerID']
                 );
             } else {
                 // Benutzer mit dem angegebenen Benutzernamen wurde nicht gefunden
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function getUserById($userId)
+    {
+        try {
+            // SQL-Statement für Abfrage
+            $sql = "SELECT * FROM customers,customerlogon WHERE customerlogon.CustomerID = :userId AND customerlogon.CustomerID = customers.CustomerID";
+
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':userId', $userId);
+            $stmt->execute();
+
+            // Überprüfe, ob Ergebnisse vorhanden sind
+            if ($stmt->rowCount() > 0) {
+                // Fetch as associative array
+                $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+                return new User(
+                    $userData['FirstName'],
+                    $userData['LastName'],
+                    $userData['Address'],
+                    $userData['Postal'],
+                    $userData['City'],
+                    $userData['Region'],
+                    $userData['Country'],
+                    $userData['Phone'],
+                    $userData['Email'],
+                    $userData['UserName'],
+                    $userData['Pass'],
+                    $userData['Type'],
+                    $userData['State'],
+                    $userData['CustomerID']
+                );
+            } else {
+                // Benutzer mit der angegebenen ID wurde nicht gefunden
                 return null;
             }
         } catch (Exception $e) {
@@ -214,17 +254,18 @@ class UserManager
             return null;
         }
     }
+
     public function validateAdmin($id)
     {
         try {
             // Abfrage, um zu prüfen, ob der Benutzer ein Admin ist
             $sql = "SELECT Type FROM customerlogon WHERE customerId = :customerId";
             $stmt = $this->db->prepareStatement($sql);
-            $stmt->bindValue("i", $id);
+            $stmt->bindValue(':customerId', $id);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($result) {
-                return $result['type'];
+                return $result['Type'];
             } else {
                 return null;
             }
@@ -233,31 +274,82 @@ class UserManager
         }
     }
 
-    public function toggleUserType($username)
-{
-    try {
-        $sql = "SELECT Type FROM customerlogon WHERE UserName = :username";
-        $stmt = $this->db->prepareStatement($sql);
-        $stmt->bindValue(':username', $username);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($result) {
-            $newType = $result['Type'] == 1 ? 0 : 1;
-            $sqlUpdate = "UPDATE customerlogon SET Type = :newType WHERE UserName = :username";
-            $stmtUpdate = $this->db->prepareStatement($sqlUpdate);
-            $stmtUpdate->bindValue(':newType', $newType);
-            $stmtUpdate->bindValue(':username', $username);
-            $stmtUpdate->execute();
-
-            return $stmtUpdate->rowCount() > 0;
-        } else {
+    public function activateUser($username)
+    {
+        try {
+            $sql = "UPDATE customerlogon SET State = 1 WHERE UserName = :username";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':username', $username);
+            return $stmt->execute();
+        } catch (Exception $e) {
             return false;
         }
-    } catch (Exception $e) {
-        return false;
     }
-}
+
+    public function deactivateUser($username)
+    {
+        $user = $this->getUserByUsername($username);
+        if ($user->getType() == 1 && !$this->canDemoteAdmin($user->getId())) {
+            return false; // Der letzte Admin kann nicht deaktiviert werden
+        }
+
+        try {
+            $sql = "UPDATE customerlogon SET State = 0 WHERE UserName = :username";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':username', $username);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function countAdmins()
+    {
+        $sql = "SELECT COUNT(*) as admin_count FROM customerlogon WHERE Type = 1 AND State = 1";
+        $stmt = $this->db->prepareStatement($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['admin_count'];
+    }
+
+    public function canDemoteAdmin($userId)
+    {
+        // Überprüfen, ob der Benutzer existiert und ein Admin ist
+        $user = $this->getUserById($userId);
+        if (!$user || $user->getType() != 1) {
+            return false; // Der Benutzer existiert nicht oder ist kein Admin
+        }
+
+        // Anzahl der Admins zählen
+        $adminCount = $this->countAdmins();
+        return $adminCount > 1; // Rückgabe true, wenn es mehr als einen Admin gibt
+    }
+
+    public function toggleUserType($username)
+    {
+        try {
+            $sql = "SELECT Type FROM customerlogon WHERE UserName = :username";
+            $stmt = $this->db->prepareStatement($sql);
+            $stmt->bindValue(':username', $username);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $newType = $result['Type'] == 1 ? 0 : 1;
+                $sqlUpdate = "UPDATE customerlogon SET Type = :newType WHERE UserName = :username";
+                $stmtUpdate = $this->db->prepareStatement($sqlUpdate);
+                $stmtUpdate->bindValue(':newType', $newType);
+                $stmtUpdate->bindValue(':username', $username);
+                $stmtUpdate->execute();
+
+                return $stmtUpdate->rowCount() > 0;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
     public function updateUser(User $user)
     {
@@ -313,10 +405,11 @@ class UserManager
         }
     }
 
-    public function getAllUsers() {
+    public function getAllUsers()
+    {
         $result = array();
 
-        $sql = "SELECT customerlogon.UserName FROM customerlogon;";
+        $sql = "SELECT customerlogon.UserName FROM customerlogon ORDER BY customerlogon.Type DESC, customerlogon.CustomerID ASC;";
         $stmt = $this->db->prepareStatement($sql);
         $stmt->execute();
 

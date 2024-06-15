@@ -7,13 +7,47 @@ require_once ("../Datenbank/userClass.php");
 
 $um = new UserManager();
 $userlist = $um->getAllUsers();
+$activeUsers = [];
+$inactiveUsers = [];
 
 // Toggle user type if requested
 if (isset($_POST['toggle_admin'])) {
     $username = $_POST['user_to_toggle'];
-    $um->toggleUserType($username);
-    header("Location: userUebersicht.php"); // Redirect to avoid form resubmission
+    $user = $um->getUserByUsername($username);
+    if ($user && ($um->canDemoteAdmin($user->getId()) || $user->getType() == 0)) {
+        $um->toggleUserType($username);
+    } else {
+        // Fehlerbehandlung, falls der letzte Admin nicht degradiert werden kann
+        echo "Der letzte Administrator kann nicht degradiert werden.";
+    }
+    header("Location: userUebersicht.php");
     exit;
+}
+
+// Toggle user active status if requested
+if (isset($_POST['toggle_status'])) {
+    $username = $_POST['user_to_toggle_status'];
+    $user = $um->getUserByUsername($username);
+    $new_status = $_POST['toggle_status'];
+    if ($new_status == '1') {
+        $um->activateUser($username);
+    } else {
+        if ($user && $user->getType() == 1 && !$um->canDemoteAdmin($user->getId())) {
+            echo "Der letzte Administrator kann nicht deaktiviert werden.";
+        } else {
+            $um->deactivateUser($username);
+        }
+    }
+    header("Location: userUebersicht.php");
+    exit;
+}
+
+foreach ($userlist as $user) {
+    if ($user->getState()) {
+        $activeUsers[] = $user;
+    } else {
+        $inactiveUsers[] = $user;
+    }
 }
 
 ob_end_flush(); // Output buffering beenden und Puffer leeren
@@ -122,6 +156,7 @@ ob_end_flush(); // Output buffering beenden und Puffer leeren
             cursor: pointer;
             background-color: transparent;
             vertical-align: middle;
+            margin-right: -30px;
         }
 
         .star-btn {
@@ -137,6 +172,15 @@ ob_end_flush(); // Output buffering beenden und Puffer leeren
 
         .star-btn.empty {
             background: none;
+        }
+
+        .status-icon {
+            width: 27px;
+            height: 25px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            vertical-align: middle;
         }
 
         .form-box1 .table {
@@ -177,19 +221,30 @@ ob_end_flush(); // Output buffering beenden und Puffer leeren
             text-align: center;
         }
 
+        .form-box1 .status {
+            width: 5%;
+            text-align: center;
+        }
+
         .form-box1 .username {
-            width: 60%; /* Breite Spalte */
+            width: 55%; /* Breite Spalte */
         }
 
         .form-box1 .admin form,
-        .form-box1 .edit form {
+        .form-box1 .edit form,
+        .form-box1 .status form {
             display: inline-block;
         }
 
         .form-box1 .admin form input,
-        .form-box1 .edit form input {
+        .form-box1 .edit form input,
+        .form-box1 .status form input {
             display: inline-block;
             vertical-align: middle;
+        }
+
+        .inactive-users {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -202,8 +257,9 @@ ob_end_flush(); // Output buffering beenden und Puffer leeren
                     <th class="admin">Admin</th>
                     <th class="u-name">Username</th>
                     <th class="edit"></th>
+                    <th class="status">Status</th>
                 </tr>
-                <?php foreach ($userlist as $user) { ?>
+                <?php foreach ($activeUsers as $user) { ?>
                     <tr>
                         <td class="admin">
                             <form action="userUebersicht.php" method="post">
@@ -218,9 +274,54 @@ ob_end_flush(); // Output buffering beenden und Puffer leeren
                                 <input type="submit" class="pencil-btn" name="submit-account" value=""/>
                             </form>
                         </td>
+                        <td class="status">
+                            <form action="userUebersicht.php" method="post">
+                                <input type="hidden" name="user_to_toggle_status" value="<?php echo htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
+                                <input type="hidden" name="toggle_status" value="<?php echo $user->getState() ? '0' : '1'; ?>"/>
+                                <input type="image" src="../assets/images/<?php echo $user->getState() ? 'active.png' : 'passive.png'; ?>" class="status-icon" alt="Status Icon" />
+                            </form>
+                        </td>
                     </tr>
                 <?php } ?>
             </table>
+            <div class="inactive-users">
+                <h2>Deaktivierte Benutzer</h2>
+                <details>
+                    <summary>Liste der deaktivierten Benutzer anzeigen</summary>
+                    <table class="table">
+                        <tr>
+                            <th class="admin">Admin</th>
+                            <th class="u-name">Username</th>
+                            <th class="edit"></th>
+                            <th class="status">Status</th>
+                        </tr>
+                        <?php foreach ($inactiveUsers as $user) { ?>
+                            <tr>
+                                <td class="admin">
+                                    <form action="userUebersicht.php" method="post">
+                                        <input type="hidden" name="user_to_toggle" value="<?php echo htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
+                                        <input type="submit" class="star-btn <?php echo $user->getType() == 1 ? '' : 'empty'; ?>" name="toggle_admin" value=""/>
+                                    </form>
+                                </td>
+                                <td class="u2-name"><?php echo $user->getUsername(); ?></td>
+                                <td class="edit">
+                                    <form action="adminEdits.php" method="post">
+                                        <input type="hidden" name="user_to_edit" value="<?php echo htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
+                                        <input type="submit" class="pencil-btn" name="submit-account" value=""/>
+                                    </form>
+                                </td>
+                                <td class="status">
+                                    <form action="userUebersicht.php" method="post">
+                                        <input type="hidden" name="user_to_toggle_status" value="<?php echo htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8'); ?>"/>
+                                        <input type="hidden" name="toggle_status" value="<?php echo $user->getState() ? '0' : '1'; ?>"/>
+                                        <input type="image" src="../assets/images/<?php echo $user->getState() ? 'active.png' : 'passive.png'; ?>" class="status-icon" alt="Status Icon" />
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </details>
+                </div>
         </div>
     </div>
 </body>
