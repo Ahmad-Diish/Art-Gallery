@@ -16,6 +16,8 @@ if (isset($_POST['toggle_admin'])) {
     $user = $um->getUserByUsername($username);
     if ($user && ($um->canDemoteAdmin($user->getId()) || $user->getType() == 0)) {
         $um->toggleUserType($username);
+        $_SESSION['UserData'] = $um->getUserByUsername($username); // Update session data
+        echo '<script>location.reload();</script>';
     } else {
         // Fehlerbehandlung, falls der letzte Admin nicht degradiert werden kann
         echo "Der letzte Administrator kann nicht degradiert werden.";
