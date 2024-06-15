@@ -62,6 +62,7 @@ function renderHeader()
     if (isset($_SESSION['UserData'])) {
         // Benutzer ist eingeloggt
         $username = htmlspecialchars($_SESSION['UserData']->getUsername());
+        $userType = $_SESSION['UserData']->getType();
         echo '
                 <button class="btn heart-btn"><i class="bi bi-heart"></i></button>
                 <div class="user-menu">
@@ -69,7 +70,11 @@ function renderHeader()
                     <div class="sub-menu-wrap" id="subMenu">
                         <div class="sub-menu">
                             <div class="user-info">
-                                <a href="../User/account.php" class="sub-menu-link"><p>My Account</p></a>
+                                <a href="../User/account.php" class="sub-menu-link"><p>My Account</p></a>';
+        if ($userType == 1) {
+            echo '<a href="../User/userUebersicht.php" class="sub-menu-link"><p>Übersicht</p></a>';
+        }
+        echo '
                                 <a href="?action=logout&redirect=' . urlencode($currentUrl) . '" class="sub-menu-link"><p>Logout</p></a>
                             </div>
                         </div>
