@@ -149,7 +149,7 @@ require_once ("../Homepage/header.php");
                 <p>Gruppe 3</p>
                 <p>Email: ahmad.diish@th-wildau.de</p>
                 <p>Telefon: +49 123 456789</p>
-                <p>USE CASE: 1-2-3-4-6-12-15-16-17 </p>
+                <p>USE CASE: 1-2-3-4-6-9-10-12-15-16-17 </p>
             </div>
             <div class="team-member">
                 <h2>Omer </h2>
