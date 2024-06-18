@@ -1,4 +1,8 @@
 <?php
+ob_start();
+
+require_once ("../Homepage/header.php");
+echo "<tr><td>&nbsp;</td></tr>";
 require_once ("../Datenbank/userManager.php");
 require_once ("../Datenbank/userClass.php");
 require_once ("../User/vali.php");
@@ -86,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         if (!empty($emailErrors['repeat'])) {
             $errorMessages['emailrepeat'] = implode("<br/>", $emailErrors['repeat']);
         }
-    } 
+    }
 
     if (!empty($_POST['username'])) {
         $usernameError = $validator->validateRegisterUsername($_POST['username']);
@@ -103,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         if (!empty($passwordErrors['passwordrepeat'])) {
             $errorMessages['passwordrepeat'] = implode("<br/>", $passwordErrors['passwordrepeat']);
         }
-    } 
+    }
 
     if (empty($errorMessages)) {
         $user = new User(
@@ -117,7 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $_POST['phone'] ?? NULL,
             $_POST['email'] ?? NULL,
             $_POST['username'] ?? NULL,
-            password_hash($_POST['password'], PASSWORD_DEFAULT)
+            password_hash($_POST['password'], PASSWORD_DEFAULT),
+            'default_type',
+            'default_state'
         );
 
         if ($userManager->addUser($user)) {
@@ -225,10 +231,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     </style>
 </head>
 <body>
-<?php
-require_once ("../Homepage/header.php");
-echo "<tr><td>&nbsp;</td></tr>";
-?>
 
 <div class="container1">
     <div class="box1 form-box1">
@@ -239,7 +241,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="firstname">Vorname*</label>
                 <input type="text" name="firstname">
                 <?php if (isset($errorMessages['firstname'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['firstname']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['firstname']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -247,7 +249,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="lastname">Nachname*</label>
                 <input type="text" name="lastname">
                 <?php if (isset($errorMessages['lastname'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['lastname']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['lastname']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -255,7 +257,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="address">Adresse*</label>
                 <input type="text" name="address">
                 <?php if (isset($errorMessages['address'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['address']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['address']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -263,7 +265,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="postal">Postleitzahl</label>
                 <input type="text" name="postal">
                 <?php if (isset($errorMessages['postal'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['postal']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['postal']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -271,7 +273,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="city">Stadt*</label>
                 <input type="text" name="city">
                 <?php if (isset($errorMessages['city'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['city']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['city']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -279,7 +281,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="region">Region</label>
                 <input type="text" name="region">
                 <?php if (isset($errorMessages['region'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['region']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['region']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -289,61 +291,228 @@ echo "<tr><td>&nbsp;</td></tr>";
                     <option value="" disabled selected></option>
                     <?php
                     $countries = [
-                        "Afghanistan", "Ägypten", "Albanien", "Algerien", "Andorra", "Angola", "Antigua und Barbuda", "Äquatorialguinea", "Argentinien", "Armenien", "Aserbaidschan", "Äthiopien", "Australien",
-                        
-                        "Bahamas", "Bahrain", "Bangladesch", "Barbados", "Belgien", "Belize", "Benin", "Bhutan", "Bolivien", "Bosnien und Herzegowina", "Botswana", "Brasilien", "Brunei", "Bulgarien", "Burkina Faso", "Burundi", 
-                        
-                        "Chile", "China", "Costa Rica",
-                    
-                        "Dänemark", "Deutschland", "Dominica", "Dominikanische Republik", "Dschibuti",
-                        
-                        "Ecuador", "El Salvador", "Eritrea", "Estland", "Eswatini",
-                        
-                        "Fidschi", "Finnland", "Frankreich",
-                        
-                        "Gabun", "Gambia", "Georgien", "Ghana", "Grenada", "Griechenland", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
-                        
-                        "Haiti", "Honduras",
-                        
-                        "Indien", "Indonesien", "Irak", "Iran", "Irland", "Island", "Israel", "Italien",
-                        
-                        "Jamaika", "Japan", "Jemen", "Jordanien",
-                        
-                        "Kambodscha", "Kamerun", "Kanada", "Kap Verde", "Kasachstan", "Katar", "Kenia", "Kirgisistan", "Kiribati", "Kolumbien", "Komoren", "Kosovo", "Kroatien", "Kuba", "Kuwait",
-                        
-                        "Laos", "Lesotho", "Lettland", "Libanon", "Liberia", "Libyen", "Liechtenstein", "Litauen", "Luxemburg",
-                        
-                        "Madagaskar", "Malawi", "Malaysia", "Malediven", "Mali", "Malta", "Marshallinseln", "Mauretanien", "Mauritius", "Mexiko", "Mikronesien", "Moldawien", "Monaco", "Mongolei", "Montenegro", "Marokko", "Mosambik", "Myanmar",
-                        
-                        "Namibia", "Nauru", "Nepal", "Neuseeland", "Nicaragua", "Niederlande", "Niger", "Nigeria", "Nordkorea", "Nordmazedonien", "Norwegen",
-                        
-                        "Oman", "Österreich",
-                        
-                        "Pakistan", "Palau", "Palästina", "Panama", "Papua-Neuguinea", "Paraguay", "Peru", "Philippinen", "Polen", "Portugal",
-                        
-                        "Rumänien", "Ruanda", "Russland",
-                        
-                        "Saint Kitts und Nevis", "Saint Lucia", "Saint Vincent und die Grenadinen", "Sambia", "Samoa", "San Marino", "Sao Tome und Principe", "Saudi-Arabien", "Schweden", "Schweiz", "Senegal", "Serbien", "Seychellen", "Sierra Leone", "Simbabwe", "Singapur", "Slowakei", "Slowenien", "Somalia", "Spanien", "Sri Lanka", "Südafrika", "Sudan", "Südsudan", "Suriname", "Syrien",
-                        
-                        "Tadschikistan", "Tansania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad und Tobago", "Tschad", "Tschechische Republik", "Tunesien", "Türkei", "Turkmenistan", "Tuvalu",
-                        
-                        "Uganda", "Ukraine", "Ungarn", "Uruguay", "Usbekistan",
-                        
-                        "Vanuatu", "Vatikanstadt", "Venezuela", "Vereinigte Arabische Emirate", "Vereinigte Staaten", "Vereinigtes Königreich", "Vietnam",
+                        "Afghanistan",
+                        "Ägypten",
+                        "Albanien",
+                        "Algerien",
+                        "Andorra",
+                        "Angola",
+                        "Antigua und Barbuda",
+                        "Äquatorialguinea",
+                        "Argentinien",
+                        "Armenien",
+                        "Aserbaidschan",
+                        "Äthiopien",
+                        "Australien",
+
+                        "Bahamas",
+                        "Bahrain",
+                        "Bangladesch",
+                        "Barbados",
+                        "Belgien",
+                        "Belize",
+                        "Benin",
+                        "Bhutan",
+                        "Bolivien",
+                        "Bosnien und Herzegowina",
+                        "Botswana",
+                        "Brasilien",
+                        "Brunei",
+                        "Bulgarien",
+                        "Burkina Faso",
+                        "Burundi",
+
+                        "Chile",
+                        "China",
+                        "Costa Rica",
+
+                        "Dänemark",
+                        "Deutschland",
+                        "Dominica",
+                        "Dominikanische Republik",
+                        "Dschibuti",
+
+                        "Ecuador",
+                        "El Salvador",
+                        "Eritrea",
+                        "Estland",
+                        "Eswatini",
+
+                        "Fidschi",
+                        "Finnland",
+                        "Frankreich",
+
+                        "Gabun",
+                        "Gambia",
+                        "Georgien",
+                        "Ghana",
+                        "Grenada",
+                        "Griechenland",
+                        "Guatemala",
+                        "Guinea",
+                        "Guinea-Bissau",
+                        "Guyana",
+
+                        "Haiti",
+                        "Honduras",
+
+                        "Indien",
+                        "Indonesien",
+                        "Irak",
+                        "Iran",
+                        "Irland",
+                        "Island",
+                        "Israel",
+                        "Italien",
+
+                        "Jamaika",
+                        "Japan",
+                        "Jemen",
+                        "Jordanien",
+
+                        "Kambodscha",
+                        "Kamerun",
+                        "Kanada",
+                        "Kap Verde",
+                        "Kasachstan",
+                        "Katar",
+                        "Kenia",
+                        "Kirgisistan",
+                        "Kiribati",
+                        "Kolumbien",
+                        "Komoren",
+                        "Kosovo",
+                        "Kroatien",
+                        "Kuba",
+                        "Kuwait",
+
+                        "Laos",
+                        "Lesotho",
+                        "Lettland",
+                        "Libanon",
+                        "Liberia",
+                        "Libyen",
+                        "Liechtenstein",
+                        "Litauen",
+                        "Luxemburg",
+
+                        "Madagaskar",
+                        "Malawi",
+                        "Malaysia",
+                        "Malediven",
+                        "Mali",
+                        "Malta",
+                        "Marshallinseln",
+                        "Mauretanien",
+                        "Mauritius",
+                        "Mexiko",
+                        "Mikronesien",
+                        "Moldawien",
+                        "Monaco",
+                        "Mongolei",
+                        "Montenegro",
+                        "Marokko",
+                        "Mosambik",
+                        "Myanmar",
+
+                        "Namibia",
+                        "Nauru",
+                        "Nepal",
+                        "Neuseeland",
+                        "Nicaragua",
+                        "Niederlande",
+                        "Niger",
+                        "Nigeria",
+                        "Nordkorea",
+                        "Nordmazedonien",
+                        "Norwegen",
+
+                        "Oman",
+                        "Österreich",
+
+                        "Pakistan",
+                        "Palau",
+                        "Palästina",
+                        "Panama",
+                        "Papua-Neuguinea",
+                        "Paraguay",
+                        "Peru",
+                        "Philippinen",
+                        "Polen",
+                        "Portugal",
+
+                        "Rumänien",
+                        "Ruanda",
+                        "Russland",
+
+                        "Saint Kitts und Nevis",
+                        "Saint Lucia",
+                        "Saint Vincent und die Grenadinen",
+                        "Sambia",
+                        "Samoa",
+                        "San Marino",
+                        "Sao Tome und Principe",
+                        "Saudi-Arabien",
+                        "Schweden",
+                        "Schweiz",
+                        "Senegal",
+                        "Serbien",
+                        "Seychellen",
+                        "Sierra Leone",
+                        "Simbabwe",
+                        "Singapur",
+                        "Slowakei",
+                        "Slowenien",
+                        "Somalia",
+                        "Spanien",
+                        "Sri Lanka",
+                        "Südafrika",
+                        "Sudan",
+                        "Südsudan",
+                        "Suriname",
+                        "Syrien",
+
+                        "Tadschikistan",
+                        "Tansania",
+                        "Thailand",
+                        "Timor-Leste",
+                        "Togo",
+                        "Tonga",
+                        "Trinidad und Tobago",
+                        "Tschad",
+                        "Tschechische Republik",
+                        "Tunesien",
+                        "Türkei",
+                        "Turkmenistan",
+                        "Tuvalu",
+
+                        "Uganda",
+                        "Ukraine",
+                        "Ungarn",
+                        "Uruguay",
+                        "Usbekistan",
+
+                        "Vanuatu",
+                        "Vatikanstadt",
+                        "Venezuela",
+                        "Vereinigte Arabische Emirate",
+                        "Vereinigte Staaten",
+                        "Vereinigtes Königreich",
+                        "Vietnam",
 
                         "Weißrussland",
-                        
+
                         "Zentralafrikanische Republik"
                     ];
-                    
-                    
+
+
                     foreach ($countries as $country) {
                         echo '<option value="' . $country . '">' . $country . '</option>';
                     }
                     ?>
                 </select>
                 <?php if (isset($errorMessages['country'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['country']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['country']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -351,7 +520,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="phone">Telefon</label>
                 <input type="text" name="phone">
                 <?php if (isset($errorMessages['phone'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -359,15 +528,15 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="email">E-Mail*</label>
                 <input type="text" name="email">
                 <?php if (isset($errorMessages['email'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['email']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['email']; ?></p>
                 <?php endif; ?>
             </div>
 
             <div class="field">
-                <label for="emailrepeat">E-Mail wiederholen*</label>
+                <label for="email">E-Mail wiederholen*</label>
                 <input type="text" name="emailrepeat">
                 <?php if (isset($errorMessages['emailrepeat'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['emailrepeat']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['emailrepeat']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -375,7 +544,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="username">Username*</label>
                 <input type="text" name="username">
                 <?php if (isset($errorMessages['username'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['username']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['username']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -383,7 +552,7 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="password">Passwort*</label>
                 <input type="password" name="password">
                 <?php if (isset($errorMessages['password'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['password']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['password']; ?></p>
                 <?php endif; ?>
             </div>
 
@@ -391,12 +560,12 @@ echo "<tr><td>&nbsp;</td></tr>";
                 <label for="passwordrepeat">Passwort wiederholen*</label>
                 <input type="password" name="passwordrepeat">
                 <?php if (isset($errorMessages['passwordrepeat'])): ?>
-                    <p class="error-message"><?php echo $errorMessages['passwordrepeat']; ?></p>
+                        <p class="error-message"><?php echo $errorMessages['passwordrepeat']; ?></p>
                 <?php endif; ?>
             </div>
             
             <?php if (isset($errorMessages['general'])): ?>
-                <p class="error-message spaced-error-message"><?php echo $errorMessages['general']; ?></p>
+                    <p class="error-message spaced-error-message"><?php echo $errorMessages['general']; ?></p>
             <?php endif; ?>
 
             <button class="button2" type="submit" name="submit">Registrieren</button>
@@ -412,4 +581,5 @@ echo "<tr><td>&nbsp;</td></tr>";
 <?php
 echo "<tr><td>&nbsp;</td></tr>";
 require_once ("../Homepage/footer.php");
+ob_end_flush();
 ?>

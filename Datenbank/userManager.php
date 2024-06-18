@@ -52,64 +52,65 @@ class UserManager
     }
 
     public function addUser(User $user)
-    {
-        // SQL-Statements für beide Tabellen
-        $sqlMaxID = "SELECT MAX(CustomerID) AS max_id FROM customers";
-        $sqlCustomer = "INSERT INTO customers (CustomerID, firstname, lastname, address, postal, city, region, country, phone, email) 
-                        VALUES (:customer_id, :firstname, :lastname, :address, :postal, :city, :region, :country, :phone, :email)";
+{
+    // SQL-Statements für beide Tabellen
+    $sqlMaxID = "SELECT MAX(CustomerID) AS max_id FROM customers";
+    $sqlCustomer = "INSERT INTO customers (CustomerID, FirstName, LastName, Address, Postal, City, Region, Country, Phone, Email) 
+                    VALUES (:customer_id, :firstname, :lastname, :address, :postal, :city, :region, :country, :phone, :email)";
 
-        $sqlCustomerLogon = "INSERT INTO customerlogon (CustomerID, username, Pass, DateJoined) 
-                             VALUES (:customer_id, :username, :Pass, :DateJoined, :State)";
+    $sqlCustomerLogon = "INSERT INTO customerlogon (CustomerID, UserName, Pass, DateJoined, State) 
+                         VALUES (:customer_id, :username, :Pass, :DateJoined, :State)";
 
-        try {
-            // Beginne Transaktion
-            $this->db->beginTransaction();
+    try {
+        // Beginne Transaktion
+        $this->db->beginTransaction();
 
-            // Hole die aktuell höchste ID
-            $stmtMaxID = $this->db->prepareStatement($sqlMaxID);
-            $stmtMaxID->execute();
-            $result = $stmtMaxID->fetch(PDO::FETCH_ASSOC);
-            $maxID = $result['max_id'];
-            $newID = $maxID + 1;
+        // Hole die aktuell höchste ID
+        $stmtMaxID = $this->db->prepareStatement($sqlMaxID);
+        $stmtMaxID->execute();
+        $result = $stmtMaxID->fetch(PDO::FETCH_ASSOC);
+        $maxID = $result['max_id'];
+        $newID = $maxID + 1;
 
-            // Füge Benutzername, Passwort und DateJoined in customerlogon-Tabelle ein
-            $stmtCustomerLogon = $this->db->prepareStatement($sqlCustomerLogon);
-            $stmtCustomerLogon->bindValue(':customer_id', $newID);
-            $stmtCustomerLogon->bindValue(':username', $user->getUsername());
-            $stmtCustomerLogon->bindValue(':Pass', $user->getPasswordHash());
-            $stmtCustomerLogon->bindValue(':DateJoined', date('Y-m-d H:i:s'));
-            $stmtCustomerLogon->bindValue(':State', 1);
-            $stmtCustomerLogon->execute();
+        // Füge Benutzername, Passwort und DateJoined in customerlogon-Tabelle ein
+        $stmtCustomerLogon = $this->db->prepareStatement($sqlCustomerLogon);
+        $stmtCustomerLogon->bindValue(':customer_id', $newID);
+        $stmtCustomerLogon->bindValue(':username', $user->getUsername());
+        $stmtCustomerLogon->bindValue(':Pass', $user->getPasswordHash());
+        $stmtCustomerLogon->bindValue(':DateJoined', date('Y-m-d H:i:s'));
+        $stmtCustomerLogon->bindValue(':State', 1);
+        $stmtCustomerLogon->execute();
 
-            $stmtCustomer = $this->db->prepareStatement($sqlCustomer);
-            $stmtCustomer->bindValue(':customer_id', $newID);
-            $stmtCustomer->bindValue(':firstname', $user->getFirstname());
-            $stmtCustomer->bindValue(':lastname', $user->getLastname());
-            $stmtCustomer->bindValue(':address', $user->getAddress());
-            $stmtCustomer->bindValue(':postal', $user->getPostal() ?: NULL);
-            $stmtCustomer->bindValue(':city', $user->getCity());
-            $stmtCustomer->bindValue(':region', $user->getRegion() ?: NULL);
-            $stmtCustomer->bindValue(':country', $user->getCountry());
-            $stmtCustomer->bindValue(':phone', $user->getPhone() ?: NULL);
-            $stmtCustomer->bindValue(':email', $user->getEmail());
-            $stmtCustomer->execute();
+        // Füge Kundeninformationen in customers-Tabelle ein
+        $stmtCustomer = $this->db->prepareStatement($sqlCustomer);
+        $stmtCustomer->bindValue(':customer_id', $newID);
+        $stmtCustomer->bindValue(':firstname', $user->getFirstname());
+        $stmtCustomer->bindValue(':lastname', $user->getLastname());
+        $stmtCustomer->bindValue(':address', $user->getAddress());
+        $stmtCustomer->bindValue(':postal', $user->getPostal() ?: NULL);
+        $stmtCustomer->bindValue(':city', $user->getCity());
+        $stmtCustomer->bindValue(':region', $user->getRegion() ?: NULL);
+        $stmtCustomer->bindValue(':country', $user->getCountry());
+        $stmtCustomer->bindValue(':phone', $user->getPhone() ?: NULL);
+        $stmtCustomer->bindValue(':email', $user->getEmail());
+        $stmtCustomer->execute();
 
-            // Überprüfe, ob beide Einträge erfolgreich waren
-            if ($stmtCustomer->rowCount() > 0 && $stmtCustomerLogon->rowCount() > 0) {
-                // Commit Transaktion
-                $this->db->commit();
-                return true;
-            } else {
-                // Rollback Transaktion bei Misserfolg
-                $this->db->rollBack();
-                return false;
-            }
-        } catch (Exception $e) {
-            // Bei Fehler Rollback durchführen und Fehlermeldung ausgeben
+        // Überprüfe, ob beide Einträge erfolgreich waren
+        if ($stmtCustomer->rowCount() > 0 && $stmtCustomerLogon->rowCount() > 0) {
+            // Commit Transaktion
+            $this->db->commit();
+            return true;
+        } else {
+            // Rollback Transaktion bei Misserfolg
             $this->db->rollBack();
             return false;
         }
+    } catch (Exception $e) {
+        // Bei Fehler Rollback durchführen und Fehlermeldung ausgeben
+        $this->db->rollBack();
+        return false;
     }
+}
 
     public function emailExists($email)
     {
