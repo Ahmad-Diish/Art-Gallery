@@ -18,7 +18,7 @@ class Review
     private $rating;
     private $comment;
     private $datenbank;
-
+    
     public function __construct($reviewId, $artWorkId, $customerId, $reviewDate, $rating, $comment)
     {
         $this->reviewId = $reviewId;
@@ -213,7 +213,7 @@ class Review
         echo "<div class='review-header'>";
         echo "<p class='review-author'>Kommentator: $customerName</p>";
 
-        if (isset($_SESSION['CustomerID']) && $_SESSION['Type'] == 0) : ?>
+        if (isset($_SESSION['CustomerID']) && $_SESSION['UserData']->getType() == 1) : ?>
             <form class="deleteForm" method="POST" action="../Datenbank/deleteReview.php" style="display:inline;">
                 <input type="hidden" name="ReviewId" value="<?php echo $reviewId; ?>">
                 <button type="submit" class="submit-comment-delete-btn" onclick="return confirm('Sind Sie sicher, dass Sie diesen Kommentar löschen möchten?')">Kommentar löschen</button>
