@@ -50,5 +50,10 @@ class User {
     public function setState($state) {
         $this->state = $state;
     }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 }
 ?>
