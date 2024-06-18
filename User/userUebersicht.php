@@ -159,7 +159,7 @@ ob_end_flush();
             color: red;
             margin-top: 0px;
             margin-bottom: 3px;
-            font-size: 14px.
+            font-size: 14px;
         }
 
         .form-box1 form .spaced-error-message {
