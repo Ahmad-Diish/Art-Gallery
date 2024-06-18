@@ -170,14 +170,14 @@ require_once ("../Homepage/header.php");
                 <p>Gruppe 3</p>
                 <p>Email: isaskia.keller@th-wildau.de</p>
                 <p>Telefon: +49 123 456789</p>
-                <p>USE CASE: 9-10-18-19-20-21-22-23-24-25 </p>
+                <p>USE CASE: 9-10-18-19-20-22</p>
             </div>
             <div class="team-member">
                 <h2>Anneli</h2>
                 <p>Gruppe 3</p>
                 <p>Email: anneli.pommnitz@th-wildau.de</p>
                 <p>Telefon: +49 123 456789</p>
-                <p>USE CASE: 9-10-18-19-20-21-22-23-24-25 </p>
+                <p>USE CASE: 9-10-20-21-22-23 </p>
             </div>
         </div>
     </div>
