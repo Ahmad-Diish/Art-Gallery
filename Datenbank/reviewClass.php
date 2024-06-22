@@ -1,11 +1,11 @@
 <?php
 
-// Include necessary files
+
 require_once("../Datenbank/datenbank.php");
-//require_once("../Datenbank/reviewClass.php");
+
 require_once("../Datenbank/reviewManager.php");
 
-// Create a database connection
+
 $datenbank = new datenbank();
 $reviewManager = new ReviewManager($datenbank);
 
@@ -30,7 +30,7 @@ class Review
         $this->datenbank = new datenbank();
     }
 
-    // Getter and Setter Methods
+   
     public function setArtworkId($artworkId)
     {
         $this->artWorkId = $artworkId;
@@ -66,7 +66,7 @@ class Review
         return $this->comment;
     }
 
-    // Static Methods
+  
     public static function fromState(array $review): Review
     {
         $reviewId = $review["ReviewId"] ?? null;
@@ -89,7 +89,7 @@ class Review
         return new self(-1, -1, -1, "", 0, "");
     }
 
-    // Fetch customer details directly from the database
+   
     private function fetchCustomerDetails($customerId)
     {
         try {
@@ -108,7 +108,6 @@ class Review
     }
 
 
-    // Output the review with customer details
     public function outputReview()
     {
         $css = '
@@ -195,9 +194,8 @@ class Review
             
         </style>
         ';
-        // Ausgabe des CSS
+    
         echo $css;
-
 
 
         $reviewId = htmlspecialchars($this->getReviewId());

@@ -3,9 +3,9 @@ require_once("../Homepage/header.php");
 require_once("../Datenbank/artistManager.php");
 require_once("../Datenbank/artistClass.php");
 
-$conn = new Datenbank(); // Erstellen einer Datenbankverbindung
-$artistManager = new ArtistManager($conn); // Erstellen eines ArtistManager-Objekts mit der Datenbankverbindung
-$sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihenfolge'] : 'aufsteigend'; // Sortierreihenfolge setzen
+$conn = new Datenbank(); 
+$artistManager = new ArtistManager($conn); 
+$sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihenfolge'] : 'aufsteigend'; 
 
 
 ?>
@@ -46,7 +46,7 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
             color: #923f0e;
         }
 
-        /* Stile für den Sortierbutton */
+       
         button {
             padding: 8px 16px;
             border: none;
@@ -63,7 +63,7 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
 
         }
 
-        /* Stile für den Container */
+      
         .container {
             max-width: 90%;
             margin: 0 auto;
@@ -90,11 +90,11 @@ $sortierreihenfolge = isset($_POST['sortierreihenfolge']) ? $_POST['sortierreihe
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if (isset($_POST['sortieren'])) {
-                    $sortierreihenfolge = $_POST['sortierreihenfolge']; // Sortierreihenfolge aus dem Formular abrufen
-                    $artistManager->displayAllArtist($sortierreihenfolge); // Künstler sortiert anzeigen
+                    $sortierreihenfolge = $_POST['sortierreihenfolge']; 
+                    $artistManager->displayAllArtist($sortierreihenfolge); 
                 }
             } else {
-                $artistManager->displayAllArtist($sortierreihenfolge); // Künstler standardmäßig anzeigen
+                $artistManager->displayAllArtist($sortierreihenfolge); 
             }
             ?>
         </div>

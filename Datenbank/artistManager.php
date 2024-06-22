@@ -5,13 +5,12 @@ require_once("../Datenbank/artistClass.php");
 class ArtistManager
 {
 
-    private $datenbank; // Datenbankverbindung
-    private $artist; // Künstlerobjekt
-
+    private $datenbank; 
+    private $artist; 
     public function __construct($datenbank)
     {
         $this->datenbank = $datenbank;
-        $this->artist = Artist::getDefaultArtist(); // Standardkünstler setzen
+        $this->artist = Artist::getDefaultArtist();
     }
 
    // Funktion, um die Top-Künstler für die Homepage abzurufen
@@ -31,7 +30,7 @@ class ArtistManager
             $stmt->execute();
             $TopArtists = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $ex) {
-            // Log or handle the specific PDO exception here
+            
             exit('Could not retrieve artists: ' . $ex->getMessage());
         } finally {
             $this->datenbank->close();
@@ -64,7 +63,7 @@ class ArtistManager
         try {
             //aufsteigend A---Z
             if ($sortierreihenfolge == 'aufsteigend') {
-                //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
+               
                 $anfrage = "SELECT * FROM Artists ORDER BY LastName ASC";
             }
             // absteigend Z---A 
@@ -130,13 +129,13 @@ class ArtistManager
     //Die Funktionalität zur Abfrage eines Künstlers aus der Datenbank zu kapseln und das Ergebnis als Artist-Objekt zurückzugeben. 
     public function getArtist($id)
     {
-        $result = $this->getArtistByID($id); // Retrieve artist data from database
+        $result = $this->getArtistByID($id); 
 
-        // Check if the result is an array (artist data) or null (no artist found)
+        
         if (is_array($result)) {
-            return Artist::fromState($result); // Convert array to Artist object
+            return Artist::fromState($result);
         } else {
-            throw new Exception('Artist with ID ' . $id . ' not found'); // Handle no artist scenario
+            throw new Exception('Artist with ID ' . $id . ' not found'); 
         }
     }
 

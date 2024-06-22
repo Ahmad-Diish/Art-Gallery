@@ -169,8 +169,6 @@ class Artist
             }
         </style>
     ';
-
-        // Output the CSS
         echo $css;
 
         // Karte für den Künstler öffnen
@@ -220,7 +218,7 @@ class Artist
     // Einzelne Künstlerinformation als HTML ausgeben
     public function outputSingleArtist()
     {
-        // CSS-Styles definieren
+        
         $css = '
         <style>
           
@@ -370,14 +368,13 @@ h2 {
         echo '<div class="col-md-8">';
 
         echo '<p class="artist-description">' . $this->getDetailsArtist() . '</p>';
-        // echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="GET">';
+       
         
         $isFavorite = false;
         echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
         echo '<input type="hidden" name="artistId" value="' . $this->getArtistID() . '">';
         echo '<button type="button" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
-        //echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
-        //echo '<button type="submit" name="action" value="' . ($isFavorite ? 'removeFavoriteArtist' : 'addFavoriteArtist') . '" class="' . ($isFavorite ? 'btn btn-secondary button_style_favourite' : 'btn btn-secondary button_style') . '" data-placement="bottom" title="Favoritenliste">' . ($isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen') . '</button>';
+       
  
         
         echo '<table class="table mt-4">';
@@ -404,12 +401,12 @@ h2 {
 
 
         echo '</div>';
-        //echo '</div>';
+      
         echo '<h2 style="padding-left:10px;" class="mt-4">Kunstwerke von  ' . $this->getArtistFirstName() . " " . $this->getArtistLastName() . '</h2>';
-        //echo '</div>'; // Close the current container
+       
         echo '<div class="row">';
-        echo '</div>'; // Close the current container
-        echo '<div class="row">'; // Open a new row
+        echo '</div>'; 
+        echo '<div class="row">'; 
         echo '</div>';
     
         
