@@ -91,7 +91,7 @@
         </div>
         <div class="col-md-4">
           <h3>Über Uns</h3>
-          <p>Entdecken Sie die Welt der Kunst mit VistaArt. Wir bieten eine breite Palette von hochwertigen Kunstwerken.</p>
+          <p>Entdecken Sie die Welt der Kunst mit Art Gallery. Wir bieten eine breite Palette von hochwertigen Kunstwerken.</p>
         </div>
         <div class="col-md-4">
           <h3>Newsletter</h3>
