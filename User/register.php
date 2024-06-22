@@ -520,7 +520,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <label for="phone">Telefon</label>
                 <input type="text" name="phone">
                 <?php if (isset($errorMessages['phone'])): ?>
-                        <p class="error-message"><?php echo $errorMessages['phone']; ?></p>
+                        <p class="error-message"><?php echo implode("<br/>", $errorMessages['phone']); ?></p>
                 <?php endif; ?>
             </div>
 
