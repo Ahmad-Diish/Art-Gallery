@@ -21,13 +21,12 @@ $userlist = $um->getAllUsers();
 $activeUsers = [];
 $inactiveUsers = [];
 
-// Toggle user type if requested
 if (isset($_POST['toggle_admin'])) {
     $username = $_POST['user_to_toggle'];
     $user = $um->getUserByUsername($username);
     if ($user && ($um->canDemoteAdmin($user->getId()) || $user->getType() == 0)) {
         $um->toggleUserType($username);
-        // Aktualisiere nur die Session-Daten, wenn der aktuelle Benutzer betroffen ist
+        // Aktualisieren der Session-Daten, wenn der aktuelle Benutzer betroffen ist
         if ($username == $_SESSION['UserData']->getUsername()) {
             $_SESSION['UserData']->setType($user->getType() == 1 ? 0 : 1);
         }
@@ -53,7 +52,7 @@ if (isset($_POST['toggle_status'])) {
             $um->deactivateUser($username);
         }
     }
-    // Aktualisiere nur die Session-Daten, wenn der aktuelle Benutzer betroffen ist
+    // Aktualisieren der Session-Daten, wenn der aktuelle Benutzer betroffen ist
     if ($username == $_SESSION['UserData']->getUsername()) {
         $_SESSION['UserData']->setState($new_status);
     }
@@ -190,7 +189,9 @@ ob_end_flush();
         }
 
         .star-btn.empty {
-            background: none;
+            background: url('../assets/images/Kreis.png') no-repeat center center; /* Stellen Sie sicher, dass das Bild korrekt geladen wird */
+            background-size: contain;
+            background-color: transparent;
         }
 
         .status-icon {
@@ -209,28 +210,28 @@ ob_end_flush();
 
         .form-box1 th, 
         .form-box1 td {
-            border-bottom: 1px solid lightgrey; /* Dünne Linien für die Zeilen */
+            border-bottom: 1px solid lightgrey;
             text-align: left;
             padding: 8px;
-            position: relative; /* Notwendig für ::after */
-            vertical-align: middle; /* Mittige Ausrichtung */
+            position: relative;
+            vertical-align: middle; 
         }
 
         .form-box1 th {
             border: none;
-            color: #923f0e; /* Gleiche Farbe wie der Titel */
+            color: #923f0e;
             position: relative;
-            cursor: default; /* Verhindert, dass die Überschrift wie ein Link aussieht */
+            cursor: default; 
         }
 
         .form-box1 th::after {
             content: '';
             display: block;
             width: 100%;
-            height: 5px; /* Dicke des Strichs */
-            background-color: #923f0e; /* Farbe des Strichs */
+            height: 5px; 
+            background-color: #923f0e;
             position: absolute;
-            bottom: 0; /* Abstand zwischen dem Strich und dem Text */
+            bottom: 0;
             left: 0;
         }
 
