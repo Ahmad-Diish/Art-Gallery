@@ -189,9 +189,7 @@ ob_end_flush();
         }
 
         .star-btn.empty {
-            background: url('../assets/images/Kreis.png') no-repeat center center; /* Stellen Sie sicher, dass das Bild korrekt geladen wird */
-            background-size: contain;
-            background-color: transparent;
+            background: none;
         }
 
         .status-icon {
