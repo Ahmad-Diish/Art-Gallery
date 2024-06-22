@@ -1,5 +1,4 @@
 <?php
-// Inkludiere den UserManager, um auf die Überprüfungsfunktionen zuzugreifen
 require_once ("../Datenbank/userManager.php");
 
 class Validator
@@ -269,7 +268,6 @@ class Validator
     if (isset($postalPatterns[$country])) {
         $pattern = $postalPatterns[$country];
 
-        // Überprüfung der Postleitzahl anhand des Musters
         if (!preg_match($pattern, $postal)) {
             array_push($errors, "Die Postleitzahl ist für das angegebene Land ungültig.");
         }
@@ -321,7 +319,7 @@ class Validator
     {
         $errors = array();
 
-        // Liste der gültigen Länder auf Deutsch
+        // Liste der gültigen Länder
         $validCountries = [
             "Afghanistan",
             "Ägypten",
@@ -537,7 +535,6 @@ class Validator
             "Zentralafrikanische Republik"
         ];
 
-        // Überprüfung, ob das angegebene Land in der Liste der gültigen Länder enthalten ist
         if (!in_array($country, $validCountries)) {
             array_push($errors, "Das angegebene Land ist ungültig.");
         }
@@ -612,7 +609,6 @@ class Validator
 
     public function validateRegisterUsername($username)
     {
-        // Prüfe, ob der Benutzername bereits existiert und nicht zum aktuellen Benutzer gehört
         if ($this->userManager->usernameExists($username)) {
             return "Der Benutzername ist bereits vergeben.";
         }
@@ -621,7 +617,6 @@ class Validator
     public function validateUpdateUsername($newusername, $oldusername)
     {
         if ($newusername !== $oldusername) {
-            // Prüfe, ob der Benutzername bereits existiert und nicht zum aktuellen Benutzer gehört
             if ($this->userManager->usernameExists($newusername)) {
                 return "Der Benutzername ist bereits vergeben.";
             }

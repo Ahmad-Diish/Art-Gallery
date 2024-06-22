@@ -27,7 +27,7 @@ class UserManager
     {
         $result = array("error" => "", "user" => null);
 
-        // SQL-Abfrage vorbereiten und ausführen, um Daten aus beiden Tabellen zu holen
+        // SQL-Abfrage
         $sql = "SELECT customerlogon.Pass as Password, customerlogon.UserName as UserName, customerlogon.CustomerID as CustomerID, customerlogon.State as State FROM customers, customerlogon WHERE ((customerlogon.UserName = :username) OR (customers.Email = :email)) AND (customerlogon.CustomerID = customers.CustomerID); ";
         $stmt = $this->db->prepareStatement($sql);
         $stmt->bindParam(":username", $identifier);
@@ -53,7 +53,7 @@ class UserManager
 
     public function addUser(User $user)
 {
-    // SQL-Statements für beide Tabellen
+    // SQL-Statements
     $sqlMaxID = "SELECT MAX(CustomerID) AS max_id FROM customers";
     $sqlCustomer = "INSERT INTO customers (CustomerID, FirstName, LastName, Address, Postal, City, Region, Country, Phone, Email) 
                     VALUES (:customer_id, :firstname, :lastname, :address, :postal, :city, :region, :country, :phone, :email)";
@@ -62,17 +62,17 @@ class UserManager
                          VALUES (:customer_id, :username, :Pass, :DateJoined, :State)";
 
     try {
-        // Beginne Transaktion
+        // Beginn Transaktion
         $this->db->beginTransaction();
 
-        // Hole die aktuell höchste ID
+        // Holen der jeweils aktuell höchsten ID
         $stmtMaxID = $this->db->prepareStatement($sqlMaxID);
         $stmtMaxID->execute();
         $result = $stmtMaxID->fetch(PDO::FETCH_ASSOC);
         $maxID = $result['max_id'];
         $newID = $maxID + 1;
 
-        // Füge Benutzername, Passwort und DateJoined in customerlogon-Tabelle ein
+        // Einfügen Benutzername, Passwort und DateJoined in customerlogon-Tabelle
         $stmtCustomerLogon = $this->db->prepareStatement($sqlCustomerLogon);
         $stmtCustomerLogon->bindValue(':customer_id', $newID);
         $stmtCustomerLogon->bindValue(':username', $user->getUsername());
@@ -81,7 +81,7 @@ class UserManager
         $stmtCustomerLogon->bindValue(':State', 1);
         $stmtCustomerLogon->execute();
 
-        // Füge Kundeninformationen in customers-Tabelle ein
+        // Einfügen von Kundeninformationen in customers-Tabelle
         $stmtCustomer = $this->db->prepareStatement($sqlCustomer);
         $stmtCustomer->bindValue(':customer_id', $newID);
         $stmtCustomer->bindValue(':firstname', $user->getFirstname());
@@ -95,13 +95,11 @@ class UserManager
         $stmtCustomer->bindValue(':email', $user->getEmail());
         $stmtCustomer->execute();
 
-        // Überprüfe, ob beide Einträge erfolgreich waren
+        // Überprüfen, ob beide Einträge erfolgreich waren
         if ($stmtCustomer->rowCount() > 0 && $stmtCustomerLogon->rowCount() > 0) {
-            // Commit Transaktion
             $this->db->commit();
             return true;
         } else {
-            // Rollback Transaktion bei Misserfolg
             $this->db->rollBack();
             return false;
         }
@@ -175,7 +173,7 @@ class UserManager
 
             // Überprüfe, ob Ergebnisse vorhanden sind
             if ($stmt->rowCount() > 0) {
-                // Fetch as associative array
+                // Fetch als assoziatives array
                 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
                 return new User(
                     $userData['FirstName'],
@@ -214,7 +212,7 @@ class UserManager
 
             // Überprüfe, ob Ergebnisse vorhanden sind
             if ($stmt->rowCount() > 0) {
-                // Fetch as associative array
+                // Fetch as assoziatives array
                 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
                 return new User(
                     $userData['FirstName'],
@@ -295,7 +293,7 @@ class UserManager
     {
         $user = $this->getUserByUsername($username);
         if ($user->getType() == 1 && !$this->canDemoteAdmin($user->getId())) {
-            return false; // Der letzte Admin kann nicht deaktiviert werden
+            return false; // letzte Admin kann nicht deaktiviert werden
         }
 
         try {
@@ -327,7 +325,7 @@ class UserManager
 
         // Anzahl der Admins zählen
         $adminCount = $this->countAdmins();
-        return $adminCount > 1; // Rückgabe true, wenn es mehr als einen Admin gibt
+        return $adminCount > 1; // true wird zurückgegeben, wenn es mehr als einen Admin gibt
     }
 
     public function toggleUserType($username)

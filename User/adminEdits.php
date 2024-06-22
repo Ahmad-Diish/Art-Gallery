@@ -26,7 +26,6 @@ $userData = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && isset($_POST['user_to_edit'])) {
     $userData = $userManager->getUserByUsername($_POST['user_to_edit']);
 
-    // Überprüfung spezifischer Fehler für ausgefüllte Felder
     if (!empty($_POST['firstname'])) {
         $firstNameErrors = $validator->validateFirstName($_POST['firstname']);
         if (!empty($firstNameErrors)) {
@@ -111,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
     }
 
     if (empty($errorMessages)) {
-        // Initialisiere das User-Objekt
+        // Initialisiere des User-Objekts
         $user = new User(
             empty($_POST['firstname']) ? $userData->getFirstname() : $_POST['firstname'],
             empty($_POST['lastname']) ? $userData->getLastname() : $_POST['lastname'],
@@ -129,11 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes']) && is
             $userData->getId()
         );
 
-        // Aktualisiere die Datenbank
+        // Aktualisieren der Datenbank
         if ($userManager->updateUser($user)) {
             $successMessage = "Änderungen erfolgreich gespeichert.";
             $userData = $userManager->getUserByUsername($userData->getUsername());
-            // Aktualisiere nur die Session, wenn der aktuelle Benutzer bearbeitet wird
+            // Aktualisieren der Session, wenn der aktuelle Benutzer bearbeitet wird
             if ($userData->getUsername() === $_SESSION['UserData']->getUsername()) {
                 $_SESSION['UserData'] = $userData;
             }
@@ -255,7 +254,7 @@ ob_end_flush();
             if (successMessage) {
                 setTimeout(() => {
                     successMessage.style.display = 'none';
-                }, 800); // 0.8 Sekunden
+                }, 800);
             }
         });
     </script>

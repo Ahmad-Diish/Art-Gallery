@@ -19,7 +19,7 @@ $userData = null;
 if (isset($_SESSION['UserData'])) {
     $userData = $_SESSION['UserData'];
     
-    // Prüfe, ob der Benutzer existiert
+    // Prüfen, ob der Benutzer existiert
     if (!$userData) {
         echo "Benutzer nicht gefunden.";
         exit();
@@ -28,7 +28,6 @@ if (isset($_SESSION['UserData'])) {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_changes'])) {
     
-        // Überprüfung spezifischer Fehler für ausgefüllte Felder
         if (!empty($_POST['firstname'])) {
             $firstNameErrors = $validator->validateFirstName($_POST['firstname']);
             if (!empty($firstNameErrors)) {
@@ -113,7 +112,7 @@ if (isset($_SESSION['UserData'])) {
         } 
 
     if (empty($errorMessages)) {
-        // Initialisiere das User-Objekt
+        // Initialisieren des User-Objekts
         $user = new User(
             empty($_POST['firstname']) ? $userData->getFirstname() : $_POST['firstname'],
             empty($_POST['lastname']) ? $userData->getLastname() : $_POST['lastname'],
@@ -129,7 +128,7 @@ if (isset($_SESSION['UserData'])) {
             $userData->getId()
         );
 
-        // Aktualisiere die Datenbank
+        // Aktualisieren der Datenbank
         if ($userManager->updateUser($user)) {
             $successMessage = "Änderungen erfolgreich gespeichert.";
             $userData = $userManager->getUserByUsername($userData->getUsername());
@@ -247,7 +246,7 @@ if (isset($_SESSION['UserData'])) {
             if (successMessage) {
                 setTimeout(() => {
                     successMessage.style.display = 'none';
-                }, 800); // 0.8 Sekunden
+                }, 800); 
             }
         });
     </script>

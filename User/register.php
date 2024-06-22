@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         $errorMessages['general'] = "Bitte füllen Sie die mit * gekennzeichneten Felder aus.";
     }
 
-    // Überprüfung spezifischer Fehler für ausgefüllte Felder
     if (!empty($_POST['firstname'])) {
         $firstNameErrors = $validator->validateFirstName($_POST['firstname']);
         if (!empty($firstNameErrors)) {

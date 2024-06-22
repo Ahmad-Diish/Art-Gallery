@@ -7,7 +7,7 @@ session_start();
 $loginerr = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $identifier = trim($_POST["identifier"]); // Akzeptiert sowohl E-Mail als auch Benutzername
+    $identifier = trim($_POST["identifier"]);
     $password = $_POST["password"];
     $um = new UserManager();
     $user = null;

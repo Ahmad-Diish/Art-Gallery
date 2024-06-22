@@ -5,8 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+ // Logout
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
-    // Logout-Logik
     session_destroy();
     $redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '../Homepage/index.php';
     if (basename($redirect) == 'account.php') {

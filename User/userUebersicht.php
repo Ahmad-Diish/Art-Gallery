@@ -5,7 +5,6 @@ require_once ("../Homepage/header.php");
 require_once ("../Datenbank/userManager.php");
 require_once ("../Datenbank/userClass.php");
 
-// Starten der Session, falls noch nicht geschehen
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -38,7 +37,6 @@ if (isset($_POST['toggle_admin'])) {
     }
 }
 
-// Toggle user active status if requested
 if (isset($_POST['toggle_status'])) {
     $username = $_POST['user_to_toggle_status'];
     $user = $um->getUserByUsername($username);
@@ -245,7 +243,7 @@ ob_end_flush();
         }
 
         .form-box1 .username {
-            width: 55%; /* Breite Spalte */
+            width: 55%;
         }
 
         .form-box1 .admin form,
