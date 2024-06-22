@@ -6,8 +6,8 @@ require_once("../Datenbank/artworkClass.php");
 class Subject
 {
 
-    public $subjectId; // Öffentliche Eigenschaft für die Subject-ID
-    private $subjectName; // Private Eigenschaft für den Subject-Namen
+    public $subjectId; 
+    private $subjectName; 
 
 
      // Konstruktor für die Subject-Klasse
@@ -17,13 +17,13 @@ class Subject
         $this->subjectName = $subjectName;
     }
 
-     // Getter für die Subject-ID
+    
     public function getSubjectId(): int
     {
         return $this->subjectId;
     }
 
-    // Getter für den Subject-Namen
+    
     public function getSubjectName(): string
     {
         return $this->subjectName;
@@ -48,7 +48,7 @@ class Subject
     // Ausgabe der Subject-Informationen im HTML-Format
     public function outputSubjects(): void
     {
-        // CSS für die Kartenansicht
+       
         $css = '
         <style>
          .card {
@@ -99,7 +99,7 @@ class Subject
         </style>
     ';
 
-        // Ausgabe des CSS
+      
         echo $css;
 
         // Ausgabe der Subject-Informationen als Karte
@@ -137,7 +137,7 @@ class Subject
             </style>
         ';
 
-        // Ausgabe des CSS
+        
         echo $css;
          // Ausgabe der Subject-Details
         echo '<body style="background-color: #fffbeb;">';

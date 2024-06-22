@@ -1,11 +1,11 @@
 <?php
 //TODO
 
-//*The system displays a list of all the subjects in the database, along with their subject image (see art-images/subjects) sorted by SubjectName. Each should be a link to Display Single Subject case. This list does not need to be sortable. 
+
 require_once("../Homepage/header.php");
 require_once("../Datenbank/subjectManager.php");
 
-// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
+
 $conn = new datenbank();
 $subjectManager = new SubjectManager($conn);
 

@@ -4,9 +4,9 @@ require_once("../Datenbank/subjectClass.php");
 
 class  SubjectManager
 {
-    private $collectionAllSubjects = array(); // Sammlung aller Subjects
-    private $datenbank; // Datenbankverbindung
-    private $subjecti; // Aktuelles Subject
+    private $collectionAllSubjects = array(); 
+    private $datenbank; 
+    private $subjecti; 
 
     private $artworki;
 
@@ -63,18 +63,18 @@ class  SubjectManager
     {
         $subjects = $this->collectionAllSubjects;
 
-        // Durchlaufen der Sammlung aller Subjekte
+       
         foreach ($subjects as $subject) {
-            // Überprüfen, ob die ID des aktuellen Subjekts mit der gesuchten ID übereinstimmt
+          
             if ($subject['SubjectId'] == $subjectId) {
-                // Subjekt aus dem Zustand erstellen und ausgeben
+               
                 $subjectObj = Subject::fromState($subject);
                 $subjectObj->outputSingleSubject();
-                return; // Wenn das Subjekt gefunden wurde, die Schleife beenden
+                return; 
             }
         }
 
-        // Fehlermeldung, falls das Subjekt mit der angegebenen ID nicht gefunden wurde
+        
         echo "Subjekt mit der ID $subjectId wurde nicht gefunden.";
     }
 
@@ -86,7 +86,7 @@ class  SubjectManager
            
             $this->datenbank->connect();
 
-           // SQL-Abfrage, um Kunstwerke für die bereitgestellte Subject-ID abzurufen
+         
             $query = "SELECT *
             FROM artworksubjects, artworks
             WHERE artworksubjects.ArtworkID = artworks.ArtworkID
@@ -96,16 +96,13 @@ class  SubjectManager
             $statement->bindParam(':subjectId', $subjectId);
             $statement->execute();
 
-            // Fetch artworks related to the subject
+            
             $artworkData = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            // Close the database connection
+            
             $this->datenbank->close();
 
-            // Return artwork data
             return $artworkData;
         } catch (PDOException $e) {
-            // Handle exceptions (e.g., database connection error)
             exit('Error retrieving artworks: ' . $e->getMessage());
         }
     }
@@ -114,10 +111,10 @@ class  SubjectManager
     public function getSubjectByArtworksID($artworksID)
     {
         try {
-            // Verbindung zur Datenbank herstellen
+           
             $this->datenbank->connect();
 
-            // SQL-Abfrage, um das Thema für die bereitgestellte Artwork-ID abzurufen
+            
             $query = "SELECT subjects.SubjectID, subjects.SubjectName
             FROM artworksubjects
             INNER JOIN subjects ON artworksubjects.SubjectID = subjects.SubjectID
@@ -127,16 +124,14 @@ class  SubjectManager
             $statement->bindParam(':artworksID', $artworksID);
             $statement->execute();
 
-            // Themen für das Kunstwerk abrufen
             $subjectData = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            // Datenbankverbindung schließen
             $this->datenbank->close();
 
-            // Themen-Daten zurückgeben
+          
             return $subjectData;
         } catch (PDOException $e) {
-            // Ausnahmen behandeln (z.B. Datenbankverbindungsfehler)
+    
             exit('Fehler beim Abrufen der Themen: ' . $e->getMessage());
         }
     }
