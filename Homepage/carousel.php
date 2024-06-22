@@ -5,19 +5,19 @@ function zufallsBildAuswahl()
 
   $verzeichnis = "../assets/images/carousel";
 
-  // Alle Dateien im Verzeichnis auflisten (einschließlich "." und "..")
+
   $dateien = scandir($verzeichnis);
 
-  // Die "." und ".." aus der Liste entfernen
+
   $dateien = array_diff($dateien, array('.', '..'));
 
-  // Eine zufällige Datei auswählen
+
   $zufallsBild = $dateien[array_rand($dateien)];
   return $zufallsBild;
 }
 ?>
 
-<!-- Wurden diese Bilder in Folder CAROUSEL benutzt , weil sie als Querformat sind . Als Hochformat sehen sie sehr schlecht aus . -->
+
 <style>
   #carouselExampleCaptions {
     margin-top: 20px;
@@ -31,7 +31,7 @@ function zufallsBildAuswahl()
 
   .carousel-item {
     height: 500px;
-    /* adjust the height to fit your needs */
+
     background-color: #E5DDC5;
     ;
     padding: 5px;

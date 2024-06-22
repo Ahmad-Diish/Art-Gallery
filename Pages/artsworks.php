@@ -3,23 +3,23 @@ require_once("../Homepage/header.php");
 require_once("../Datenbank/artworkManager.php");
 
 
-// Erstellen einer neuen Datenbankverbindung und einer ArtistManager-Instanz.
+
 $conn = new Datenbank();
 $artworkManager = new ArtworkManager($conn);
 
-// Verarbeitung des Formulars für die Sortierung.
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Überprüfe, ob die Formulardaten für die Sortierreihenfolge gesendet wurden
+
     if (isset($_POST['sortierreihenfolge']) && (isset($_POST['sortierungsart']))) {
         $sortierreihenfolge = $_POST['sortierreihenfolge'];
         $sortierungsart = $_POST['sortierungsart'];
         $artworkManager->sortiereArtworks($sortierungsart, $sortierreihenfolge);
     }
 } else {
-    // Default-Sortierreihenfolge
+
     $sortierreihenfolge = 'aufsteigend';
 
-    // Default-Sortierungsart
+
     $sortierungsart = 'Title';
     $artworkManager->sortiereArtworks($sortierungsart, $sortierreihenfolge);
 }
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kunstwerke Galerie</title>
     <style>
-        /* Stile für die Sortierfelder */
+
         body {
 
             background-color: #fffbeb;
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: #923f0e;
         }
 
-        /* Stile für den Sortierbutton */
+
         button {
             padding: 8px 16px;
             border: none;
@@ -74,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             cursor: pointer;
         }
 
-        /* Stile für den Container */
         .container {
             max-width: 90%;
             margin: 0 auto;
@@ -85,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container mt-5">
         <h2>Kunstwerke Galerie</h2>
-        <!-- Sorting Options -->
+
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <label for="Sortiere">Sortiere nach:</label>
             <select class="" aria-label="Default select example" name="sortierungsart">
@@ -106,9 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
         <div class="row mt-4 cards">
-            <!-- Artwork Images and Links -->
+
             <?php
-            // Ausgabe der sortierten Kunstwerke
+
             $artworkManager->AllArtworks();
             ?>
         </div>

@@ -254,12 +254,12 @@ function handleError()
     <body>
         <div class="container mt-4">
             <?php
-            // hier wurde die Funktion outSingleArtwork von Klasse Artwork gerufen, um das Kunstwerk allein zu zeigen
+
             $artwork->outputSingleArtwork();
             ?>
         </div>
 
-        <!-- HTML -->
+
         <!DOCTYPE html>
         <html lang="de">
 
@@ -267,26 +267,23 @@ function handleError()
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Bewertungen und Kommentare</title>
-            <link rel="stylesheet" href="styles.css"> <!-- Stil-Datei einbinden -->
+            <link rel="stylesheet" href="styles.css"> 
         </head>
 
         <body>
 
-            <!-- Bewertungen -->
+
 
             <?php if (isset($_SESSION['CustomerID'])) : ?>
-                <!-- Kommentare -->
+
                 <div class="comments-section">
                     <h2>Kommentare</h2>
 
-                    <!-- Kommentare anzeigen -->
                     <div class="comment">
                     </div>
 
-                    <!-- Kommentarformular -->
                     <form class="comment-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?artworkID=' . $artworkID; ?>">
 
-                        <!-- Sternebewertung -->
                         <label for="rating-select">Bewertung:</label>
                         <select name="rating" id="rating-select">
                             <option value="0">Keine Bewertung</option>
@@ -298,9 +295,9 @@ function handleError()
                         </select>
                         <input type="hidden" name="artworkID" value="<?php echo $artworkID; ?>">
                         <input type="hidden" name="customerID" value="<?php echo $_SESSION['CustomerID']; ?>">
-                        <!-- Kommentarfeld mit htmlspecialchars() bearbeiten -->
+
                         <textarea class="comment-textarea" name="comment" placeholder="Fügen Sie Ihren Kommentar hier hinzu"><?php echo htmlspecialchars($_POST['comment'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
-                        <!-- Überprüfung und Absenden des Kommentars -->
+
                         <?php
                         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $commentText = $_POST['comment'] ?? '';
@@ -308,21 +305,20 @@ function handleError()
                             $customerID = $_POST['customerID'] ?? null;
                             $rating = $_POST['rating'] ?? 0;
 
-                            // Sanitize user input
                             $commentText = htmlspecialchars($commentText, ENT_QUOTES, 'UTF-8');
 
                             if ($commentText && $artworkID && $customerID && $rating) {
                                 $referer = $_SERVER['HTTP_REFERER'];
 
-                                ob_start(); // Output buffering start
+                                ob_start(); 
                                 $reviewManager->addComment($artworkID, $customerID, $commentText, $rating);
-                                $output = ob_get_clean(); // Get the buffered output
+                                $output = ob_get_clean(); 
 
                                 if (strpos($output, 'Fehler:') === false) {
                                     header("Location: $referer");
                                     exit;
                                 } else {
-                                    echo $output; // Display the error message
+                                    echo $output; 
                                 }
                             } else {
                                 echo "<h6> Alle Felder müssen ausgefüllt werden.</h6>";
@@ -345,7 +341,7 @@ function handleError()
                 <h2>Bewertungen</h2>
 
                 <?php
-                // Zeige die Top-Bewertungen an
+
                 $reviewManager->displayReview($artworkID);
                 ?>
 

@@ -1,6 +1,5 @@
 <?php
 
-//* hier wurde die globale Variable sowie Methode definiert.
 require("../Datenbank/datenbank.php");
 require_once("artistManager.php");
 require_once("subjectManager.php");
@@ -155,11 +154,11 @@ class Artwork
 
     public static function getDefaultArtwork(): Artwork
     {
-        //$artWorksID, $artistId, $imageFileName, $title, $description, $excerpt, $artWorkType, $yearOfWork, $width, $height, $medium, $originalHome, $artworkGalleryID, $artworkLink, $googleLink
+       
         return new self(-1, -1, "", "", "", "", "", 0, 0, 0, 0, "", 0, "", "");
     }
 
-    // Hier folgen die Getter und Setter Methoden...
+
 
     public static function fromState(array $artwork): Artwork
     {

@@ -45,22 +45,21 @@ class ArtworkManager
     public function getAllArtwork()
     {
         try {
-            // Verbindung zur Datenbank herstellen
+
             $this->datenbank->connect();
     
-            // SQL-Anfrage zum Abrufen aller Kunstwerke
+ 
             $anfrage = "SELECT * FROM Artworks";
             $stmt = $this->datenbank->prepareStatement($anfrage);
             $stmt->execute();
-    
-            // Kunstwerke aus der Datenbank abrufen
+
             $this->collectionAllArtworks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
         } catch (Exception $ex) {
-            // Fehlerbehandlung, falls das Abrufen der Kunstwerke fehlschlägt
+
             exit('Could not retrieve Artwork' . $ex->getMessage());
         } finally {
-            // Datenbankverbindung schließen, unabhängig davon, ob ein Fehler aufgetreten ist oder nicht
+
             $this->datenbank->close();
         }
     }
@@ -100,7 +99,7 @@ class ArtworkManager
     }
 
 
-    // TOPArtwork Homepage
+    // TOP Artwork Homepage
     public function TopArtwork()
     {
 
@@ -149,9 +148,9 @@ class ArtworkManager
         
         try{
             if ($sortierungsart == 'YearOfWork') {
-                //aufsteigend A---Z
+
                 if ($sortierreihenfolge == 'aufsteigend') {
-                    //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
+         
                     $anfrage = "SELECT * FROM Artworks ORDER BY YearOfWork ASC";
                 }
                 // absteigend Z---A 
@@ -160,7 +159,7 @@ class ArtworkManager
                 }
             } elseif ($sortierungsart == 'ArtistID') {
                 if ($sortierreihenfolge == 'aufsteigend') {
-                    //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
+
                     $anfrage = "SELECT * FROM Artworks ORDER BY ArtistID ASC";
                 }
                 // absteigend Z---A 
@@ -169,7 +168,7 @@ class ArtworkManager
                 }
             } elseif ($sortierungsart == 'Title') {
                 if ($sortierreihenfolge == 'aufsteigend') {
-                    //SELECT column_name(s) FROM table_name ORDER BY column_name(s) ASC|DESC
+
                     $anfrage = "SELECT * FROM Artworks ORDER BY Title ASC";
                 }
                 // absteigend Z---A 
