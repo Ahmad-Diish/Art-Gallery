@@ -125,6 +125,7 @@ if (isset($_SESSION['UserData'])) {
             empty($_POST['email']) ? $userData->getEmail() : $_POST['email'],
             empty($_POST['username']) ? $userData->getUsername() : $_POST['username'],
             !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : $userData->getPasswordHash(),
+            $userData->getState(),
             $userData->getId()
         );
 
