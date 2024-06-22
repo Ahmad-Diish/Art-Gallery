@@ -44,7 +44,6 @@ class Artwork
 
     private $subjecti;
 
-    private $reviewi;
 
     private $datenbank;
 
